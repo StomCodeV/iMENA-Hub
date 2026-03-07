@@ -3,271 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMENA · Rwandan Ecosystem | StomCodeV 2026</title>
+    <title>IMENA Ecosystem – Rwandan Innovation</title>
+    <!--CSS-->
+    <link rel="stylesheet" href="index.css">
     <!-- Font Awesome 6 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    <!-- Inter font -->
+    <!-- Inter font for clean readability -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800;14..32,900&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none; /* custom cursor */
-        }
-
-        :root {
-            --primary: #00A859;        /* Rwanda green */
-            --secondary: #F9B233;       /* Rwanda gold */
-            --accent: #0077C8;           /* Rwanda blue */
-            --bg-deep: #03050a;
-            --glass-bg: rgba(255, 255, 255, 0.02);
-            --glass-edge: rgba(255, 255, 255, 0.06);
-            --glow: rgba(0, 168, 89, 0.3);
-        }
-
-        body {
-            background: var(--bg-deep);
-            font-family: 'Inter', sans-serif;
-            color: #edeff2;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* canvas background (particles + wave glow) */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            display: block;
-        }
-
-        /* premium custom cursor */
-        .cursor-outer {
-            width: 44px;
-            height: 44px;
-            border: 1.5px solid var(--primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease, width 0.2s, height 0.2s, background 0.2s;
-            transform: translate(-50%, -50%);
-            backdrop-filter: blur(2px);
-            box-shadow: 0 0 18px rgba(0,168,89,0.3);
-        }
-        .cursor-inner {
-            width: 6px;
-            height: 6px;
-            background: var(--secondary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 12px var(--secondary);
-        }
-        a:hover ~ .cursor-outer, button:hover ~ .cursor-outer {
-            width: 60px;
-            height: 60px;
-            background: rgba(0,168,89,0.05);
-        }
-
-        /* glassmorphism panels */
-        .glass-panel {
-            background: rgba(5, 10, 15, 0.4);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid var(--glass-edge);
-            border-radius: 48px;
-            box-shadow: 0 30px 60px -20px #000, 0 0 0 1px rgba(0,168,89,0.1) inset;
-        }
-
-        .section-tag {
-            color: var(--secondary);
-            letter-spacing: 6px;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            margin-bottom: 12px;
-            display: inline-block;
-            border-left: 3px solid var(--primary);
-            padding-left: 16px;
-        }
-
-        /* premium buttons */
-        .btn-premium {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--primary) 0%, #00804a 100%);
-            color: white;
-            font-weight: 600;
-            padding: 14px 38px;
-            border-radius: 50px;
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 20px 30px -12px rgba(0,168,89,0.5), 0 0 0 1px rgba(249,178,51,0.2) inset;
-            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
-            backdrop-filter: blur(4px);
-        }
-        .btn-premium i { transition: transform 0.25s; }
-        .btn-premium:hover {
-            transform: scale(1.06) translateY(-5px);
-            background: linear-gradient(145deg, #00b85e, var(--primary));
-            box-shadow: 0 28px 40px -10px #00A859, 0 2px 0 0 var(--secondary) inset;
-            letter-spacing: 1.2px;
-        }
-        .btn-premium:hover i { transform: translateX(6px); }
-
-        /* hero */
-        header {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 1.5rem;
-            background: radial-gradient(circle at 50% 30%, rgba(0,168,89,0.12) 0%, transparent 70%);
-        }
-
-        .badge {
-            background: rgba(0,168,89,0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(249,178,51,0.2);
-            padding: 10px 28px;
-            border-radius: 60px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--secondary);
-            margin-bottom: 28px;
-            box-shadow: 0 8px 16px -10px #000;
-        }
-
-        h1 {
-            font-size: clamp(3.5rem, 13vw, 7rem);
-            font-weight: 900;
-            background: linear-gradient(140deg, #ffffff, #c0ffd0, var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
-            letter-spacing: -0.02em;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
-        }
-
-        /* image styling - advanced, glassy, responsive */
-        .img-glass {
-            border-radius: 28px;
-            border: 2px solid rgba(249,178,51,0.3);
-            box-shadow: 0 25px 40px -12px #000, 0 0 0 1px rgba(0,168,89,0.3) inset;
-            transition: 0.3s ease;
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-        .img-glass:hover {
-            border-color: var(--primary);
-            transform: scale(1.02);
-            box-shadow: 0 30px 50px -10px #00A859;
-        }
-
-        /* heritage & dev grid */
-        .heritage-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 28px;
-            margin-top: 40px;
-        }
-
-        .hero-card, .dev-card {
-            background: rgba(255,255,255,0.02);
-            border-radius: 28px;
-            padding: 24px 20px;
-            border: 1px solid rgba(249,178,51,0.1);
-            transition: 0.25s;
-            border-left: 5px solid var(--secondary);
-            backdrop-filter: blur(6px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .hero-card:hover, .dev-card:hover { background: rgba(0,168,89,0.08); border-left-width: 8px; }
-        .dev-card img { width: 100%; max-width: 240px; border-radius: 24px; margin-bottom: 20px; border: 2px solid var(--secondary); }
-        .ecosystem-img {
-            margin: 40px 0 20px;
-            text-align: center;
-        }
-        .ecosystem-img img { max-width: 100%; border-radius: 36px; border: 2px solid var(--primary); box-shadow: 0 30px 40px -20px #000; }
-
-        /* projects grid */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-            gap: 30px;
-            padding: 70px 8% 100px;
-        }
-
-        .project-card {
-            background: rgba(10, 18, 20, 0.45);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 36px;
-            padding: 44px 32px;
-            transition: all 0.4s cubic-bezier(0.15, 0.75, 0.48, 1);
-            box-shadow: 0 30px 45px -40px #000;
-            position: relative;
-            overflow: hidden;
-        }
-        .project-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 36px;
-            padding: 2px;
-            background: linear-gradient(145deg, rgba(0,168,89,0.3), rgba(249,178,51,0.1));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-        .project-card:hover {
-            transform: translateY(-18px) scale(1.02);
-            background: rgba(0,40,30,0.6);
-            border-color: var(--primary);
-            box-shadow: 0 40px 50px -15px #00A859;
-        }
-
-        /* footer */
-        footer {
-            background: #020408;
-            padding: 80px 10% 60px;
-            border-top: 1px solid rgba(249,178,51,0.2);
-            text-align: center;
-        }
-        .contact-info p {
-            margin: 28px 0;
-            font-size: 1.2rem;
-            background: rgba(0,168,89,0.05);
-            padding: 16px 30px;
-            border-radius: 60px;
-            display: inline-block;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .contact-info span { color: var(--secondary); font-weight: 700; margin-right: 12px; }
-
-        @media (max-width: 700px) {
-            .glass-panel { padding: 28px !important; border-radius: 32px; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="cursor-outer"></div>
@@ -276,62 +20,36 @@
 
     <!-- HERO -->
     <header>
-        <div class="badge">🇷🇼 INYANGE Y'URWANDA · IMENA</div>
+        <div class="badge">🇷🇼 I love RWANDA ❤️</div>
         <h1>IMENA ECOSYSTEM</h1>
-        <p style="font-size: 1.6rem; max-width: 800px; font-weight: 300; letter-spacing: 1px; background: linear-gradient(135deg,#ccc,#fff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:20px;">
-            Hero‑grade code, rooted in Rwandan soil.
+        <p style="font-size: 1.5rem; max-width: 700px; font-weight: 300; background: linear-gradient(135deg,#ccc,#fff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:20px;">
+            A legacy of code, grown from Rwandan excellence
         </p>
-        <a href="#core" class="btn-premium" style="margin-top: 40px;"><span>Discover the Shield</span> <i class="fas fa-arrow-right"></i></a>
+        <a href="#core" class="btn-premium" style="margin-top: 40px;"><span>Discover more</span> <i class="fas fa-arrow-right"></i></a>
     </header>
 
-    <!-- CORE SECTION with ECOSYSTEM PHOTO and DEVELOPER PHOTOS -->
+    <!-- CORE SECTION with ECOSYSTEM PHOTO and MEANING -->
     <section id="core" style="padding: 40px 8% 60px;">
         <div class="glass-panel" style="padding: 60px 50px;">
-            <span class="section-tag">Imena · Ubunyamwuga</span>
-            <h2 style="font-size: clamp(2.2rem,5vw,3.5rem); font-weight:800; margin-bottom: 30px;">Born from <span style="color:var(--primary);">the hills</span>, built for the future</h2>
+            <span class="section-tag">Imena ecosystem from RWANDA ❤️</span>
+            <h2 style="font-size: clamp(2rem,5vw,3.2rem); font-weight:800; margin-bottom: 30px;">Heart of <span style="color:var(--primary);">Rwanda.</span> Code of Innovation.</h2>
             
-            <!-- ECOSYSTEM PHOTO (provided) -->
+            <!-- ECOSYSTEM PHOTO -->
             <div class="ecosystem-img">
                 <a href="https://postimg.cc/zLYrGzPX" target="_blank">
                     <img src="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png" alt="IMENA Ecosystem visual" class="img-glass" style="max-width: 100%; border-radius: 40px;">
                 </a>
-                <p style="margin-top: 15px; color: var(--secondary);"><i class="fas fa-mountain"></i> The IMENA Ecosystem – digital sanctuary</p>
+                <p style="margin-top: 15px; color: var(--secondary);"><i class="fas fa-mountain"></i> The IMENA Ecosystem — A digital home for Rwandan success.</p>
             </div>
 
             <p style="font-size:1.2rem; color:#bbb; max-width: 800px; margin-top: 30px;">
-                In Rwanda, <strong>Imena</strong> are heroes of the highest order — those who gave everything for unity.  
-                Our ecosystem carries that name to remind us that real technology serves and protects.  
-                From Karumuna cell (Ntarama) to the world.
+                In Rwanda, <strong>Imena</strong> is one of the categories of heroes. Imena heroes are heroes of the highest order, those who gave everything for the unity of Rwanda.  
+                Our ecosystem carries that name to remind us that "real technology serves and protects."
             </p>
 
-            <!-- Developer photos (Jean Chrisostom & BLAD) placed side by side under heritage -->
-            <div style="margin-top: 60px;">
-                <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 30px; border-bottom: 2px dashed var(--primary); padding-bottom: 15px;">The minds behind the code</h3>
-                <div class="heritage-cards">
-                    <!-- Jean Chrisostom -->
-                    <div class="dev-card">
-                        <a href="https://postimg.cc/Mnccw7yk" target="_blank">
-                            <img src="https://i.postimg.cc/Mnccw7yk/chrisostom.jpg" alt="Jean Chrisostom" class="img-glass">
-                        </a>
-                        <h3 style="color: var(--secondary);">Jean Chrisostom</h3>
-                        <p>Founder & lead developer · StomCodeV. Building from Ntarama with the spirit of Imena.</p>
-                        <p style="margin-top: 10px;"><i class="fas fa-map-pin" style="color: var(--primary);"></i> Karumuna, Bugesera</p>
-                    </div>
-                    <!-- BLAD (second developer) -->
-                    <div class="dev-card">
-                        <a href="https://postimg.cc/tZ0wrGqj" target="_blank">
-                            <img src="https://i.postimg.cc/tZ0wrGqj/BLAD.webp" alt="BLAD" class="img-glass">
-                        </a>
-                        <h3 style="color: var(--secondary);">BLAD</h3>
-                        <p>Core collaborator · Ecosystem architect & innovation partner.</p>
-                        <p style="margin-top: 10px;"><i class="fas fa-code" style="color: var(--primary);"></i> code & resilience</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Heritage cards (heroes) with slight update to include more depth -->
+            <!-- Heritage cards (heroes) -->
             <div style="margin-top: 70px;">
-                <h3 style="color: var(--primary); font-size: 1.8rem;">The Imena we honour</h3>
+                <h3 style="color: var(--primary); font-size: 1.8rem;">Imena heroes</h3>
                 <div class="heritage-cards">
                     <div class="hero-card">
                         <i class="fas fa-crown fa-2x" style="color: var(--secondary);"></i>
@@ -341,60 +59,101 @@
                     <div class="hero-card">
                         <i class="fas fa-fist-raised fa-2x" style="color: var(--secondary);"></i>
                         <h3 style="color: var(--secondary);">Agathe Uwiringiyimana</h3>
-                        <p>First female PM, fought divisionism, championed education for all.</p>
+                        <p>First female Prime Minister, fought divisionism, championed education for all.</p>
                     </div>
                     <div class="hero-card">
                         <i class="fas fa-hands-helping fa-2x" style="color: var(--secondary);"></i>
                         <h3 style="color: var(--secondary);">Nyange Students</h3>
-                        <p>"We are all Rwandans" — refused ethnic separation, 1997.</p>
+                        <p>Refused ethnic separation, 1997. "We are all Rwandans"</p>
                     </div>
                 </div>
             </div>
 
             <!-- quote -->
             <div style="margin-top: 60px; border-left: 3px solid var(--primary); padding-left: 30px;">
-                <p style="font-style: italic; color: #ccc;">“The IMENA ecosystem is not just code — it’s a digital Umuganda. I build from Ntarama so that every Rwandan can see themselves as a tech creator, not just a consumer.”</p>
-                <p style="margin-top: 15px; font-weight: 600;">— Jean Chrisostom · StomCodeV</p>
+                <p style="font-style: italic; color: #ccc;">“The IMENA ecosystem is not just code — it’s about Rwanda’s history and the rise of the nation toward the digital world.”</p>
+                <p style="margin-top: 15px; font-weight: 600;">— TUYISENGE Jean Chrisostom</p>
             </div>
         </div>
     </section>
 
-    <!-- ecosystem PROJECTS (active nodes) unchanged but keeping them -->
-    <h2 style="text-align: center; font-size: 2.8rem; font-weight: 800; margin: 50px 0 0;">
-        <span style="color: var(--primary);">active</span> ecosystem nodes
+    <!-- IMENA ecosystem PROJECTS (now with 4 projects) -->
+    <h2 style="text-align: center; font-size: 2.5rem; font-weight: 800; margin: 30px 0 10px;">
+        <span style="color: var(--primary);">IMENA</span> ecosystem projects
     </h2>
     <section class="projects-grid">
+        <!-- CV BUILDER -->
         <div class="project-card">
             <i class="fas fa-id-card fa-3x"></i>
-            <h3 style="font-size: 2rem; margin-bottom: 15px;">IMENA CV</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">Rwandan workforce accelerator — modern, bilingual, ATS‑ready profiles.</p>
+            <h3>IMENA CV BUILDER</h3>
+            <p style="opacity:0.8; margin-bottom: 25px;">A CV Builder website that enables users to make their own CV for free and download as PDF.</p>
             <a href="https://imena-cv-builder.netlify.app/" class="btn-premium" target="_blank" rel="noopener"><span>Build yours</span> <i class="fas fa-external-link-alt"></i></a>
         </div>
+        <!-- TRINITY COLLEGE -->
         <div class="project-card">
             <i class="fas fa-university fa-3x"></i>
-            <h3 style="font-size: 2rem; margin-bottom: 15px;">Trinity College</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">Full‑spectrum school management — built for Bugesera’s excellence.</p>
+            <h3>IMENA TRINITY COLLEGE</h3>
+            <p style="opacity:0.8; margin-bottom: 25px;">A school website that shows all information about the school and direct application for admission.</p>
             <a href="https://stomcodev.github.io/IMENA-TRINITY-COLLEGE/" class="btn-premium" target="_blank" rel="noopener"><span>Visit campus</span> <i class="fas fa-arrow-right"></i></a>
         </div>
+        <!-- TRAINER AI (newly added) -->
+        <div class="project-card">
+            <i class="fas fa-robot fa-3x"></i>
+            <h3>IMENA TRAINER AI</h3>
+            <p style="opacity:0.8; margin-bottom: 25px;">AI-powered training assistant — smart, adaptive, and built for Rwandan learners.</p>
+            <a href="https://stomcodev.github.io/IMENA-TRAINER-AI/" class="btn-premium" target="_blank" rel="noopener"><span>Start training</span> <i class="fas fa-brain"></i></a>
+        </div>
+        <!-- DEVELOPER PORTFOLIO -->
         <div class="project-card">
             <i class="fas fa-code fa-3x"></i>
-            <h3 style="font-size: 2rem; margin-bottom: 15px;">StomCodeV Hub</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">Portfolio & professional identity of Jean Chrisostom.</p>
-            <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" class="btn-premium" target="_blank" rel="noopener"><span>Meet dev</span> <i class="fas fa-user"></i></a>
+            <h3>IMENA founder&developer website</h3>
+            <p style="opacity:0.8; margin-bottom: 25px;">Portfolio & professional identity of TUYISENGE Jean Chrisostom.</p>
+            <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" class="btn-premium" target="_blank" rel="noopener"><span>Visit me</span> <i class="fas fa-user"></i></a>
         </div>
     </section>
 
-    <!-- FOOTER (contact unchanged) -->
+    <!-- Developer photos StomCodeV -->
+    <div style="padding: 0 8% 40px;">
+        <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 30px; border-bottom: 2px dashed var(--primary); padding-bottom: 15px; text-align:center;">Founder and developer's profile</h3>
+        <div class="heritage-cards">
+            <!-- Jean Chrisostom -->
+            <div class="dev-card">
+                <a href="https://postimg.cc/Mnccw7yk" target="_blank">
+                    <img src="https://i.postimg.cc/Mnccw7yk/chrisostom.jpg" alt="Jean Chrisostom" class="img-glass">
+                </a>
+                <h3 style="color: var(--secondary);">TUYISENGE Jean Chrisostom</h3>
+                <p>Founder of IMENA Ecosystem & developer</p>
+                <p style="margin-top: 10px;"><i class="fas fa-map-pin" style="color: var(--primary);"></i> Kigali, Rwanda</p>
+            </div>
+            <!-- StomCodeV -->
+            <div class="dev-card">
+                <a href="https://postimg.cc/tZ0wrGqj" target="_blank">
+                    <img src="https://i.postimg.cc/tZ0wrGqj/BLAD.webp" alt="StomCodeV" class="img-glass">
+                </a>
+                <h3 style="color: var(--secondary);">StomCodeV</h3>
+                <p>TUYISENGE Jean Chrisostom is also known as StomCodeV when coding. StomCodeV means "Chrisostom Code Developer"</p>
+                <p style="margin-top: 10px;"><i class="fas fa-code" style="color: var(--primary);"></i> code & resilience</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER - professional, clean, with clickable developer credit -->
     <footer>
-        <div style="max-width: 900px; margin: 0 auto;">
-            <i class="fas fa-shield-alt" style="font-size: 3rem; color: var(--primary); opacity: 0.4; margin-bottom: 20px;"></i>
-            <h2 style="color: var(--primary); font-weight: 700; font-size: 2.5rem;">Secure Line to the hills</h2>
+        <div class="footer-content">
+            <div class="footer-quote">
+                <i class="fas fa-shield-alt" style="margin-right: 10px;"></i> "Heart of Rwanda. Code of Innovation."
+            </div>
             <div class="contact-info">
                 <p><span><i class="fas fa-map-pin"></i> HQ</span> Karumuna, Ntarama, Bugesera · Rwanda</p>
-                <p><span><i class="fas fa-envelope"></i> Direct</span> tuyisengejeanchrisostome@gmail.com</p>
+                <p><span><i class="fas fa-envelope"></i> Email</span> tuyisengejeanchrisostome@gmail.com</p>
                 <p><span><i class="fab fa-whatsapp"></i> WhatsApp</span> +250 796 717 230</p>
             </div>
-            <p style="border-top: 1px solid rgba(249,178,51,0.2); padding-top: 30px; margin-top: 40px; opacity:0.7;">© 2026 StomCodeV — IMENA Ecosystem: infinite resilience. All rights reserved.</p>
+            <p style="opacity:0.7; font-size:0.9rem;">© 2026 IMENA ECOSYSTEM. All rights reserved.</p>
+            
+            <!-- Developer credit line with clickable link -->
+            <div class="developer-credit">
+                Developed by <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank" rel="noopener">TUYISENGE Jean Chrisostom</a>
+            </div>
         </div>
     </footer>
 
@@ -420,7 +179,7 @@
             };
             animateCursor();
 
-            // canvas background
+            // canvas background (unchanged, keeps visual appeal)
             const canvas = document.getElementById('bg-canvas');
             const ctx = canvas.getContext('2d');
             let width, height;
