@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMENA Ecosystem | StomCodeV 2026</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #00A859; /* Rwanda Green */
+            --secondary: #F9B233; /* Rwanda Gold */
+            --accent: #0077C8; /* Rwanda Blue */
+            --bg-dark: #05060a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg-dark);
+            color: #e0e0e0;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- ADVANCED ANIMATED BACKGROUND --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0; z-index: -1;
+            width: 100%; height: 100%;
+        }
+
+        /* --- PREMIUM CUSTOM CURSOR --- */
+        .cursor-outer {
+            width: 35px; height: 35px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: 0.15s ease-out;
+        }
+        .cursor-inner {
+            width: 6px; height: 6px;
+            background: var(--secondary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* --- HERO SECTION --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background: radial-gradient(circle at center, rgba(0, 168, 89, 0.1) 0%, transparent 70%);
+        }
+
+        .badge {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(to right, #fff, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        /* --- HERITAGE & HISTORY SECTION --- */
+        .heritage-section {
+            padding: 100px 10%;
+            position: relative;
+        }
+
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .section-tag { color: var(--primary); font-weight: bold; text-transform: uppercase; margin-bottom: 10px; display: block;}
+
+        .hero-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .hero-card {
+            background: rgba(255,255,255,0.02);
+            padding: 30px;
+            border-radius: 20px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        /* --- PROJECTS GRID --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 50px 10% 100px;
+        }
+
+        .project-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 40px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-20px);
+            background: rgba(255,255,255,0.07);
+            border-color: var(--primary);
+        }
+
+        /* --- PREMIUM BUTTONS --- */
+        .btn-premium {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-top: 25px;
+            transition: 0.3s;
+            border: none;
+            box-shadow: 0 10px 20px rgba(0, 168, 89, 0.3);
+        }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 168, 89, 0.5);
+            letter-spacing: 1px;
+        }
+
+        /* --- CONTACT FOOTER --- */
+        footer {
+            background: #000;
+            padding: 80px 10%;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .contact-info { margin: 30px 0; font-size: 1.1rem; }
+        .contact-info span { color: var(--secondary); display: block; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .hero-cards { grid-template-columns: 1fr; }
+            .glass-panel { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-outer"></div>
+    <div class="cursor-inner"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <header>
+        <div class="badge">Innovation • Excellence • Rwanda</div>
+        <h1>IMENA ECOSYSTEM</h1>
+        <p style="font-size: 1.4rem; max-width: 700px; opacity: 0.7; margin-top: 20px;">
+            A Digital Sanctuary of Rwandan Heroism and High-Performance Software.
+        </p>
+        <a href="#about" class="btn-premium">Discover the Shield</a>
+    </header>
+
+    <section class="heritage-section" id="about">
+        <div class="glass-panel">
+            <span class="section-tag">Our Philosophy</span>
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">The Spirit of <span style="color: var(--primary);">IMENA</span></h2>
+            <p style="font-size: 1.1rem; color: #bbb;">
+                In Rwandan culture, <strong>Imena</strong> is the category of National Heroes known for their extraordinary sacrifice and service. 
+                They are the backbone of our history. We chose this name because we believe software should be as resilient and selfless as our heroes.
+            </p>
+
+            <div class="hero-cards">
+                <div class="hero-card">
+                    <h3 style="color: var(--secondary);">King Mutara III Rudahigwa</h3>
+                    <p>Symbol of unity and modern progress. He abolished social inequality, just as we aim to abolish digital barriers.</p>
+                </div>
+                <div class="hero-card">
+                    <h3 style="color: var(--secondary);">Agathe Uwiringiyimana</h3>
+                    <p>A pioneer of democracy and education. Her courage inspires our mission to empower every teacher in Rwanda.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 50px; border-top: 1px solid var(--glass-border); padding-top: 40px;">
+                <h3 style="color: var(--primary);">The Vision of StomCodeV</h3>
+                <p>Based in <strong>Karumuna Village, Ntarama</strong>, I am developing the IMENA Ecosystem to ensure that Rwanda 
+                is not just a consumer of tech, but a creator. My aim is to build tools that solve real problems for real people.</p>
+            </div>
+        </div>
+    </section>
+
+    <h2 style="text-align: center; font-size: 2.5rem;">Current <span style="color: var(--secondary);">Ecosystem</span> Nodes</h2>
+    <section class="projects-grid">
+        <div class="project-card">
+            <i class="fas fa-id-card fa-3x" style="color: var(--primary); margin-bottom: 20px;"></i>
+            <h3>IMENA CV Builder</h3>
+            <p>Empowering the Rwandan workforce with world-class professional profiles.</p>
+            <a href="https://imena-cv-builder.netlify.app/" class="btn-premium">Open App</a>
+        </div>
+
+        <div class="project-card">
+            <i class="fas fa-university fa-3x" style="color: var(--primary); margin-bottom: 20px;"></i>
+            <h3>Trinity College Portal</h3>
+            <p>Advanced school management system for modern educational excellence.</p>
+            <a href="https://stomcodev.github.io/IMENA-TRINITY-COLLEGE/" class="btn-premium">Visit Campus</a>
+        </div>
+
+        <div class="project-card">
+            <i class="fas fa-code fa-3x" style="color: var(--primary); margin-bottom: 20px;"></i>
+            <h3>The Developer Hub</h3>
+            <p>The official professional identity and portfolio of Jean Chrisostom.</p>
+            <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" class="btn-premium">Meet the Dev</a>
+        </div>
+    </section>
+
+    <footer>
+        <h2 style="color: var(--primary);">Secure Your Connection</h2>
+        <div class="contact-info">
+            <p><span><i class="fas fa-map-marker-alt"></i> Location:</span> Karumuna, Ntarama, Bugesera, Rwanda</p>
+            <p><span><i class="fas fa-envelope"></i> Email:</span> tuyisengejeanchrisostome@gmail.com</p>
+            <p><span><i class="fab fa-whatsapp"></i> WhatsApp:</span> +250 796 717 230</p>
+        </div>
+        <p style="opacity: 0.5;">© 2026 StomCodeV | All Rights Reserved under IMENA Ecosystem</p>
+    </footer>
+
+    <script>
+        // Cursor Logic
+        const oCursor = document.querySelector('.cursor-outer');
+        const iCursor = document.querySelector('.cursor-inner');
+        document.addEventListener('mousemove', e => {
+            oCursor.style.left = e.clientX + 'px';
+            oCursor.style.top = e.clientY + 'px';
+            iCursor.style.left = e.clientX + 'px';
+            iCursor.style.top = e.clientY + 'px';
+        });
+
+        // Matrix/Star Field Background
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        for(let i=0; i<100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                vX: (Math.random() - 0.5) * 0.5,
+                vY: (Math.random() - 0.5) * 0.5
+            });
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(5, 6, 10, 0.2)';
+            ctx.fillRect(0,0,canvas.width, canvas.height);
+            ctx.fillStyle = '#00A859';
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fill();
+                p.x += p.vX; p.y += p.vY;
+                if(p.x < 0 || p.x > canvas.width) p.vX *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.vY *= -1;
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
