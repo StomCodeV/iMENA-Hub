@@ -1,0 +1,15 @@
+# 🤖 Welcome, Google Bot! Here's how to crawl IMENA Ecosystem
+
+# Allow all good bots to explore everything
+User-agent: *
+Allow: /
+
+# Tell Google where to find your complete sitemap
+Sitemap: https://stomcodev.github.io/IMENA-Ecosystem/sitemap.xml
+
+# Optional: Specify crawl rate (be kind to servers)
+Crawl-delay: 5
+
+# Optional: Disallow any private folders (if you create them later)
+# Disallow: /private/
+# Disallow: /admin/
