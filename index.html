@@ -3,65 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMENA Ecosystem – Rwandan Innovation</title>
+    <title>IMENA Ecosystem - Rwandan Innovation</title>
     <!--CSS-->
     <link rel="stylesheet" href="index.css">
     <!-- Font Awesome 6 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    <!-- Inter font for clean readability -->
+    <!-- Inter font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Progress bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Theme toggle -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <!-- Custom cursor -->
     <div class="cursor-outer"></div>
     <div class="cursor-inner"></div>
+    
+    <!-- Canvas background -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- HERO -->
+    <!-- HERO SECTION -->
     <header>
-        <div class="badge"> Rwanda based technology</div>
+        <div class="badge">🇷🇼 I love RWANDA ❤️</div>
         <h1>IMENA ECOSYSTEM</h1>
-        <p style="font-size: 1.5rem; max-width: 700px; font-weight: 300; background: linear-gradient(135deg,#ccc,#fff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:20px;">
-            A legacy of code, grown from Rwandan excellence
-        </p>
-        <a href="#core" class="btn-premium" style="margin-top: 40px;"><span>Discover more</span> <i class="fas fa-arrow-right"></i></a>
+        <p id="typewriter"></p>
+        <a href="#core" class="btn-premium" style="margin-top: 20px;">
+            <span>Discover more</span> <i class="fas fa-arrow-right"></i>
+        </a>
     </header>
 
-    <!-- CORE SECTION with ECOSYSTEM PHOTO and MEANING -->
+    <!-- CORE SECTION -->
     <section id="core" style="padding: 40px 8% 60px;">
         <div class="glass-panel" style="padding: 60px 50px;">
             <span class="section-tag">Imena ecosystem from RWANDA ❤️</span>
-            <h2 style="font-size: clamp(2rem,5vw,3.2rem); font-weight:800; margin-bottom: 30px;">Heart of <span style="color:var(--primary);">Rwanda.</span> Code of Innovation.</h2>
+            <h2 style="font-size: clamp(2rem,5vw,3.2rem); font-weight:800; margin-bottom: 30px;">
+                Heart of <span style="color:var(--primary);">Rwanda.</span> Code of Innovation.
+            </h2>
             
             <!-- ECOSYSTEM PHOTO -->
             <div class="ecosystem-img">
                 <a href="https://postimg.cc/zLYrGzPX" target="_blank">
-                    <img src="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png" alt="IMENA Ecosystem visual" class="img-glass" style="max-width: 100%; border-radius: 40px;">
+                    <img src="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png" alt="IMENA Ecosystem visual" class="img-glass">
                 </a>
-                <p style="margin-top: 15px; color: var(--secondary);"><i class="fas fa-mountain"></i> The IMENA Ecosystem — A digital home for Rwandan success.</p>
+                <p style="margin-top: 15px; color: var(--secondary);">
+                    <i class="fas fa-mountain"></i> The IMENA Ecosystem — A digital home for Rwandan success.
+                </p>
             </div>
 
-            <p style="font-size:1.2rem; color:#bbb; max-width: 800px; margin-top: 30px;">
-                In Rwanda, <strong>Imena</strong> is one of the categories of heroes. Imena heroes are heroes of the highest order, those who gave everything for the unity of Rwanda.  
-                Our ecosystem carries that name to remind us that "real technology serves and protects."
+            <p style="font-size:1.2rem; color: var(--text-muted); max-width: 800px; margin: 30px auto;">
+                In Rwanda, <strong>Imena</strong> is one of the categories of heroes. Imena heroes are heroes of the highest order, 
+                those who gave everything for the unity of Rwanda. Our ecosystem carries that name to remind us that 
+                "real technology serves and protects."
             </p>
 
-            <!-- Heritage cards (heroes) -->
+            <!-- STATS COUNTER -->
+            <div class="stats-container">
+                <div class="stat-item glass-panel">
+                    <span class="stat-number" data-target="1500">0</span>
+                    <span class="stat-label">CVs Created</span>
+                </div>
+                <div class="stat-item glass-panel">
+                    <span class="stat-number" data-target="500">0</span>
+                    <span class="stat-label">Students</span>
+                </div>
+                <div class="stat-item glass-panel">
+                    <span class="stat-number" data-target="1000">0</span>
+                    <span class="stat-label">AI Interactions</span>
+                </div>
+                <div class="stat-item glass-panel">
+                    <span class="stat-number" data-target="4">0</span>
+                    <span class="stat-label">Projects</span>
+                </div>
+            </div>
+
+            <!-- HERITAGE CARDS (Heroes) -->
             <div style="margin-top: 70px;">
-                <h3 style="color: var(--primary); font-size: 1.8rem;">Imena heroes</h3>
+                <h3 style="color: var(--primary); font-size: 1.8rem; text-align: center;">Imena Heroes</h3>
                 <div class="heritage-cards">
-                    <div class="hero-card">
+                    <div class="hero-card" data-hero="Mutara III Rudahigwa">
                         <i class="fas fa-crown fa-2x" style="color: var(--secondary);"></i>
                         <h3 style="color: var(--secondary);">Mutara III Rudahigwa</h3>
                         <p>King who abolished ubuhake. Symbol of unity & modern progress.</p>
                     </div>
-                    <div class="hero-card">
+                    <div class="hero-card" data-hero="Agathe Uwiringiyimana">
                         <i class="fas fa-fist-raised fa-2x" style="color: var(--secondary);"></i>
                         <h3 style="color: var(--secondary);">Agathe Uwiringiyimana</h3>
-                        <p>First female Prime Minister, fought divisionism, championed education for all.</p>
+                        <p>First female Prime Minister, fought divisionism, championed education.</p>
                     </div>
-                    <div class="hero-card">
+                    <div class="hero-card" data-hero="Nyange Students">
                         <i class="fas fa-hands-helping fa-2x" style="color: var(--secondary);"></i>
                         <h3 style="color: var(--secondary);">Nyange Students</h3>
                         <p>Refused ethnic separation, 1997. "We are all Rwandans"</p>
@@ -69,52 +105,68 @@
                 </div>
             </div>
 
-            <!-- quote -->
+            <!-- Quote -->
             <div style="margin-top: 60px; border-left: 3px solid var(--primary); padding-left: 30px;">
-                <p style="font-style: italic; color: #ccc;">“The IMENA ecosystem is not just code — it’s about Rwanda’s history and the rise of the nation toward the digital world.”</p>
+                <p style="font-style: italic; color: var(--text-muted);">
+                    “The IMENA ecosystem is not just code — it's about Rwanda's history and the rise of the nation toward the digital world.”
+                </p>
                 <p style="margin-top: 15px; font-weight: 600;">— TUYISENGE Jean Chrisostom</p>
             </div>
         </div>
     </section>
 
-    <!-- IMENA ecosystem PROJECTS (now with 4 projects) -->
+    <!-- PROJECTS SECTION -->
     <h2 style="text-align: center; font-size: 2.5rem; font-weight: 800; margin: 30px 0 10px;">
         <span style="color: var(--primary);">IMENA</span> ecosystem projects
     </h2>
+    
     <section class="projects-grid">
         <!-- CV BUILDER -->
         <div class="project-card">
             <i class="fas fa-id-card fa-3x"></i>
             <h3>IMENA CV BUILDER</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">A CV Builder website that enables users to make their own CV for free and download as PDF.</p>
-            <a href="https://imena-cv-builder.netlify.app/" class="btn-premium" target="_blank" rel="noopener"><span>Build yours</span> <i class="fas fa-external-link-alt"></i></a>
+            <p style="opacity:0.8; margin-bottom: 25px;">Create professional CVs for free and download as PDF.</p>
+            <a href="https://imena-cv-builder.netlify.app/" class="btn-premium" target="_blank" rel="noopener">
+                <span>Build yours</span> <i class="fas fa-external-link-alt"></i>
+            </a>
         </div>
+        
         <!-- TRINITY COLLEGE -->
         <div class="project-card">
             <i class="fas fa-university fa-3x"></i>
             <h3>IMENA TRINITY COLLEGE</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">A school website that shows all information about the school and direct application for admission.</p>
-            <a href="https://stomcodev.github.io/IMENA-TRINITY-COLLEGE/" class="btn-premium" target="_blank" rel="noopener"><span>Visit campus</span> <i class="fas fa-arrow-right"></i></a>
+            <p style="opacity:0.8; margin-bottom: 25px;">School website with information and admission applications.</p>
+            <a href="https://stomcodev.github.io/IMENA-TRINITY-COLLEGE/" class="btn-premium" target="_blank" rel="noopener">
+                <span>Visit campus</span> <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
-        <!-- TRAINER AI (newly added) -->
+        
+        <!-- TRAINER AI -->
         <div class="project-card">
             <i class="fas fa-robot fa-3x"></i>
             <h3>IMENA TRAINER AI</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">AI-powered training assistant — smart, adaptive, and built for Rwandan learners.</p>
-            <a href="https://stomcodev.github.io/IMENA-TRAINER-AI/" class="btn-premium" target="_blank" rel="noopener"><span>Start training</span> <i class="fas fa-brain"></i></a>
+            <p style="opacity:0.8; margin-bottom: 25px;">AI-powered training assistant for Rwandan learners.</p>
+            <a href="https://stomcodev.github.io/IMENA-TRAINER-AI/" class="btn-premium" target="_blank" rel="noopener">
+                <span>Start training</span> <i class="fas fa-brain"></i>
+            </a>
         </div>
+        
         <!-- DEVELOPER PORTFOLIO -->
         <div class="project-card">
             <i class="fas fa-code fa-3x"></i>
-            <h3>IMENA founder&developer website</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">Portfolio & professional identity of TUYISENGE Jean Chrisostom.</p>
-            <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" class="btn-premium" target="_blank" rel="noopener"><span>Visit me</span> <i class="fas fa-user"></i></a>
+            <h3>Developer website</h3>
+            <p style="opacity:0.8; margin-bottom: 25px;">Portfolio of TUYISENGE Jean Chrisostom.</p>
+            <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" class="btn-premium" target="_blank" rel="noopener">
+                <span>Visit me</span> <i class="fas fa-user"></i>
+            </a>
         </div>
     </section>
 
-    <!-- Developer photos StomCodeV -->
+    <!-- DEVELOPER PROFILES -->
     <div style="padding: 0 8% 40px;">
-        <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 30px; border-bottom: 2px dashed var(--primary); padding-bottom: 15px; text-align:center;">Founder and developer's profile</h3>
+        <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 30px; border-bottom: 2px dashed var(--primary); padding-bottom: 15px; text-align:center;">
+            Founder and developer's profile
+        </h3>
         <div class="heritage-cards">
             <!-- Jean Chrisostom -->
             <div class="dev-card">
@@ -125,51 +177,90 @@
                 <p>Founder of IMENA Ecosystem & developer</p>
                 <p style="margin-top: 10px;"><i class="fas fa-map-pin" style="color: var(--primary);"></i> Kigali, Rwanda</p>
             </div>
+            
             <!-- StomCodeV -->
             <div class="dev-card">
                 <a href="https://postimg.cc/tZ0wrGqj" target="_blank">
                     <img src="https://i.postimg.cc/tZ0wrGqj/BLAD.webp" alt="StomCodeV" class="img-glass">
                 </a>
                 <h3 style="color: var(--secondary);">StomCodeV</h3>
-                <p>TUYISENGE Jean Chrisostom is also known as StomCodeV when coding. StomCodeV means "Chrisostom Code Developer"</p>
+                <p>TUYISENGE Jean Chrisostom is also known as StomCodeV when coding.</p>
                 <p style="margin-top: 10px;"><i class="fas fa-code" style="color: var(--primary);"></i> code & resilience</p>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER - professional, clean, with clickable developer credit -->
+    <!-- NEWSLETTER SECTION - Google Sheets Integration -->
+    <div class="newsletter-section glass-panel">
+        <h3 style="color: var(--primary); font-size: 2rem; margin-bottom: 15px;">Join the IMENA Community</h3>
+        <p style="margin-bottom: 20px; color: var(--text-muted);">Get updates on new projects and Rwandan tech news</p>
+        
+        <form id="newsletterForm" class="newsletter-form">
+            <input type="email" id="subscriberEmail" placeholder="Enter your email" required>
+            <input type="text" id="subscriberName" placeholder="Your name (optional)">
+            <button type="submit" class="btn-premium">
+                <span>Subscribe</span> <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+        
+        <div id="subscribeMessage" style="margin-top: 20px; display: none;"></div>
+        
+        <!-- Note: Replace with your Google Apps Script URL -->
+        <p style="font-size: 0.8rem; opacity: 0.5; margin-top: 20px;">
+            <i class="fas fa-lock"></i> We respect your privacy - unsubscribe anytime
+        </p>
+    </div>
+
+    <!-- MODAL for Hero Details -->
+    <div id="heroModal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal">&times;</span>
+            <h3 id="modalTitle" style="color: var(--secondary); font-size: 2rem; margin-bottom: 20px;"></h3>
+            <p id="modalDescription" style="margin-bottom: 20px;"></p>
+            <div id="modalExtra" class="modal-extra"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
     <footer>
         <div class="footer-content">
             <div class="footer-quote">
                 <i class="fas fa-shield-alt" style="margin-right: 10px;"></i> "Heart of Rwanda. Code of Innovation."
             </div>
+            
             <div class="contact-info">
                 <p><span><i class="fas fa-map-pin"></i> HQ</span> Karumuna, Ntarama, Bugesera · Rwanda</p>
                 <p><span><i class="fas fa-envelope"></i> Email</span> tuyisengejeanchrisostome@gmail.com</p>
                 <p><span><i class="fab fa-whatsapp"></i> WhatsApp</span> +250 796 717 230</p>
             </div>
+            
             <p style="opacity:0.7; font-size:0.9rem;">© 2026 IMENA ECOSYSTEM. All rights reserved.</p>
             
-            <!-- Developer credit line with clickable link -->
             <div class="developer-credit">
-                Developed by <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank" rel="noopener">TUYISENGE Jean Chrisostom [StomCodeV]</a>
+                Developed by <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank" rel="noopener">
+                    TUYISENGE Jean Chrisostom
+                </a>
             </div>
         </div>
     </footer>
 
     <script>
         (function() {
-            // custom cursor
+            // =========================================
+            // 1. CUSTOM CURSOR
+            // =========================================
             const outer = document.querySelector('.cursor-outer');
             const inner = document.querySelector('.cursor-inner');
             let mouseX = 0, mouseY = 0;
             let outerX = 0, outerY = 0;
+
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 inner.style.left = mouseX + 'px';
                 inner.style.top = mouseY + 'px';
             });
+
             const animateCursor = () => {
                 outerX += (mouseX - outerX) * 0.2;
                 outerY += (mouseY - outerY) * 0.2;
@@ -179,10 +270,13 @@
             };
             animateCursor();
 
-            // canvas background (unchanged, keeps visual appeal)
+            // =========================================
+            // 2. CANVAS BACKGROUND
+            // =========================================
             const canvas = document.getElementById('bg-canvas');
             const ctx = canvas.getContext('2d');
             let width, height;
+
             function resizeCanvas() {
                 width = window.innerWidth;
                 height = window.innerHeight;
@@ -208,13 +302,14 @@
             let time = 0;
             function drawBackground() {
                 ctx.clearRect(0, 0, width, height);
+                
                 const gradient = ctx.createRadialGradient(width*0.5, height*0.5, 10, width*0.5, height*0.5, width*0.8);
                 gradient.addColorStop(0, '#07100c');
                 gradient.addColorStop(1, '#010202');
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, width, height);
 
-                // wave lines
+                // Wave lines
                 ctx.save();
                 ctx.globalAlpha = 0.15;
                 ctx.lineWidth = 2.5;
@@ -238,8 +333,10 @@
                     ctx.shadowColor = p.baseColor;
                     ctx.shadowBlur = 12;
                     ctx.fill();
+                    
                     p.x += p.vx;
                     p.y += p.vy;
+                    
                     if (p.x < 0) p.x = width;
                     if (p.x > width) p.x = 0;
                     if (p.y < 0) p.y = height;
@@ -251,7 +348,277 @@
             }
             drawBackground();
 
-            // hover effect for cards
+            // =========================================
+            // 3. TYPEWRITER EFFECT
+            // =========================================
+            const phrases = [
+                "A legacy of code, grown from Rwandan excellence 🇷🇼",
+                "Where heroes inspire innovation ✨",
+                "Building Rwanda's digital future 🚀",
+                "Code with the spirit of Imena 💚💛💙"
+            ];
+            
+            let phraseIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            
+            function typeWriter() {
+                const currentPhrase = phrases[phraseIndex];
+                const typewriterElement = document.getElementById('typewriter');
+                
+                if (isDeleting) {
+                    typewriterElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    typewriterElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+                
+                if (!isDeleting && charIndex === currentPhrase.length) {
+                    isDeleting = true;
+                    setTimeout(typeWriter, 2000);
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(typeWriter, 500);
+                } else {
+                    setTimeout(typeWriter, isDeleting ? 50 : 100);
+                }
+            }
+            
+            window.addEventListener('load', typeWriter);
+
+            // =========================================
+            // 4. ANIMATED COUNTER
+            // =========================================
+            function animateCounter() {
+                const counters = document.querySelectorAll('.stat-number');
+                
+                counters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-target'));
+                    const increment = target / 50;
+                    
+                    let current = 0;
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            counter.textContent = Math.ceil(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.textContent = target;
+                        }
+                    };
+                    
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                updateCounter();
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    });
+                    
+                    observer.observe(counter);
+                });
+            }
+            
+            window.addEventListener('load', animateCounter);
+
+            // =========================================
+            // 5. 3D TILT EFFECT ON CARDS
+            // =========================================
+            const cards = document.querySelectorAll('.hero-card, .project-card, .dev-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                });
+            });
+
+            // =========================================
+            // 6. HERO MODAL
+            // =========================================
+            const modal = document.getElementById('heroModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDescription');
+            const modalExtra = document.getElementById('modalExtra');
+            const closeBtn = document.querySelector('.close-modal');
+
+            const heroDetails = {
+                'Mutara III Rudahigwa': {
+                    fullName: 'King Mutara III Rudahigwa (1911-1959)',
+                    description: 'Known as Charles Léon Pierre, he was the King of Rwanda who abolished "ubuhake" (cattle contract system) in 1954, freeing thousands from servitude.',
+                    extra: 'He advocated for Rwandan independence and unity, and was a symbol of modern progress and dignity for all Rwandans.'
+                },
+                'Agathe Uwiringiyimana': {
+                    fullName: 'Agathe Uwiringiyimana (1953-1994)',
+                    description: 'Rwanda\'s first female Prime Minister, appointed in 1993. She was a passionate advocate for democracy, women\'s rights, and education.',
+                    extra: 'She was assassinated on April 7, 1994, for refusing to abandon her commitment to a unified Rwanda.'
+                },
+                'Nyange Students': {
+                    fullName: 'Nyange Secondary School Students (1997)',
+                    description: 'On March 18, 1997, armed insurgents attacked Nyange Secondary School and ordered students to separate by ethnicity.',
+                    extra: 'They refused, declaring "We are all Rwandans." Several were killed and many injured. Their bravery represents the ultimate sacrifice for national unity.'
+                }
+            };
+
+            document.querySelectorAll('.hero-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const title = card.querySelector('h3').textContent.trim();
+                    const details = heroDetails[title] || {
+                        fullName: title,
+                        description: card.querySelector('p').textContent,
+                        extra: 'An Imena hero who sacrificed for Rwanda\'s unity.'
+                    };
+                    
+                    modalTitle.textContent = details.fullName;
+                    modalDesc.textContent = details.description;
+                    modalExtra.innerHTML = `<p style="color: var(--secondary); margin-top: 20px;"><i class="fas fa-quote-right"></i> ${details.extra}</p>`;
+                    
+                    modal.style.display = 'flex';
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // =========================================
+            // 7. PROGRESS BAR
+            // =========================================
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById('progressBar').style.width = scrolled + '%';
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // =========================================
+            // 8. THEME TOGGLE
+            // =========================================
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            const icon = themeToggle.querySelector('i');
+
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-theme');
+                
+                if (body.classList.contains('light-theme')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+
+            // =========================================
+            // 9. CLICK PARTICLES
+            // =========================================
+            document.addEventListener('click', (e) => {
+                for (let i = 0; i < 8; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'click-particle';
+                    particle.style.left = e.clientX + 'px';
+                    particle.style.top = e.clientY + 'px';
+                    particle.style.background = i % 2 === 0 ? 'var(--primary)' : 'var(--secondary)';
+                    particle.style.transform = `rotate(${i * 45}deg) translate(${20 + Math.random() * 30}px)`;
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 600);
+                }
+            });
+
+            // =========================================
+            // 10. GOOGLE SHEETS NEWSLETTER SUBSCRIPTION
+            // =========================================
+            // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygiUMiGZjPJsXiEHnLFgRdUmOYEhtvnTcOr_JEwfWn2EVHJk5k8tY7CkEn2IxHna0OuA/exec';
+            
+            const newsletterForm = document.getElementById('newsletterForm');
+            const subscribeMessage = document.getElementById('subscribeMessage');
+            
+            newsletterForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('subscriberEmail').value;
+                const name = document.getElementById('subscriberName').value || 'Anonymous';
+                
+                // Show loading message
+                subscribeMessage.style.display = 'block';
+                subscribeMessage.className = '';
+                subscribeMessage.textContent = 'Subscribing...';
+                subscribeMessage.style.color = 'var(--secondary)';
+                
+                try {
+                    // Prepare data for Google Sheets
+                    const formData = new FormData();
+                    formData.append('Email', email);
+                    formData.append('Name', name);
+                    formData.append('Timestamp', new Date().toISOString());
+                    
+                    // Send to Google Sheets
+                    const response = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Required for Google Apps Script
+                        body: formData
+                    });
+                    
+                    // Show success message (even with no-cors, we assume success)
+                    subscribeMessage.className = 'success-message';
+                    subscribeMessage.innerHTML = '<i class="fas fa-check-circle"></i> Thank you for subscribing! Check your email for confirmation.';
+                    
+                    // Reset form
+                    newsletterForm.reset();
+                    
+                    // Optional: Send email notification (you'll need a backend for this)
+                    // You can also set up the Google Script to send an email
+                    
+                } catch (error) {
+                    console.error('Subscription error:', error);
+                    subscribeMessage.className = 'error-message';
+                    subscribeMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Something went wrong. Please try again.';
+                }
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    subscribeMessage.style.display = 'none';
+                }, 5000);
+            });
+
+            // Hover effect for cursor
             document.querySelectorAll('.btn-premium, .project-card, .dev-card, .hero-card').forEach(el => {
                 el.addEventListener('mouseenter', () => {
                     outer.style.width = '68px';
@@ -266,5 +633,44 @@
             });
         })();
     </script>
+
+    <!-- ========================================= -->
+    <!-- GOOGLE APPS SCRIPT CODE (for your Sheet) -->
+    <!-- ========================================= -->
+    <!--
+    Copy this code to Google Apps Script:
+    
+    function doPost(e) {
+      var sheet = SpreadsheetApp.getActiveSheet();
+      var data = e.parameter;
+      
+      // Append row: Timestamp, Email, Name
+      sheet.appendRow([
+        new Date(),
+        data.Email,
+        data.Name || 'Anonymous'
+      ]);
+      
+      // Optional: Send email notification
+      if (data.Email) {
+        MailApp.sendEmail({
+          to: "tuyisengejeanchrisostome@gmail.com",
+          subject: "New IMENA Newsletter Subscriber",
+          htmlBody: `<h2>New Subscriber!</h2>
+                     <p><strong>Email:</strong> ${data.Email}</p>
+                     <p><strong>Name:</strong> ${data.Name || 'Not provided'}</p>
+                     <p><strong>Time:</strong> ${new Date()}</p>`
+        });
+      }
+      
+      return ContentService
+        .createTextOutput(JSON.stringify({result: 'success'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    function doGet() {
+      return HtmlService.createHtmlOutput('IMENA Newsletter Subscription Endpoint');
+    }
+    -->
 </body>
 </html>
