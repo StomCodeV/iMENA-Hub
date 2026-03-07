@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IMENA · Rwandan Ecosystem | StomCodeV 2026</title>
-    <!-- Font Awesome (icons) -->
+    <!-- Font Awesome 6 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    <!-- Inter font for premium feel -->
+    <!-- Inter font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800;14..32,900&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none;
+            cursor: none; /* custom cursor */
         }
 
         :root {
@@ -36,7 +36,7 @@
             overflow-x: hidden;
         }
 
-        /* -- advanced canvas background (particle + wave glow) -- */
+        /* canvas background (particles + wave glow) */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -47,7 +47,7 @@
             display: block;
         }
 
-        /* -- precision custom cursor -- */
+        /* premium custom cursor */
         .cursor-outer {
             width: 44px;
             height: 44px;
@@ -78,7 +78,7 @@
             background: rgba(0,168,89,0.05);
         }
 
-        /* -- glassmorphism core -- */
+        /* glassmorphism panels */
         .glass-panel {
             background: rgba(5, 10, 15, 0.4);
             backdrop-filter: blur(16px) saturate(180%);
@@ -88,7 +88,6 @@
             box-shadow: 0 30px 60px -20px #000, 0 0 0 1px rgba(0,168,89,0.1) inset;
         }
 
-        /* -- section tag -- */
         .section-tag {
             color: var(--secondary);
             letter-spacing: 6px;
@@ -101,7 +100,7 @@
             padding-left: 16px;
         }
 
-        /* -- premium buttons with depth -- */
+        /* premium buttons */
         .btn-premium {
             display: inline-flex;
             align-items: center;
@@ -127,7 +126,7 @@
         }
         .btn-premium:hover i { transform: translateX(6px); }
 
-        /* -- hero header -- */
+        /* hero */
         header {
             min-height: 100vh;
             display: flex;
@@ -163,26 +162,52 @@
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
         }
 
-        /* -- heritage cards (elevated) -- */
-        .heritage-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-            margin-top: 50px;
+        /* image styling - advanced, glassy, responsive */
+        .img-glass {
+            border-radius: 28px;
+            border: 2px solid rgba(249,178,51,0.3);
+            box-shadow: 0 25px 40px -12px #000, 0 0 0 1px rgba(0,168,89,0.3) inset;
+            transition: 0.3s ease;
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        .img-glass:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+            box-shadow: 0 30px 50px -10px #00A859;
         }
 
-        .hero-card {
+        /* heritage & dev grid */
+        .heritage-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        .hero-card, .dev-card {
             background: rgba(255,255,255,0.02);
             border-radius: 28px;
-            padding: 32px 24px;
+            padding: 24px 20px;
             border: 1px solid rgba(249,178,51,0.1);
             transition: 0.25s;
             border-left: 5px solid var(--secondary);
             backdrop-filter: blur(6px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
-        .hero-card:hover { background: rgba(0,168,89,0.08); border-left-width: 8px; }
+        .hero-card:hover, .dev-card:hover { background: rgba(0,168,89,0.08); border-left-width: 8px; }
+        .dev-card img { width: 100%; max-width: 240px; border-radius: 24px; margin-bottom: 20px; border: 2px solid var(--secondary); }
+        .ecosystem-img {
+            margin: 40px 0 20px;
+            text-align: center;
+        }
+        .ecosystem-img img { max-width: 100%; border-radius: 36px; border: 2px solid var(--primary); box-shadow: 0 30px 40px -20px #000; }
 
-        /* -- projects grid (responsive, premium) -- */
+        /* projects grid */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
@@ -219,9 +244,8 @@
             border-color: var(--primary);
             box-shadow: 0 40px 50px -15px #00A859;
         }
-        .project-card i { color: var(--primary); margin-bottom: 24px; }
 
-        /* -- footer contact with map marker style -- */
+        /* footer */
         footer {
             background: #020408;
             padding: 80px 10% 60px;
@@ -240,19 +264,14 @@
         }
         .contact-info span { color: var(--secondary); font-weight: 700; margin-right: 12px; }
 
-        /* -- responsiveness fine tuning -- */
         @media (max-width: 700px) {
             .glass-panel { padding: 28px !important; border-radius: 32px; }
-            .hero-card { padding: 24px; }
         }
     </style>
 </head>
 <body>
-    <!-- custom cursors -->
     <div class="cursor-outer"></div>
     <div class="cursor-inner"></div>
-
-    <!-- advanced canvas (particles + waves) -->
     <canvas id="bg-canvas"></canvas>
 
     <!-- HERO -->
@@ -265,35 +284,74 @@
         <a href="#core" class="btn-premium" style="margin-top: 40px;"><span>Discover the Shield</span> <i class="fas fa-arrow-right"></i></a>
     </header>
 
-    <!-- HERITAGE + PHILOSOPHY (core) -->
-    <section class="heritage-section" id="core" style="padding: 60px 8% 80px;">
-        <div class="glass-panel" style="padding: 70px 50px;">
+    <!-- CORE SECTION with ECOSYSTEM PHOTO and DEVELOPER PHOTOS -->
+    <section id="core" style="padding: 40px 8% 60px;">
+        <div class="glass-panel" style="padding: 60px 50px;">
             <span class="section-tag">Imena · Ubunyamwuga</span>
             <h2 style="font-size: clamp(2.2rem,5vw,3.5rem); font-weight:800; margin-bottom: 30px;">Born from <span style="color:var(--primary);">the hills</span>, built for the future</h2>
-            <p style="font-size:1.2rem; color:#bbb; max-width: 800px;">
+            
+            <!-- ECOSYSTEM PHOTO (provided) -->
+            <div class="ecosystem-img">
+                <a href="https://postimg.cc/zLYrGzPX" target="_blank">
+                    <img src="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png" alt="IMENA Ecosystem visual" class="img-glass" style="max-width: 100%; border-radius: 40px;">
+                </a>
+                <p style="margin-top: 15px; color: var(--secondary);"><i class="fas fa-mountain"></i> The IMENA Ecosystem – digital sanctuary</p>
+            </div>
+
+            <p style="font-size:1.2rem; color:#bbb; max-width: 800px; margin-top: 30px;">
                 In Rwanda, <strong>Imena</strong> are heroes of the highest order — those who gave everything for unity.  
                 Our ecosystem carries that name to remind us that real technology serves and protects.  
                 From Karumuna cell (Ntarama) to the world.
             </p>
 
-            <div class="heritage-cards">
-                <div class="hero-card">
-                    <i class="fas fa-crown fa-2x" style="color: var(--secondary); margin-bottom: 15px;"></i>
-                    <h3 style="color: var(--secondary);">Mutara III Rudahigwa</h3>
-                    <p>The king who abolished ubuhake. We abolish digital inequality through open tools.</p>
-                </div>
-                <div class="hero-card">
-                    <i class="fas fa-fist-raised fa-2x" style="color: var(--secondary); margin-bottom: 15px;"></i>
-                    <h3 style="color: var(--secondary);">Agathe Uwiringiyimana</h3>
-                    <p>Fearless prime minister & educator. Our platforms empower every Rwandan teacher.</p>
-                </div>
-                <div class="hero-card">
-                    <i class="fas fa-hands-helping fa-2x" style="color: var(--secondary); margin-bottom: 15px;"></i>
-                    <h3 style="color: var(--secondary);">The Unknown Imena</h3>
-                    <p>Everyday heroes who built communities. We embed their resilience in every function.</p>
+            <!-- Developer photos (Jean Chrisostom & BLAD) placed side by side under heritage -->
+            <div style="margin-top: 60px;">
+                <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 30px; border-bottom: 2px dashed var(--primary); padding-bottom: 15px;">The minds behind the code</h3>
+                <div class="heritage-cards">
+                    <!-- Jean Chrisostom -->
+                    <div class="dev-card">
+                        <a href="https://postimg.cc/Mnccw7yk" target="_blank">
+                            <img src="https://i.postimg.cc/Mnccw7yk/chrisostom.jpg" alt="Jean Chrisostom" class="img-glass">
+                        </a>
+                        <h3 style="color: var(--secondary);">Jean Chrisostom</h3>
+                        <p>Founder & lead developer · StomCodeV. Building from Ntarama with the spirit of Imena.</p>
+                        <p style="margin-top: 10px;"><i class="fas fa-map-pin" style="color: var(--primary);"></i> Karumuna, Bugesera</p>
+                    </div>
+                    <!-- BLAD (second developer) -->
+                    <div class="dev-card">
+                        <a href="https://postimg.cc/tZ0wrGqj" target="_blank">
+                            <img src="https://i.postimg.cc/tZ0wrGqj/BLAD.webp" alt="BLAD" class="img-glass">
+                        </a>
+                        <h3 style="color: var(--secondary);">BLAD</h3>
+                        <p>Core collaborator · Ecosystem architect & innovation partner.</p>
+                        <p style="margin-top: 10px;"><i class="fas fa-code" style="color: var(--primary);"></i> code & resilience</p>
+                    </div>
                 </div>
             </div>
 
+            <!-- Heritage cards (heroes) with slight update to include more depth -->
+            <div style="margin-top: 70px;">
+                <h3 style="color: var(--primary); font-size: 1.8rem;">The Imena we honour</h3>
+                <div class="heritage-cards">
+                    <div class="hero-card">
+                        <i class="fas fa-crown fa-2x" style="color: var(--secondary);"></i>
+                        <h3 style="color: var(--secondary);">Mutara III Rudahigwa</h3>
+                        <p>King who abolished ubuhake. Symbol of unity & modern progress.</p>
+                    </div>
+                    <div class="hero-card">
+                        <i class="fas fa-fist-raised fa-2x" style="color: var(--secondary);"></i>
+                        <h3 style="color: var(--secondary);">Agathe Uwiringiyimana</h3>
+                        <p>First female PM, fought divisionism, championed education for all.</p>
+                    </div>
+                    <div class="hero-card">
+                        <i class="fas fa-hands-helping fa-2x" style="color: var(--secondary);"></i>
+                        <h3 style="color: var(--secondary);">Nyange Students</h3>
+                        <p>"We are all Rwandans" — refused ethnic separation, 1997.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- quote -->
             <div style="margin-top: 60px; border-left: 3px solid var(--primary); padding-left: 30px;">
                 <p style="font-style: italic; color: #ccc;">“The IMENA ecosystem is not just code — it’s a digital Umuganda. I build from Ntarama so that every Rwandan can see themselves as a tech creator, not just a consumer.”</p>
                 <p style="margin-top: 15px; font-weight: 600;">— Jean Chrisostom · StomCodeV</p>
@@ -301,37 +359,32 @@
         </div>
     </section>
 
-    <!-- ecosystem NODES (projects) with embedded live links -->
+    <!-- ecosystem PROJECTS (active nodes) unchanged but keeping them -->
     <h2 style="text-align: center; font-size: 2.8rem; font-weight: 800; margin: 50px 0 0;">
         <span style="color: var(--primary);">active</span> ecosystem nodes
     </h2>
     <section class="projects-grid">
-        <!-- CV BUILDER -->
         <div class="project-card">
             <i class="fas fa-id-card fa-3x"></i>
             <h3 style="font-size: 2rem; margin-bottom: 15px;">IMENA CV</h3>
             <p style="opacity:0.8; margin-bottom: 25px;">Rwandan workforce accelerator — modern, bilingual, ATS‑ready profiles.</p>
             <a href="https://imena-cv-builder.netlify.app/" class="btn-premium" target="_blank" rel="noopener"><span>Build yours</span> <i class="fas fa-external-link-alt"></i></a>
         </div>
-
-        <!-- TRINITY COLLEGE -->
         <div class="project-card">
             <i class="fas fa-university fa-3x"></i>
             <h3 style="font-size: 2rem; margin-bottom: 15px;">Trinity College</h3>
             <p style="opacity:0.8; margin-bottom: 25px;">Full‑spectrum school management — built for Bugesera’s excellence.</p>
             <a href="https://stomcodev.github.io/IMENA-TRINITY-COLLEGE/" class="btn-premium" target="_blank" rel="noopener"><span>Visit campus</span> <i class="fas fa-arrow-right"></i></a>
         </div>
-
-        <!-- DEV HUB / PORTFOLIO -->
         <div class="project-card">
             <i class="fas fa-code fa-3x"></i>
             <h3 style="font-size: 2rem; margin-bottom: 15px;">StomCodeV Hub</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">The maker's mind — portfolio & professional identity of Jean Chrisostom.</p>
+            <p style="opacity:0.8; margin-bottom: 25px;">Portfolio & professional identity of Jean Chrisostom.</p>
             <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" class="btn-premium" target="_blank" rel="noopener"><span>Meet dev</span> <i class="fas fa-user"></i></a>
         </div>
     </section>
 
-    <!-- premium contact footer with real details + extra Rwanda touch -->
+    <!-- FOOTER (contact unchanged) -->
     <footer>
         <div style="max-width: 900px; margin: 0 auto;">
             <i class="fas fa-shield-alt" style="font-size: 3rem; color: var(--primary); opacity: 0.4; margin-bottom: 20px;"></i>
@@ -342,28 +395,22 @@
                 <p><span><i class="fab fa-whatsapp"></i> WhatsApp</span> +250 796 717 230</p>
             </div>
             <p style="border-top: 1px solid rgba(249,178,51,0.2); padding-top: 30px; margin-top: 40px; opacity:0.7;">© 2026 StomCodeV — IMENA Ecosystem: infinite resilience. All rights reserved.</p>
-            <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center; color: var(--secondary);">
-                <i class="fas fa-dragon"></i> <i class="fas fa-mountain"></i> <i class="fas fa-water"></i>
-            </div>
         </div>
     </footer>
 
     <script>
         (function() {
-            // --- ADVANCED CURSOR (smooth follow) ---
+            // custom cursor
             const outer = document.querySelector('.cursor-outer');
             const inner = document.querySelector('.cursor-inner');
             let mouseX = 0, mouseY = 0;
             let outerX = 0, outerY = 0;
-            let innerX = 0, innerY = 0;
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
-                // inner moves instantly
                 inner.style.left = mouseX + 'px';
                 inner.style.top = mouseY + 'px';
             });
-            // smooth outer with lerp
             const animateCursor = () => {
                 outerX += (mouseX - outerX) * 0.2;
                 outerY += (mouseY - outerY) * 0.2;
@@ -373,7 +420,7 @@
             };
             animateCursor();
 
-            // --- CANVAS BACKGROUND (particles + light streaks) ---
+            // canvas background
             const canvas = document.getElementById('bg-canvas');
             const ctx = canvas.getContext('2d');
             let width, height;
@@ -386,7 +433,6 @@
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
 
-            // Particles (floating glow)
             const particles = [];
             const PARTICLE_COUNT = 110;
             for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -396,23 +442,20 @@
                     radius: Math.random() * 2.6 + 0.8,
                     vx: (Math.random() - 0.5) * 0.35,
                     vy: (Math.random() - 0.5) * 0.25,
-                    baseColor: Math.random() > 0.6 ? '#F9B233' : '#00A859', // gold or green
+                    baseColor: Math.random() > 0.6 ? '#F9B233' : '#00A859',
                 });
             }
 
-            // extra slow wave lines (Rwandan hills abstraction)
             let time = 0;
             function drawBackground() {
                 ctx.clearRect(0, 0, width, height);
-                
-                // deep gradient base
                 const gradient = ctx.createRadialGradient(width*0.5, height*0.5, 10, width*0.5, height*0.5, width*0.8);
                 gradient.addColorStop(0, '#07100c');
                 gradient.addColorStop(1, '#010202');
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, width, height);
 
-                // draw wave lines (soft moving ridges)
+                // wave lines
                 ctx.save();
                 ctx.globalAlpha = 0.15;
                 ctx.lineWidth = 2.5;
@@ -429,7 +472,6 @@
                 }
                 ctx.restore();
 
-                // draw particles (glowing)
                 particles.forEach(p => {
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -437,35 +479,21 @@
                     ctx.shadowColor = p.baseColor;
                     ctx.shadowBlur = 12;
                     ctx.fill();
-                    
-                    // move
                     p.x += p.vx;
                     p.y += p.vy;
-                    
-                    // boundaries with soft wrap
                     if (p.x < 0) p.x = width;
                     if (p.x > width) p.x = 0;
                     if (p.y < 0) p.y = height;
                     if (p.y > height) p.y = 0;
                 });
-                
-                // extra floating tiny dots
-                ctx.shadowBlur = 8;
-                for (let i = 0; i < 30; i++) {
-                    if (i % 2 === 0) continue; // performance friendly
-                    ctx.fillStyle = '#00A859';
-                    ctx.beginPath();
-                    ctx.arc((Math.sin(time*0.2 + i)*130 + width*0.3 + i*23) % width, (Math.cos(time*0.1 + i)*70 + height*0.7) % height, 1.5, 0, 2*Math.PI);
-                    ctx.fill();
-                }
 
                 time += 0.03;
                 requestAnimationFrame(drawBackground);
             }
             drawBackground();
 
-            // optional: tiny hover effect for cards (cursor scale)
-            document.querySelectorAll('.btn-premium, .project-card').forEach(el => {
+            // hover effect for cards
+            document.querySelectorAll('.btn-premium, .project-card, .dev-card, .hero-card').forEach(el => {
                 el.addEventListener('mouseenter', () => {
                     outer.style.width = '68px';
                     outer.style.height = '68px';
