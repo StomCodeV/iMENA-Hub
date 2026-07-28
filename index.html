@@ -1,730 +1,1471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ===== 1. BASIC META TAGS (Essential) ===== -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <!-- ===== 2. PAGE TITLE (Shows in Google & Browser Tab) ===== -->
-    <title>IMENA Ecosystem | Rwandan Innovation & Technology</title>
-    
-    <!-- ===== 3. SEO META TAGS (For Google Ranking) ===== -->
-    <meta name="description" content="IMENA Ecosystem honors Rwandan heroes through technology. Free CV Builder, Trinity College School Management, AI Trainer, and developer tools. Built in Rwanda for the world.">
-    <meta name="keywords" content="Rwanda, Imena, CV Builder, Trinity College, AI Trainer, StomCodeV, Rwandan heroes, Agathe Uwiringiyimana, Mutara III, Nyange Students, Kigali tech">
-    <meta name="author" content="TUYISENGE Jean Chrisostom">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
-    
-    <!-- ===== 4. GOOGLE VERIFICATION (Important for Search Console) ===== -->
-    <meta name="google-site-verification" content="google145549782ba1..." />
-    
-    <!-- ===== 5. OPEN GRAPH META (For Facebook, LinkedIn, WhatsApp) ===== -->
-    <meta property="og:title" content="IMENA Ecosystem - Rwandan Innovation">
-    <meta property="og:description" content="A digital home for Rwandan success. Free CV Builder, School Management, AI Trainer, and more.">
-    <meta property="og:image" content="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://stomcodev.github.io/IMENA-Ecosystem/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="IMENA Ecosystem">
-    <meta property="og:locale" content="en_US">
-    
-    <!-- ===== 6. TWITTER CARD META (For Twitter/X sharing) ===== -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="IMENA Ecosystem - Rwandan Innovation">
-    <meta name="twitter:description" content="Honoring Rwandan heroes through technology. Free tools for everyone.">
-    <meta name="twitter:image" content="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png">
-    <meta name="twitter:creator" content="@stomcodev">
-    
-    <!-- ===== 7. FAVICON (Browser Tab Icon) ===== -->
-    <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png">
-    
-    <!-- ===== 8. CSS STYLES ===== -->
-    <link rel="stylesheet" href="index.css">
-    
-    <!-- ===== 9. FONTS (Optimized loading) ===== -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    
-    <!-- ===== 10. FONT AWESOME (Icons) ===== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" defer></script>
-    
-    <!-- ===== 11. CANONICAL URL (Prevents duplicate content) ===== -->
-    <link rel="canonical" href="https://stomcodev.github.io/IMENA-Ecosystem/">
-    
-    <!-- ===== 12. THEME COLOR (For mobile browsers) ===== -->
-    <meta name="theme-color" content="#00A859">
-    <meta name="msapplication-TileColor" content="#00A859">
-    
-    <!-- ===== 13. MANIFEST (For PWA - optional) ===== -->
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- ===== 14. PRELOAD KEY RESOURCES (Faster loading) ===== -->
-    <link rel="preload" href="index.css" as="style">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" as="style">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iMENA Hub</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ===== THREE.JS CANVAS ===== */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f7971e;
+            border-radius: 10px;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled {
+            padding: 0.7rem 4rem;
+            background: rgba(10, 10, 26, 0.96);
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: #fff;
+        }
+        .nav-logo img {
+            height: 40px;
+            width: auto;
+        }
+        .nav-logo span {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-links a:hover {
+            color: #ffd200;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-cta {
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            border-radius: 50px;
+            color: #0a0a1a !important;
+            font-weight: 700 !important;
+        }
+        .nav-cta::after {
+            display: none !important;
+        }
+        .nav-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(247, 151, 30, 0.4);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: #fff;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== OVERLAY CONTENT ===== */
+        .content {
+            position: relative;
+            z-index: 1;
+            padding-top: 80px;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 2rem 4rem;
+            text-align: center;
+        }
+        .hero * {
+            pointer-events: auto;
+        }
+        .hero-logo {
+            max-width: 180px;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 1s ease-out;
+        }
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 80px rgba(247, 151, 30, 0.3);
+            animation: fadeUp 1.2s ease-out;
+        }
+        .hero-title span {
+            font-weight: 300;
+            background: linear-gradient(135deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-tagline {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            letter-spacing: 0.15em;
+            animation: fadeUp 1.4s ease-out;
+        }
+        .hero-tagline strong {
+            color: #ffd200;
+            font-weight: 700;
+        }
+        .hero-desc {
+            max-width: 720px;
+            margin: 1.8rem auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+            animation: fadeUp 1.6s ease-out;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2.5rem 0;
+            animation: fadeUp 1.8s ease-out;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #ffd200;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.2rem;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeUp 2.0s ease-out;
+        }
+        .btn {
+            padding: 0.9rem 2.4rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #0a0a1a;
+            box-shadow: 0 4px 30px rgba(247, 151, 30, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 45px rgba(247, 151, 30, 0.5);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-outline:hover {
+            border-color: #ffd200;
+            color: #ffd200;
+            transform: translateY(-3px);
+        }
+        .btn-gold {
+            background: transparent;
+            color: #ffd200;
+            border: 2px solid #ffd200;
+        }
+        .btn-gold:hover {
+            background: #ffd200;
+            color: #0a0a1a;
+            transform: translateY(-3px);
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .section-title .highlight {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .about-text {
+            color: #cbd5e1;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+        .about-text p {
+            margin-bottom: 1.2rem;
+        }
+        .about-text strong {
+            color: #ffd200;
+        }
+        .about-highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .highlight-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .highlight-box .num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffd200;
+        }
+        .highlight-box .label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* ===== VISION & MISSION ===== */
+        .vm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        .vm-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .vm-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(247, 151, 30, 0.3);
+        }
+        .vm-card i {
+            font-size: 3rem;
+            color: #ffd200;
+            margin-bottom: 1rem;
+        }
+        .vm-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .vm-card p {
+            color: #cbd5e1;
+            line-height: 1.7;
+        }
+
+        /* ===== CORE AREAS ===== */
+        .core-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .core-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .core-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+        .core-card:hover::before {
+            transform: scaleX(1);
+        }
+        .core-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 215, 0, 0.06);
+            border-color: rgba(247, 151, 30, 0.3);
+        }
+        .core-card .icon {
+            font-size: 2.5rem;
+            color: #ffd200;
+            margin-bottom: 1rem;
+        }
+        .core-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.7rem;
+        }
+        .core-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ===== APPROACH ===== */
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        .approach-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.06);
+        }
+        .approach-item i {
+            font-size: 2.5rem;
+            color: #ffd200;
+            margin-bottom: 1rem;
+        }
+        .approach-item h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .approach-item p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ===== INITIATIVES ===== */
+        .init-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .init-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+        }
+        .init-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(247, 151, 30, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .init-card .badge {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            background: rgba(247, 151, 30, 0.2);
+            color: #ffd200;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        .init-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .init-card p {
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .init-card .features {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .init-card .features span {
+            background: rgba(255, 215, 0, 0.08);
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        /* ===== PAPERLESS DETAIL ===== */
+        .paperless-section {
+            background: rgba(255, 215, 0, 0.03);
+            border-radius: 30px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            margin-top: 2rem;
+        }
+        .paperless-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .paperless-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .paperless-feature {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .paperless-feature i {
+            color: #ffd200;
+            font-size: 1.2rem;
+        }
+        .paperless-feature span {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        /* ===== PARTNERS ===== */
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            align-items: center;
+            justify-items: center;
+        }
+        .partner-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .partner-card:hover {
+            background: rgba(247, 151, 30, 0.08);
+            border-color: #f7971e;
+        }
+        .partner-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffd200;
+        }
+        .partner-card p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 0.3rem;
+        }
+
+        /* ===== FOUNDER ===== */
+        .founder-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .founder-image {
+            text-align: center;
+        }
+        .founder-image .avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            font-weight: 900;
+            color: #0a0a1a;
+            margin: 0 auto 1rem;
+            box-shadow: 0 0 60px rgba(247, 151, 30, 0.2);
+        }
+        .founder-image h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        .founder-image .title {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .founder-info {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        .founder-info p {
+            margin-bottom: 1rem;
+        }
+        .founder-info .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .founder-info .skills span {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #ffd200;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+        }
+        .founder-info .certs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .founder-info .certs span {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 215, 0, 0.06);
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+        }
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+        .footer-brand h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .footer-brand p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-top: 0.5rem;
+            max-width: 300px;
+        }
+        .footer-col h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .footer-col a {
+            display: block;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            transition: color 0.3s ease;
+        }
+        .footer-col a:hover {
+            color: #ffd200;
+        }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: #475569;
+            font-size: 0.8rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .about-grid,
+            .vm-grid,
+            .paperless-grid,
+            .founder-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .approach-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 1.5rem;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 26, 0.98);
+                padding: 2rem;
+                gap: 1.5rem;
+                border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            .hero-tagline {
+                font-size: 1.1rem;
+            }
+            .hero-desc {
+                font-size: 0.95rem;
+                padding: 0 1rem;
+            }
+            .hero-stats {
+                gap: 2rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
+            .approach-grid {
+                grid-template-columns: 1fr;
+            }
+            .paperless-features {
+                grid-template-columns: 1fr;
+            }
+            .paperless-section {
+                padding: 1.5rem;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .founder-image .avatar {
+                width: 150px;
+                height: 150px;
+                font-size: 3.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .btn {
+                padding: 0.7rem 1.4rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <!-- Progress bar -->
-    <div class="progress-bar" id="progressBar"></div>
-    
-    <!-- Theme toggle -->
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <i class="fas fa-moon"></i>
-    </button>
-    
-    <!-- Custom cursor -->
-    <div class="cursor-outer"></div>
-    <div class="cursor-inner"></div>
-    
-    <!-- Canvas background -->
-    <canvas id="bg-canvas"></canvas>
 
-    <!-- HERO SECTION -->
-    <header>
-        <div class="badge">❤️RWANDA❤️</div>
-        <h1>IMENA ECOSYSTEM</h1>
-        <p id="typewriter"></p>
-        <a href="#core" class="btn-premium" style="margin-top: 20px;">
-            <span>Discover more</span> <i class="fas fa-arrow-right"></i>
+    <!-- ===== THREE.JS CANVAS ===== -->
+    <div id="three-canvas"></div>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-logo">
+            <img src="logo.webp" alt="iMENA Hub Logo" />
+            <span>iMENA Hub</span>
         </a>
-    </header>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#vision">Vision &amp; Mission</a></li>
+            <li><a href="#core">Core Areas</a></li>
+            <li><a href="#initiatives">Initiatives</a></li>
+            <li><a href="#paperless">Paperless</a></li>
+            <li><a href="#partners">Partners</a></li>
+            <li><a href="#founder">Founder</a></li>
+            <li><a href="#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
 
-    <!-- CORE SECTION -->
-    <section id="core" style="padding: 40px 8% 60px;">
-        <div class="glass-panel" style="padding: 60px 50px;">
-            <span class="section-tag">Imena ecosystem from RWANDA ❤️</span>
-            <h2 style="font-size: clamp(2rem,5vw,3.2rem); font-weight:800; margin-bottom: 30px;">
-                Heart of <span style="color:var(--primary);">Rwanda.</span> Code of Innovation.
-            </h2>
-            
-            <!-- ECOSYSTEM PHOTO -->
-            <div class="ecosystem-img">
-                <a href="https://postimg.cc/zLYrGzPX" target="_blank">
-                    <img src="https://i.postimg.cc/zLYrGzPX/Gemini-Generated-Image-gxsle2gxsle2gxsl.png" alt="IMENA Ecosystem visual" class="img-glass">
-                </a>
-                <p style="margin-top: 15px; color: var(--secondary);">
-                    <i class="fas fa-mountain"></i> The IMENA Ecosystem — A digital home for Rwandan success.
-                </p>
-            </div>
+    <!-- ===== OVERLAY CONTENT ===== -->
+    <div class="content">
 
-            <p style="font-size:1.2rem; color: var(--text-muted); max-width: 800px; margin: 30px auto;">
-                In Rwanda, <strong>Imena</strong> is one of the categories of heroes. Imena heroes are heroes of the highest order, 
-                those who gave everything for the unity of Rwanda. Our ecosystem carries that name to remind us that 
-                "real technology serves and protects."
+        <!-- ===== HERO ===== -->
+        <section class="hero" id="home">
+            <img src="logo.webp" alt="iMENA Hub" class="hero-logo" />
+            <h1 class="hero-title">iMENA <span>Hub</span></h1>
+            <p class="hero-tagline">
+                <strong>Empowering Future-Ready Education</strong> Through Innovation and Technology
             </p>
-
-            <!-- STATS COUNTER -->
-            <div class="stats-container">
-                <div class="stat-item glass-panel">
-                    <span class="stat-number" data-target="1500">0</span>
-                    <span class="stat-label">CVs Created</span>
+            <p class="hero-desc">
+                iMENA Hub is a Rwandan educational technology initiative dedicated to empowering
+                teachers, learners, and schools through practical digital skills, educational innovation,
+                and modern teaching methods.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">24K+</div>
+                    <div class="stat-label">Active Users</div>
                 </div>
-                <div class="stat-item glass-panel">
-                    <span class="stat-number" data-target="500">0</span>
-                    <span class="stat-label">Students</span>
+                <div class="stat-item">
+                    <div class="stat-number">96</div>
+                    <div class="stat-label">Countries</div>
                 </div>
-                <div class="stat-item glass-panel">
-                    <span class="stat-number" data-target="1000">0</span>
-                    <span class="stat-label">AI Interactions</span>
+                <div class="stat-item">
+                    <div class="stat-number">247</div>
+                    <div class="stat-label">iMENA Learn Students</div>
                 </div>
-                <div class="stat-item glass-panel">
-                    <span class="stat-number" data-target="4">0</span>
-                    <span class="stat-label">Projects</span>
-                </div>
-            </div>
-
-            <!-- HERITAGE CARDS (Heroes) -->
-            <div style="margin-top: 70px;">
-                <h3 style="color: var(--primary); font-size: 1.8rem; text-align: center;">Imena Heroes</h3>
-                <div class="heritage-cards">
-                    <div class="hero-card" data-hero="Mutara III Rudahigwa">
-                        <i class="fas fa-crown fa-2x" style="color: var(--secondary);"></i>
-                        <h3 style="color: var(--secondary);">Mutara III Rudahigwa</h3>
-                        <p>King who abolished ubuhake. Symbol of unity & modern progress.</p>
-                    </div>
-                    <div class="hero-card" data-hero="Agathe Uwiringiyimana">
-                        <i class="fas fa-fist-raised fa-2x" style="color: var(--secondary);"></i>
-                        <h3 style="color: var(--secondary);">Agathe Uwiringiyimana</h3>
-                        <p>First female Prime Minister, fought divisionism, championed education.</p>
-                    </div>
-                    <div class="hero-card" data-hero="Nyange Students">
-                        <i class="fas fa-hands-helping fa-2x" style="color: var(--secondary);"></i>
-                        <h3 style="color: var(--secondary);">Nyange Students</h3>
-                        <p>Refused ethnic separation, 1997. "We are all Rwandans"</p>
-                    </div>
+                <div class="stat-item">
+                    <div class="stat-number">136+</div>
+                    <div class="stat-label">Trinity College Students</div>
                 </div>
             </div>
+            <div class="hero-btns">
+                <a href="#initiatives" class="btn btn-primary">🚀 Explore Initiatives</a>
+                <a href="#about" class="btn btn-outline">📖 Learn More</a>
+                <a href="#paperless" class="btn btn-gold">📝 Paperless Platform</a>
+            </div>
+        </section>
 
-            <!-- Quote -->
-            <div style="margin-top: 60px; border-left: 3px solid var(--primary); padding-left: 30px;">
-                <p style="font-style: italic; color: var(--text-muted);">
-                    “The IMENA ecosystem is not just code — it's about Rwanda's history and the rise of the nation toward the digital world.”
+        <!-- ===== ABOUT ===== -->
+        <section class="section" id="about">
+            <h2 class="section-title">About <span class="highlight">iMENA Hub</span></h2>
+            <p class="section-subtitle">
+                Bridging the gap between classroom learning and real-world digital skills through practical education and teacher development.
+            </p>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        <strong>iMENA Hub</strong> is a Rwandan educational technology initiative dedicated to
+                        empowering teachers, learners, and schools through practical digital skills,
+                        educational innovation, and modern teaching methods.
+                    </p>
+                    <p>
+                        Our purpose is to bridge the gap between classroom learning and real-world digital
+                        skills through practical education and teacher development programs. We focus on
+                        delivering educational technology solutions, coding, AI, and digital literacy to
+                        schools and learners across Rwanda and Africa.
+                    </p>
+                    <div class="about-highlights">
+                        <div class="highlight-box">
+                            <div class="num">2024</div>
+                            <div class="label">Founded</div>
+                        </div>
+                        <div class="highlight-box">
+                            <div class="num">7+</div>
+                            <div class="label">Partners</div>
+                        </div>
+                        <div class="highlight-box">
+                            <div class="num">500+</div>
+                            <div class="label">Youth Reached Annually</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size:1.3rem;margin-bottom:1rem;color:#fff;">Our Core Purpose</h3>
+                    <ul style="list-style:none;color:#cbd5e1;line-height:2;font-size:1.05rem;">
+                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Empower teachers with digital competencies</li>
+                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Equip learners with practical digital skills</li>
+                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Partner with schools for real-world impact</li>
+                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Develop innovative EdTech solutions</li>
+                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Support Rwanda's Vision 2050 digital transformation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== VISION & MISSION ===== -->
+        <section class="section" id="vision">
+            <h2 class="section-title">Vision &amp; <span class="highlight">Mission</span></h2>
+            <div class="vm-grid">
+                <div class="vm-card">
+                    <i class="fas fa-eye"></i>
+                    <h3>Vision</h3>
+                    <p>
+                        To become one of Africa's leading educational technology organizations,
+                        transforming how students and teachers engage with learning across the continent.
+                        Harnessing the power of digital tools, AI, and modern pedagogy to bridge the gap
+                        between classroom learning and real-world readiness.
+                    </p>
+                </div>
+                <div class="vm-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Mission</h3>
+                    <p>
+                        To bridge the gap between classroom learning and real-world skills by providing
+                        practical digital education, teacher development, and educational technology solutions.
+                        We deliver hands-on digital skills training, teacher professional development, and
+                        innovative EdTech solutions to schools and learners across Rwanda and beyond.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CORE AREAS ===== -->
+        <section class="section" id="core">
+            <h2 class="section-title">Our <span class="highlight">Core Areas</span></h2>
+            <p class="section-subtitle">
+                iMENA Hub equips learners and educators with cutting-edge digital competencies across key disciplines.
+            </p>
+            <div class="core-grid">
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h3>Teacher Development</h3>
+                    <p>Equipping educators with modern pedagogical skills, digital tools, and innovative teaching methods to transform classroom experiences.</p>
+                </div>
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-code"></i></div>
+                    <h3>AI &amp; Coding</h3>
+                    <p>Introducing artificial intelligence concepts and programming fundamentals to build future-ready problem-solving and technical skills.</p>
+                </div>
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Digital Skills Training</h3>
+                    <p>Providing learners with practical, real-world digital competencies including web development, graphic design, and cybersecurity.</p>
+                </div>
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>iMENA Learn</h3>
+                    <p>Training youth on digital skills and ICT through our program to level up youth with technology skills for the future.</p>
+                </div>
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Cybersecurity</h3>
+                    <p>Training learners to protect digital systems, understand network security, and apply ethical hacking principles in real-world environments.</p>
+                </div>
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-globe"></i></div>
+                    <h3>Web Development</h3>
+                    <p>Teaching modern web technologies including HTML, CSS, JavaScript, and frameworks to build responsive, functional websites and applications.</p>
+                </div>
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3>Graphic Design</h3>
+                    <p>Developing visual communication skills using professional design tools for branding, layout, digital media, and creative content production.</p>
+                </div>
+                <div class="core-card">
+                    <div class="icon"><i class="fas fa-microchip"></i></div>
+                    <h3>EdTech Integration</h3>
+                    <p>Integrating digital tools, platforms, and smart solutions into classrooms to enhance teaching effectiveness and learning outcomes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== APPROACH ===== -->
+        <section class="section" id="approach">
+            <h2 class="section-title">Our <span class="highlight">Approach</span></h2>
+            <p class="section-subtitle">
+                iMENA Hub combines pedagogy, technology, creativity, and practical learning to prepare learners for the future.
+            </p>
+            <div class="approach-grid">
+                <div class="approach-item">
+                    <i class="fas fa-hands-on"></i>
+                    <h4>Hands-On Learning</h4>
+                    <p>We prioritize project-based, experiential learning that connects classroom concepts to real-world digital skills and challenges.</p>
+                </div>
+                <div class="approach-item">
+                    <i class="fas fa-tools"></i>
+                    <h4>Innovative Tools</h4>
+                    <p>Leveraging cutting-edge educational technology, AI tools, and modern platforms to create engaging and effective learning environments.</p>
+                </div>
+                <div class="approach-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>Teacher Empowerment</h4>
+                    <p>Equipping educators with professional development, digital competencies, and innovative teaching methods to lead future-ready classrooms.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== INITIATIVES ===== -->
+        <section class="section" id="initiatives">
+            <h2 class="section-title">Current <span class="highlight">Initiatives</span></h2>
+            <p class="section-subtitle">
+                iMENA Hub is actively developing and deploying innovative tools and programs that transform how learners and teachers engage with education.
+            </p>
+            <div class="init-grid">
+                <div class="init-card">
+                    <span class="badge">🚀 Digital Learning</span>
+                    <h3>iMENA Learn</h3>
+                    <p>A digital learning platform delivering practical skills, structured courses, and educational content tailored for Rwandan learners and educators.</p>
+                    <div class="features">
+                        <span>ICT Training</span>
+                        <span>Hands-on</span>
+                        <span>4-Week Camps</span>
+                    </div>
+                </div>
+                <div class="init-card">
+                    <span class="badge">📝 Assessment</span>
+                    <h3>AfriQuiz</h3>
+                    <p>An interactive quiz platform designed to make assessment engaging, competitive, and accessible for African students and classrooms.</p>
+                    <div class="features">
+                        <span>Gamified</span>
+                        <span>Real-time</span>
+                        <span>Mobile-friendly</span>
+                    </div>
+                </div>
+                <div class="init-card">
+                    <span class="badge">🤖 AI-Powered</span>
+                    <h3>AI-Powered Tools</h3>
+                    <p>Intelligent educational tools powered by AI to personalize learning, support teachers, and enhance student outcomes at scale.</p>
+                    <div class="features">
+                        <span>Personalized</span>
+                        <span>Adaptive</span>
+                        <span>REB Aligned</span>
+                    </div>
+                </div>
+                <div class="init-card">
+                    <span class="badge">🌱 Paperless</span>
+                    <h3>Paperless Platform</h3>
+                    <p>A smart digital assessment platform that replaces paper-based processes with streamlined, eco-friendly digital workflows.</p>
+                    <div class="features">
+                        <span>Digital Tests</span>
+                        <span>Instant Feedback</span>
+                        <span>Reports</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PAPERLESS DETAIL ===== -->
+        <section class="section" id="paperless">
+            <div class="paperless-section">
+                <h2 style="font-size:2.5rem;font-weight:800;text-align:center;margin-bottom:0.5rem;">
+                    📝 <span style="background:linear-gradient(135deg,#f7971e,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Paperless</span>
+                </h2>
+                <p style="text-align:center;color:#94a3b8;font-size:1.1rem;margin-bottom:2rem;">
+                    Smart Digital Assessment Platform for Schools
                 </p>
-                <p style="margin-top: 15px; font-weight: 600;">— TUYISENGE Jean Chrisostom</p>
+                <div class="paperless-grid">
+                    <div>
+                        <p style="color:#cbd5e1;line-height:1.8;font-size:1.05rem;">
+                            <strong>Paperless</strong> transforms school assessments by enabling teachers to create digital tests,
+                            share them via simple links, and generate downloadable reports instantly — all from a mobile-friendly platform.
+                            It replaces outdated paper-based systems that drain teacher time, waste resources, and delay feedback.
+                        </p>
+                        <div style="display:flex;gap:2rem;flex-wrap:wrap;margin:1.5rem 0;">
+                            <div>
+                                <div style="font-size:1.6rem;font-weight:800;color:#ffd200;">10+</div>
+                                <div style="color:#94a3b8;font-size:0.85rem;">Languages</div>
+                            </div>
+                            <div>
+                                <div style="font-size:1.6rem;font-weight:800;color:#ffd200;">AES-256</div>
+                                <div style="color:#94a3b8;font-size:0.85rem;">Encrypted</div>
+                            </div>
+                            <div>
+                                <div style="font-size:1.6rem;font-weight:800;color:#ffd200;">Mobile</div>
+                                <div style="color:#94a3b8;font-size:0.85rem;">First Design</div>
+                            </div>
+                        </div>
+                        <a href="https://stomdevsage.github.io/IMENA.Form/" target="_blank" class="btn btn-primary" style="margin-top:0.5rem;">
+                            🚀 Try Paperless
+                        </a>
+                    </div>
+                    <div>
+                        <h4 style="font-size:1.1rem;margin-bottom:1rem;color:#fff;">Key Features</h4>
+                        <div class="paperless-features">
+                            <div class="paperless-feature"><i class="fas fa-user-plus"></i><span>Teacher Registration</span></div>
+                            <div class="paperless-feature"><i class="fas fa-file-alt"></i><span>Unlimited Assessments</span></div>
+                            <div class="paperless-feature"><i class="fas fa-list-ul"></i><span>Multiple Question Types</span></div>
+                            <div class="paperless-feature"><i class="fas fa-check-double"></i><span>Auto &amp; Manual Marking</span></div>
+                            <div class="paperless-feature"><i class="fas fa-bolt"></i><span>Instant Feedback</span></div>
+                            <div class="paperless-feature"><i class="fas fa-share-alt"></i><span>Easy Sharing &amp; Mobile</span></div>
+                            <div class="paperless-feature"><i class="fas fa-robot"></i><span>AI-Assisted Marking (Future)</span></div>
+                            <div class="paperless-feature"><i class="fas fa-chart-line"></i><span>Advanced Analytics (Future)</span></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- PROJECTS SECTION -->
-    <h2 style="text-align: center; font-size: 2.5rem; font-weight: 800; margin: 30px 0 10px;">
-        <span style="color: var(--primary);">IMENA</span> ecosystem projects
-    </h2>
-    
-    <section class="projects-grid">
-        <!-- CV BUILDER -->
-        <div class="project-card">
-            <i class="fas fa-id-card fa-3x"></i>
-            <h3>IMENA CV BUILDER</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">Create professional CVs for free and download as PDF.</p>
-            <a href="https://imena-cv-builder.netlify.app/" class="btn-premium" target="_blank" rel="noopener">
-                <span>Build yours</span> <i class="fas fa-external-link-alt"></i>
-            </a>
-        </div>
-        
-        <!-- TRINITY COLLEGE -->
-        <div class="project-card">
-            <i class="fas fa-university fa-3x"></i>
-            <h3>IMENA TRINITY COLLEGE</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">School website with information and admission applications.</p>
-            <a href="https://stomcodev.github.io/IMENA-TRINITY-COLLEGE/" class="btn-premium" target="_blank" rel="noopener">
-                <span>Visit campus</span> <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        
-        <!-- TRAINER AI -->
-        <div class="project-card">
-            <i class="fas fa-robot fa-3x"></i>
-            <h3>IMENA TRAINER AI</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">AI-powered training assistant for Rwandan learners.</p>
-            <a href="https://stomcodev.github.io/IMENA-TRAINER-AI/" class="btn-premium" target="_blank" rel="noopener">
-                <span>Start training</span> <i class="fas fa-brain"></i>
-            </a>
-        </div>
-        
-        <!-- DEVELOPER PORTFOLIO -->
-        <div class="project-card">
-            <i class="fas fa-code fa-3x"></i>
-            <h3>Developer website</h3>
-            <p style="opacity:0.8; margin-bottom: 25px;">Portfolio of TUYISENGE Jean Chrisostom.</p>
-            <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" class="btn-premium" target="_blank" rel="noopener">
-                <span>Visit me</span> <i class="fas fa-user"></i>
-            </a>
-        </div>
-    </section>
+        <!-- ===== PARTNERS ===== -->
+        <section class="section" id="partners">
+            <h2 class="section-title">Partnership <span class="highlight">Vision</span></h2>
+            <p class="section-subtitle">
+                We collaborate with schools, educational organizations, NGOs, and institutions to deliver high-quality practical skills training through qualified trainers.
+            </p>
+            <div class="partner-grid">
+                <div class="partner-card">
+                    <h4>ValuEd</h4>
+                    <p>Value-Based Education Program</p>
+                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Trainer Deployment Partner</p>
+                </div>
+                <div class="partner-card">
+                    <h4>Africa Mission Alliance</h4>
+                    <p>Rusororo</p>
+                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Strategic Partner</p>
+                </div>
+                <div class="partner-card">
+                    <h4>International Schools</h4>
+                    <p>Across Rwanda</p>
+                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Curriculum Integration</p>
+                </div>
+                <div class="partner-card">
+                    <h4>REB</h4>
+                    <p>Rwanda Education Board</p>
+                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Alignment &amp; Standards</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- DEVELOPER PROFILES -->
-    <div style="padding: 0 8% 40px;">
-        <h3 style="color: var(--secondary); font-size: 2rem; margin-bottom: 30px; border-bottom: 2px dashed var(--primary); padding-bottom: 15px; text-align:center;">
-            Founder and developer's profile
-        </h3>
-        <div class="heritage-cards">
-            <!-- Jean Chrisostom -->
-            <div class="dev-card">
-                <a href="https://postimg.cc/Mnccw7yk" target="_blank">
-                    <img src="https://i.postimg.cc/Mnccw7yk/chrisostom.jpg" alt="Jean Chrisostom" class="img-glass">
-                </a>
-                <h3 style="color: var(--secondary);">TUYISENGE Jean Chrisostom</h3>
-                <p>Founder of IMENA Ecosystem & developer</p>
-                <p style="margin-top: 10px;"><i class="fas fa-map-pin" style="color: var(--primary);"></i> Kigali, Rwanda</p>
+        <!-- ===== FOUNDER ===== -->
+        <section class="section" id="founder">
+            <h2 class="section-title">Meet the <span class="highlight">Founder</span></h2>
+            <p class="section-subtitle">
+                Driven by innovation and a belief that technology can close educational gaps across Africa.
+            </p>
+            <div class="founder-grid">
+                <div class="founder-image">
+                    <div class="avatar">JC</div>
+                    <h3>TUYISENGE Jean Chrisostom</h3>
+                    <p class="title">Student Teacher (Language Education) | Educational Technology Innovator</p>
+                    <p style="color:#94a3b8;font-size:0.9rem;margin-top:0.5rem;">
+                        <i class="fas fa-envelope"></i> tuyisengejeanchrisostome@gmail.com<br />
+                        <i class="fas fa-phone"></i> +250 796 717 230
+                    </p>
+                </div>
+                <div class="founder-info">
+                    <p>
+                        Dedicated Student Teacher specializing in Language Education with a passion for
+                        transforming learning through technology and innovation. Founder of iMENA Hub,
+                        an educational technology initiative committed to equipping teachers and learners
+                        with practical digital skills to thrive in a rapidly evolving world.
+                    </p>
+                    <p><strong>Vision Statement:</strong><br />
+                        <em>"Committed to transforming education through technology, innovation, and practical
+                        digital skills while empowering teachers and learners across Rwanda and Africa."</em>
+                    </p>
+                    <div>
+                        <strong>Professional Skills</strong>
+                        <div class="skills">
+                            <span>Educational Technology</span>
+                            <span>AI for Education</span>
+                            <span>Teacher Development</span>
+                            <span>Digital Skills Training</span>
+                            <span>Web Development</span>
+                            <span>HTML/CSS/JavaScript</span>
+                            <span>Canva</span>
+                            <span>Google Workspace</span>
+                            <span>Graphic Design</span>
+                            <span>Digital Assessment Systems</span>
+                            <span>ICT Integration</span>
+                        </div>
+                    </div>
+                    <div style="margin-top:1rem;">
+                        <strong>Certifications</strong>
+                        <div class="certs">
+                            <span>21st Century Learning Design</span>
+                            <span>AI for Educators</span>
+                            <span>Microsoft Educator Academy</span>
+                        </div>
+                    </div>
+                    <div style="margin-top:1rem;">
+                        <strong>Projects</strong>
+                        <ul style="list-style:none;padding-left:0;color:#cbd5e1;">
+                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Founder – iMENA Hub</li>
+                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Developer – Paperless (Smart Digital Assessment)</li>
+                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Founder – iMENA Learn</li>
+                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Developer – AfriQuiz (Interactive Learning)</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            
-            <!-- StomCodeV -->
-            <div class="dev-card">
-                <a href="https://postimg.cc/tZ0wrGqj" target="_blank">
-                    <img src="https://i.postimg.cc/tZ0wrGqj/BLAD.webp" alt="StomCodeV" class="img-glass">
-                </a>
-                <h3 style="color: var(--secondary);">StomCodeV</h3>
-                <p>TUYISENGE Jean Chrisostom is also known as StomCodeV when coding.</p>
-                <p style="margin-top: 10px;"><i class="fas fa-code" style="color: var(--primary);"></i> code & resilience</p>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer" id="contact">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>iMENA Hub</h3>
+                    <p>
+                        Empowering future-ready education through innovation and technology.
+                        Connect. Learn. Innovate.
+                    </p>
+                    <p style="color:#94a3b8;margin-top:0.5rem;">
+                        <i class="fas fa-envelope"></i> imenahub.rw@gmail.com
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="#about">About</a>
+                    <a href="#vision">Vision &amp; Mission</a>
+                    <a href="#core">Core Areas</a>
+                    <a href="#initiatives">Initiatives</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Projects</h4>
+                    <a href="#paperless">Paperless</a>
+                    <a href="#">iMENA Learn</a>
+                    <a href="#">AfriQuiz</a>
+                    <a href="#">AI Tools</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect</h4>
+                    <a href="#">Partnerships</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#founder">Founder</a>
+                </div>
             </div>
-        </div>
+            <div class="footer-bottom">
+                &copy; 2026 iMENA Hub — Building the future, one learner at a time.
+                <span style="display:block;margin-top:0.3rem;color:#475569;">
+                    <i class="fas fa-map-pin" style="color:#f7971e;"></i> Rwanda
+                </span>
+            </div>
+        </footer>
+
     </div>
 
-    <!-- NEWSLETTER SECTION - Google Sheets Integration -->
-    <div class="newsletter-section glass-panel">
-        <h3 style="color: var(--primary); font-size: 2rem; margin-bottom: 15px;">Join the IMENA Community</h3>
-        <p style="margin-bottom: 20px; color: var(--text-muted);">Get updates on new projects and Rwandan tech news</p>
-        
-        <form id="newsletterForm" class="newsletter-form">
-            <input type="email" id="subscriberEmail" placeholder="Enter your email" required>
-            <input type="text" id="subscriberName" placeholder="Your name (optional)">
-            <button type="submit" class="btn-premium">
-                <span>Subscribe</span> <i class="fas fa-paper-plane"></i>
-            </button>
-        </form>
-        
-        <div id="subscribeMessage" style="margin-top: 20px; display: none;"></div>
-        
-        <!-- Note: Replace with your Google Apps Script URL -->
-        <p style="font-size: 0.8rem; opacity: 0.5; margin-top: 20px;">
-            <i class="fas fa-lock"></i> We respect your privacy - unsubscribe anytime
-        </p>
-    </div>
+    <!-- ===== THREE.JS LIBRARY ===== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    </script>
 
-    <!-- MODAL for Hero Details -->
-    <div id="heroModal" class="modal">
-        <div class="modal-content glass-panel">
-            <span class="close-modal">&times;</span>
-            <h3 id="modalTitle" style="color: var(--secondary); font-size: 2rem; margin-bottom: 20px;"></h3>
-            <p id="modalDescription" style="margin-bottom: 20px;"></p>
-            <div id="modalExtra" class="modal-extra"></div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-quote">
-                <i class="fas fa-shield-alt" style="margin-right: 10px;"></i> "Heart of Rwanda. Code of Innovation."
-            </div>
-            
-            <div class="contact-info">
-                <p><span><i class="fas fa-map-pin"></i> HQ</span> Karumuna, Ntarama, Bugesera · Rwanda</p>
-                <p><span><i class="fas fa-envelope"></i> Email</span> tuyisengejeanchrisostome@gmail.com</p>
-                <p><span><i class="fab fa-whatsapp"></i> WhatsApp</span> +250 796 717 230</p>
-            </div>
-            
-            <p style="opacity:0.7; font-size:0.9rem;">© 2026 IMENA ECOSYSTEM. All rights reserved.</p>
-            
-            <div class="developer-credit">
-                Developed by <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank" rel="noopener">
-                    TUYISENGE Jean Chrisostom [StomCodeV]
-                </a>
-            </div>
-        </div>
-    </footer>
-
+    <!-- ===== 3D SCENE ===== -->
     <script>
         (function() {
-            // =========================================
-            // 1. CUSTOM CURSOR
-            // =========================================
-            const outer = document.querySelector('.cursor-outer');
-            const inner = document.querySelector('.cursor-inner');
-            let mouseX = 0, mouseY = 0;
-            let outerX = 0, outerY = 0;
+            const container = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a1a);
 
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 8);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // Lights
+            const ambient = new THREE.AmbientLight(0x404060);
+            scene.add(ambient);
+            const dirLight = new THREE.DirectionalLight(0xffd200, 1.2);
+            dirLight.position.set(2, 5, 3);
+            scene.add(dirLight);
+            const backLight = new THREE.DirectionalLight(0xf7971e, 0.6);
+            backLight.position.set(-2, -1, -4);
+            scene.add(backLight);
+            const pointLight = new THREE.PointLight(0xffd200, 0.5, 20);
+            pointLight.position.set(0, 2, 4);
+            scene.add(pointLight);
+
+            // Main group
+            const group = new THREE.Group();
+            scene.add(group);
+
+            // Core
+            const coreGeo = new THREE.IcosahedronGeometry(1.6, 1);
+            const coreMat = new THREE.MeshStandardMaterial({
+                color: 0xf7971e,
+                emissive: 0xf7971e,
+                emissiveIntensity: 0.2,
+                metalness: 0.4,
+                roughness: 0.3,
+                transparent: true,
+                opacity: 0.85
+            });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            group.add(core);
+
+            // Wireframe
+            const wireGeo = new THREE.IcosahedronGeometry(1.65, 1);
+            const wireMat = new THREE.MeshStandardMaterial({
+                color: 0xffd200,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.25
+            });
+            const wire = new THREE.Mesh(wireGeo, wireMat);
+            group.add(wire);
+
+            // Glow
+            const glowGeo = new THREE.SphereGeometry(1.2, 32, 32);
+            const glowMat = new THREE.MeshBasicMaterial({
+                color: 0xffd200,
+                transparent: true,
+                opacity: 0.08
+            });
+            const glow = new THREE.Mesh(glowGeo, glowMat);
+            group.add(glow);
+
+            // Orbiting particles
+            const ringCount = 600;
+            const ringPos = new Float32Array(ringCount * 3);
+            for (let i = 0; i < ringCount; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                const r = 2.4 + Math.random() * 1.6;
+                ringPos[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
+                ringPos[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
+                ringPos[i * 3 + 2] = Math.cos(phi) * r;
+            }
+            const ringGeo = new THREE.BufferGeometry();
+            ringGeo.setAttribute('position', new THREE.BufferAttribute(ringPos, 3));
+            const ringMat = new THREE.PointsMaterial({
+                color: 0xffd200,
+                size: 0.035,
+                transparent: true,
+                opacity: 0.7,
+                blending: THREE.AdditiveBlending
+            });
+            const ringParticles = new THREE.Points(ringGeo, ringMat);
+            group.add(ringParticles);
+
+            // Background particles
+            const bgCount = 1200;
+            const bgPos = new Float32Array(bgCount * 3);
+            for (let i = 0; i < bgCount * 3; i++) {
+                bgPos[i] = (Math.random() - 0.5) * 30;
+            }
+            const bgGeo = new THREE.BufferGeometry();
+            bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
+            const bgMat = new THREE.PointsMaterial({
+                color: 0xf7971e,
+                size: 0.03,
+                transparent: true,
+                opacity: 0.35,
+                blending: THREE.AdditiveBlending
+            });
+            const bgParticles = new THREE.Points(bgGeo, bgMat);
+            scene.add(bgParticles);
+
+            // Torus rings
+            const torusGeo = new THREE.TorusGeometry(2.3, 0.025, 16, 100);
+            const torusMat = new THREE.MeshStandardMaterial({
+                color: 0xffd200,
+                emissive: 0xf7971e,
+                emissiveIntensity: 0.15,
+                transparent: true,
+                opacity: 0.3
+            });
+            const torus = new THREE.Mesh(torusGeo, torusMat);
+            torus.rotation.x = Math.PI / 2.5;
+            torus.rotation.z = 0.3;
+            group.add(torus);
+
+            const torus2Geo = new THREE.TorusGeometry(2.6, 0.015, 16, 100);
+            const torus2Mat = new THREE.MeshStandardMaterial({
+                color: 0xf7971e,
+                emissive: 0xffd200,
+                emissiveIntensity: 0.1,
+                transparent: true,
+                opacity: 0.2
+            });
+            const torus2 = new THREE.Mesh(torus2Geo, torus2Mat);
+            torus2.rotation.x = 1.2;
+            torus2.rotation.y = 0.8;
+            group.add(torus2);
+
+            // Mouse interaction
+            let mouseX = 0,
+                mouseY = 0,
+                targetX = 0,
+                targetY = 0;
             document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                inner.style.left = mouseX + 'px';
-                inner.style.top = mouseY + 'px';
+                mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
             });
 
-            const animateCursor = () => {
-                outerX += (mouseX - outerX) * 0.2;
-                outerY += (mouseY - outerY) * 0.2;
-                outer.style.left = outerX + 'px';
-                outer.style.top = outerY + 'px';
-                requestAnimationFrame(animateCursor);
-            };
-            animateCursor();
+            // Resize
+            window.addEventListener('resize', () => {
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+            });
 
-            // =========================================
-            // 2. CANVAS BACKGROUND
-            // =========================================
-            const canvas = document.getElementById('bg-canvas');
-            const ctx = canvas.getContext('2d');
-            let width, height;
-
-            function resizeCanvas() {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-            }
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            const particles = [];
-            const PARTICLE_COUNT = 110;
-            for (let i = 0; i < PARTICLE_COUNT; i++) {
-                particles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 2.6 + 0.8,
-                    vx: (Math.random() - 0.5) * 0.35,
-                    vy: (Math.random() - 0.5) * 0.25,
-                    baseColor: Math.random() > 0.6 ? '#F9B233' : '#00A859',
+            // Nav toggle
+            document.getElementById('hamburger').addEventListener('click', function() {
+                document.getElementById('navLinks').classList.toggle('open');
+            });
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.getElementById('navLinks').classList.remove('open');
                 });
-            }
+            });
 
-            let time = 0;
-            function drawBackground() {
-                ctx.clearRect(0, 0, width, height);
-                
-                const gradient = ctx.createRadialGradient(width*0.5, height*0.5, 10, width*0.5, height*0.5, width*0.8);
-                gradient.addColorStop(0, '#07100c');
-                gradient.addColorStop(1, '#010202');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, width, height);
-
-                // Wave lines
-                ctx.save();
-                ctx.globalAlpha = 0.15;
-                ctx.lineWidth = 2.5;
-                for (let k = 0; k < 3; k++) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = k === 1 ? '#00A859' : '#F9B233';
-                    let offset = time * (0.5 + k * 0.2);
-                    for (let x = 0; x < width; x += 45) {
-                        let y = height * 0.4 + Math.sin(x * 0.005 + offset) * 60 + Math.cos(x * 0.008 + k) * 40;
-                        if (x === 0) ctx.moveTo(x, y);
-                        else ctx.lineTo(x, y);
-                    }
-                    ctx.stroke();
-                }
-                ctx.restore();
-
-                particles.forEach(p => {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = p.baseColor;
-                    ctx.shadowColor = p.baseColor;
-                    ctx.shadowBlur = 12;
-                    ctx.fill();
-                    
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    
-                    if (p.x < 0) p.x = width;
-                    if (p.x > width) p.x = 0;
-                    if (p.y < 0) p.y = height;
-                    if (p.y > height) p.y = 0;
-                });
-
-                time += 0.03;
-                requestAnimationFrame(drawBackground);
-            }
-            drawBackground();
-
-            // =========================================
-            // 3. TYPEWRITER EFFECT
-            // =========================================
-            const phrases = [
-                "A legacy of code, grown from Rwandan devlopers",
-                "Where heroes inspire innovation ✨",
-                "Building Rwanda's digital future 🚀",
-                "Code with the spirit of Imena 💚💛💙"
-            ];
-            
-            let phraseIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-            
-            function typeWriter() {
-                const currentPhrase = phrases[phraseIndex];
-                const typewriterElement = document.getElementById('typewriter');
-                
-                if (isDeleting) {
-                    typewriterElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                    charIndex--;
+            // Scroll effect for navbar
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
                 } else {
-                    typewriterElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                    charIndex++;
+                    navbar.classList.remove('scrolled');
                 }
-                
-                if (!isDeleting && charIndex === currentPhrase.length) {
-                    isDeleting = true;
-                    setTimeout(typeWriter, 2000);
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    phraseIndex = (phraseIndex + 1) % phrases.length;
-                    setTimeout(typeWriter, 500);
-                } else {
-                    setTimeout(typeWriter, isDeleting ? 50 : 100);
-                }
+            });
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                targetX += (mouseX - targetX) * 0.05;
+                targetY += (mouseY - targetY) * 0.05;
+                group.rotation.x += 0.002 + targetY * 0.002;
+                group.rotation.y += 0.005 + targetX * 0.002;
+                const pulse = 1 + Math.sin(Date.now() * 0.002) * 0.015;
+                core.scale.set(pulse, pulse, pulse);
+                glow.scale.set(pulse * 1.1, pulse * 1.1, pulse * 1.1);
+                ringParticles.rotation.x += 0.0005;
+                ringParticles.rotation.y += 0.001;
+                torus.rotation.y += 0.003;
+                torus2.rotation.y -= 0.004;
+                bgParticles.rotation.x += 0.0001;
+                bgParticles.rotation.y += 0.0002;
+                renderer.render(scene, camera);
             }
-            
-            window.addEventListener('load', typeWriter);
-
-            // =========================================
-            // 4. ANIMATED COUNTER
-            // =========================================
-            function animateCounter() {
-                const counters = document.querySelectorAll('.stat-number');
-                
-                counters.forEach(counter => {
-                    const target = parseInt(counter.getAttribute('data-target'));
-                    const increment = target / 50;
-                    
-                    let current = 0;
-                    const updateCounter = () => {
-                        current += increment;
-                        if (current < target) {
-                            counter.textContent = Math.ceil(current);
-                            requestAnimationFrame(updateCounter);
-                        } else {
-                            counter.textContent = target;
-                        }
-                    };
-                    
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                updateCounter();
-                                observer.unobserve(entry.target);
-                            }
-                        });
-                    });
-                    
-                    observer.observe(counter);
-                });
-            }
-            
-            window.addEventListener('load', animateCounter);
-
-            // =========================================
-            // 5. 3D TILT EFFECT ON CARDS
-            // =========================================
-            const cards = document.querySelectorAll('.hero-card, .project-card, .dev-card');
-            
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
-                    
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-                });
-            });
-
-            // =========================================
-            // 6. HERO MODAL
-            // =========================================
-            const modal = document.getElementById('heroModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDesc = document.getElementById('modalDescription');
-            const modalExtra = document.getElementById('modalExtra');
-            const closeBtn = document.querySelector('.close-modal');
-
-            const heroDetails = {
-                'Mutara III Rudahigwa': {
-                    fullName: 'King Mutara III Rudahigwa (1911-1959)',
-                    description: 'Known as Charles Léon Pierre, he was the King of Rwanda who abolished "ubuhake" (cattle contract system) in 1954, freeing thousands from servitude.',
-                    extra: 'He advocated for Rwandan independence and unity, and was a symbol of modern progress and dignity for all Rwandans.'
-                },
-                'Agathe Uwiringiyimana': {
-                    fullName: 'Agathe Uwiringiyimana (1953-1994)',
-                    description: 'Rwanda\'s first female Prime Minister, appointed in 1993. She was a passionate advocate for democracy, women\'s rights, and education.',
-                    extra: 'She was assassinated on April 7, 1994, for refusing to abandon her commitment to a unified Rwanda.'
-                },
-                'Nyange Students': {
-                    fullName: 'Nyange Secondary School Students (1997)',
-                    description: 'On March 18, 1997, armed insurgents attacked Nyange Secondary School and ordered students to separate by ethnicity.',
-                    extra: 'They refused, declaring "We are all Rwandans." Several were killed and many injured. Their bravery represents the ultimate sacrifice for national unity.'
-                }
-            };
-
-            document.querySelectorAll('.hero-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const title = card.querySelector('h3').textContent.trim();
-                    const details = heroDetails[title] || {
-                        fullName: title,
-                        description: card.querySelector('p').textContent,
-                        extra: 'An Imena hero who sacrificed for Rwanda\'s unity.'
-                    };
-                    
-                    modalTitle.textContent = details.fullName;
-                    modalDesc.textContent = details.description;
-                    modalExtra.innerHTML = `<p style="color: var(--secondary); margin-top: 20px;"><i class="fas fa-quote-right"></i> ${details.extra}</p>`;
-                    
-                    modal.style.display = 'flex';
-                });
-            });
-
-            closeBtn.addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            window.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-
-            // =========================================
-            // 7. PROGRESS BAR
-            // =========================================
-            window.addEventListener('scroll', () => {
-                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = (winScroll / height) * 100;
-                document.getElementById('progressBar').style.width = scrolled + '%';
-            });
-
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-
-            // =========================================
-            // 8. THEME TOGGLE
-            // =========================================
-            const themeToggle = document.getElementById('themeToggle');
-            const body = document.body;
-            const icon = themeToggle.querySelector('i');
-
-            themeToggle.addEventListener('click', () => {
-                body.classList.toggle('light-theme');
-                
-                if (body.classList.contains('light-theme')) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                } else {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                }
-            });
-
-            // =========================================
-            // 9. CLICK PARTICLES
-            // =========================================
-            document.addEventListener('click', (e) => {
-                for (let i = 0; i < 8; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'click-particle';
-                    particle.style.left = e.clientX + 'px';
-                    particle.style.top = e.clientY + 'px';
-                    particle.style.background = i % 2 === 0 ? 'var(--primary)' : 'var(--secondary)';
-                    particle.style.transform = `rotate(${i * 45}deg) translate(${20 + Math.random() * 30}px)`;
-                    document.body.appendChild(particle);
-                    
-                    setTimeout(() => particle.remove(), 600);
-                }
-            });
-
-            // =========================================
-            // 10. GOOGLE SHEETS NEWSLETTER SUBSCRIPTION
-            // =========================================
-            // IMPORTANT: Google Apps Script Web App URL
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygiUMiGZjPJsXiEHnLFgRdUmOYEhtvnTcOr_JEwfWn2EVHJk5k8tY7CkEn2IxHna0OuA/exec';
-            
-            const newsletterForm = document.getElementById('newsletterForm');
-            const subscribeMessage = document.getElementById('subscribeMessage');
-            
-            newsletterForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const email = document.getElementById('subscriberEmail').value;
-                const name = document.getElementById('subscriberName').value || 'Anonymous';
-                
-                // Show loading message
-                subscribeMessage.style.display = 'block';
-                subscribeMessage.className = '';
-                subscribeMessage.textContent = 'Subscribing...';
-                subscribeMessage.style.color = 'var(--secondary)';
-                
-                try {
-                    // Prepare data for Google Sheets
-                    const formData = new FormData();
-                    formData.append('Email', email);
-                    formData.append('Name', name);
-                    formData.append('Timestamp', new Date().toISOString());
-                    
-                    // Send to Google Sheets
-                    const response = await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors', // Required for Google Apps Script
-                        body: formData
-                    });
-                    
-                    // Show success message (even with no-cors, we assume success)
-                    subscribeMessage.className = 'success-message';
-                    subscribeMessage.innerHTML = '<i class="fas fa-check-circle"></i> Thank you for subscribing! Check your email for confirmation.';
-                    
-                    // Reset form
-                    newsletterForm.reset();
-                    
-                    // Optional: Send email notification (you'll need a backend for this)
-                    // You can also set up the Google Script to send an email
-                    
-                } catch (error) {
-                    console.error('Subscription error:', error);
-                    subscribeMessage.className = 'error-message';
-                    subscribeMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Something went wrong. Please try again.';
-                }
-                
-                // Hide message after 5 seconds
-                setTimeout(() => {
-                    subscribeMessage.style.display = 'none';
-                }, 5000);
-            });
-
-            // Hover effect for cursor
-            document.querySelectorAll('.btn-premium, .project-card, .dev-card, .hero-card').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    outer.style.width = '68px';
-                    outer.style.height = '68px';
-                    outer.style.background = 'rgba(0,168,89,0.08)';
-                });
-                el.addEventListener('mouseleave', () => {
-                    outer.style.width = '44px';
-                    outer.style.height = '44px';
-                    outer.style.background = 'transparent';
-                });
-            });
+            animate();
         })();
     </script>
 
-    <!-- ========================================= -->
-    <!-- GOOGLE APPS SCRIPT CODE (for your Sheet) -->
-    <!-- ========================================= -->
-    <!--
-    Copy this code to Google Apps Script:
-    
-    function doPost(e) {
-      var sheet = SpreadsheetApp.getActiveSheet();
-      var data = e.parameter;
-      
-      // Append row: Timestamp, Email, Name
-      sheet.appendRow([
-        new Date(),
-        data.Email,
-        data.Name || 'Anonymous'
-      ]);
-      
-      // Optional: Send email notification
-      if (data.Email) {
-        MailApp.sendEmail({
-          to: "tuyisengejeanchrisostome@gmail.com",
-          subject: "New IMENA Newsletter Subscriber",
-          htmlBody: `<h2>New Subscriber!</h2>
-                     <p><strong>Email:</strong> ${data.Email}</p>
-                     <p><strong>Name:</strong> ${data.Name || 'Not provided'}</p>
-                     <p><strong>Time:</strong> ${new Date()}</p>`
-        });
-      }
-      
-      return ContentService
-        .createTextOutput(JSON.stringify({result: 'success'}))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
-    
-    function doGet() {
-      return HtmlService.createHtmlOutput('IMENA Newsletter Subscription Endpoint');
-    }
-    -->
 </body>
 </html>
