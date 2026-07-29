@@ -4,90 +4,314 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>iMENA Hub</title>
+    <meta name="description" content="iMENA Hub is a Rwandan educational technology initiative empowering teachers, learners, and schools through practical digital skills, innovation, and modern teaching." />
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Three.js & GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js">
+    </script>
 
     <style>
-        /* ===== RESET & BASE ===== */
-        * {
+        /* ========== ROOT VARIABLES ========== */
+        :root {
+            --primary: #0a1628;
+            --primary-light: #0f1f3a;
+            --secondary: #0d9488;
+            --secondary-light: #14b8a6;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --bg: #050a14;
+            --bg-light: #0a1628;
+            --bg-card: rgba(15, 31, 58, 0.6);
+            --border: rgba(148, 163, 184, 0.1);
+            --glass: rgba(15, 31, 58, 0.4);
+            --glass-border: rgba(148, 163, 184, 0.15);
+            --gradient-1: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #6366f1 100%);
+            --gradient-2: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+            --shadow-glow: 0 0 60px rgba(13, 148, 136, 0.12);
+            --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.4);
+            --radius: 24px;
+        }
+
+        [data-theme="light"] {
+            --primary: #ffffff;
+            --primary-light: #f1f5f9;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --bg: #f8fafc;
+            --bg-light: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --border: rgba(148, 163, 184, 0.2);
+            --glass: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(148, 163, 184, 0.25);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --shadow-glow: 0 0 60px rgba(13, 148, 136, 0.06);
+        }
+
+        /* ========== RESET & BASE ========== */
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         html {
             scroll-behavior: smooth;
         }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: #0a0a1a;
-            color: #fff;
+            background: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
+            line-height: 1.7;
+            transition: background 0.4s, color 0.4s;
         }
 
-        /* ===== THREE.JS CANVAS ===== */
-        #three-canvas {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        /* ========== SCROLL PROGRESS ========== */
+        .scroll-progress {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            z-index: 10000;
+            width: 0%;
+            transition: width 0.1s;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ========== 3D CANVAS ========== */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             pointer-events: none;
         }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a1a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #f7971e;
-            border-radius: 10px;
+        #canvas-container canvas {
+            display: block;
         }
 
-        /* ===== NAVIGATION ===== */
+        /* ========== CUSTOM CURSOR ========== */
+        .cursor {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--secondary-light);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.15s, opacity 0.3s;
+            opacity: 0;
+        }
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+        }
+        body:hover .cursor,
+        body:hover .cursor-dot {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .cursor,
+            .cursor-dot {
+                display: none !important;
+            }
+        }
+
+        /* ========== GLOW ORBS ========== */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glow-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            top: 10%;
+            left: -10%;
+            animation: orbFloat 25s ease-in-out infinite;
+        }
+        .glow-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            bottom: 10%;
+            right: -10%;
+            animation: orbFloat 30s ease-in-out infinite reverse;
+        }
+        .glow-orb-3 {
+            width: 350px;
+            height: 350px;
+            background: #6366f1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbFloat 20s ease-in-out infinite 3s;
+        }
+
+        @keyframes orbFloat {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(60px, -40px) scale(1.1);
+            }
+            50% {
+                transform: translate(-40px, 60px) scale(0.9);
+            }
+            75% {
+                transform: translate(40px, 40px) scale(1.05);
+            }
+        }
+
+        /* ========== FLOATING PARTICLES ========== */
+        .particles-float {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .particle-float {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: particleRise 20s infinite linear;
+        }
+        @keyframes particleRise {
+            0% {
+                transform: translateY(110vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
-            padding: 1rem 4rem;
+            z-index: 1000;
+            padding: 1rem 3rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 26, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            background: rgba(5, 10, 20, 0.55);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="light"] .navbar {
+            background: rgba(248, 250, 252, 0.7);
         }
         .navbar.scrolled {
-            padding: 0.7rem 4rem;
-            background: rgba(10, 10, 26, 0.96);
+            padding: 0.6rem 3rem;
+            background: rgba(5, 10, 20, 0.88);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
+        [data-theme="light"] .navbar.scrolled {
+            background: rgba(248, 250, 252, 0.92);
+        }
+
         .nav-logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.6rem;
-            font-weight: 800;
+            gap: 0.75rem;
             text-decoration: none;
-            color: #fff;
         }
         .nav-logo img {
-            height: 40px;
+            height: 44px;
             width: auto;
+            border-radius: 10px;
+            transition: transform 0.3s;
         }
-        .nav-logo span {
-            background: linear-gradient(135deg, #f7971e, #ffd200);
+        .nav-logo img:hover {
+            transform: scale(1.05);
+        }
+        .nav-logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+        .nav-logo-text span {
+            background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -95,15 +319,13 @@
             align-items: center;
         }
         .nav-links a {
-            color: #cbd5e1;
+            color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            transition: color 0.3s ease;
+            transition: all 0.3s;
             position: relative;
-        }
-        .nav-links a:hover {
-            color: #ffd200;
+            letter-spacing: 0.3px;
         }
         .nav-links a::after {
             content: '';
@@ -112,553 +334,1048 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            transition: width 0.3s ease;
+            background: var(--gradient-1);
+            transition: width 0.35s ease;
+            border-radius: 2px;
+        }
+        .nav-links a:hover {
+            color: var(--text);
         }
         .nav-links a:hover::after {
             width: 100%;
         }
-        .nav-cta {
-            padding: 0.5rem 1.5rem;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            border-radius: 50px;
-            color: #0a0a1a !important;
-            font-weight: 700 !important;
+        .nav-links a.active {
+            color: var(--text);
         }
-        .nav-cta::after {
-            display: none !important;
-        }
-        .nav-cta:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(247, 151, 30, 0.4);
-        }
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .hamburger span {
-            width: 28px;
-            height: 3px;
-            background: #fff;
-            border-radius: 5px;
-            transition: all 0.3s ease;
+        .nav-links a.active::after {
+            width: 100%;
         }
 
-        /* ===== OVERLAY CONTENT ===== */
-        .content {
-            position: relative;
-            z-index: 1;
-            padding-top: 80px;
-        }
-
-        /* ===== HERO ===== */
-        .hero {
-            min-height: 100vh;
+        .nav-actions {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem 2rem 4rem;
-            text-align: center;
+            transition: all 0.4s;
+            backdrop-filter: blur(10px);
         }
-        .hero * {
-            pointer-events: auto;
+        .theme-toggle:hover {
+            background: var(--secondary);
+            color: white;
+            transform: rotate(180deg) scale(1.05);
+            border-color: var(--secondary);
         }
-        .hero-logo {
-            max-width: 180px;
-            margin-bottom: 1.5rem;
-            animation: fadeUp 1s ease-out;
-        }
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 80px rgba(247, 151, 30, 0.3);
-            animation: fadeUp 1.2s ease-out;
-        }
-        .hero-title span {
-            font-weight: 300;
-            background: linear-gradient(135deg, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-tagline {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-            letter-spacing: 0.15em;
-            animation: fadeUp 1.4s ease-out;
-        }
-        .hero-tagline strong {
-            color: #ffd200;
-            font-weight: 700;
-        }
-        .hero-desc {
-            max-width: 720px;
-            margin: 1.8rem auto;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #cbd5e1;
-            animation: fadeUp 1.6s ease-out;
-        }
-        .hero-stats {
-            display: flex;
-            gap: 4rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 2.5rem 0;
-            animation: fadeUp 1.8s ease-out;
-        }
-        .stat-item {
-            text-align: center;
-        }
-        .stat-number {
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: #ffd200;
-        }
-        .stat-label {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 0.2rem;
-        }
-        .hero-btns {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeUp 2.0s ease-out;
-        }
-        .btn {
-            padding: 0.9rem 2.4rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        .nav-cta {
+            padding: 0.6rem 1.6rem;
+            background: var(--gradient-1);
+            color: white;
             border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
             cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(13, 148, 136, 0.25);
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            color: #0a0a1a;
-            box-shadow: 0 4px 30px rgba(247, 151, 30, 0.35);
+        .nav-cta:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(13, 148, 136, 0.4);
         }
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 8px 45px rgba(247, 151, 30, 0.5);
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.3s;
         }
-        .btn-outline {
-            background: transparent;
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-outline:hover {
-            border-color: #ffd200;
-            color: #ffd200;
-            transform: translateY(-3px);
-        }
-        .btn-gold {
-            background: transparent;
-            color: #ffd200;
-            border: 2px solid #ffd200;
-        }
-        .btn-gold:hover {
-            background: #ffd200;
-            color: #0a0a1a;
-            transform: translateY(-3px);
+        .mobile-menu-btn:hover {
+            background: var(--glass);
         }
 
-        /* ===== SECTIONS ===== */
-        .section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* ========== MOBILE MENU ========== */
+        .mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+            backdrop-filter: blur(4px);
         }
-        .section-title {
-            font-size: 2.8rem;
-            font-weight: 800;
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 85%;
+            max-width: 360px;
+            height: 100vh;
+            background: var(--bg);
+            backdrop-filter: blur(40px);
+            z-index: 2000;
+            padding: 6rem 2rem 2rem;
+            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 1px solid var(--glass-border);
+            overflow-y: auto;
+        }
+        .mobile-menu.active {
+            right: 0;
+        }
+        .mobile-menu-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            padding: 10px;
+            transition: all 0.3s;
+        }
+        .mobile-menu-close:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .mobile-menu li a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: block;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .mobile-menu li a:hover {
+            background: rgba(13, 148, 136, 0.1);
+            color: var(--secondary-light);
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+        }
+        .hero-content {
             text-align: center;
-            margin-bottom: 0.5rem;
+            max-width: 900px;
+            z-index: 2;
+            position: relative;
         }
-        .section-title .highlight {
-            background: linear-gradient(135deg, #f7971e, #ffd200);
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1.4rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--secondary-light);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+            animation: floatBadge 3s ease-in-out infinite;
+        }
+        @keyframes floatBadge {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+        .hero h1 {
+            font-size: clamp(2.8rem, 6.5vw, 5.2rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .section-subtitle {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto 3rem;
-            line-height: 1.7;
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
         }
-
-        /* ===== ABOUT ===== */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: start;
-        }
-        .about-text {
-            color: #cbd5e1;
-            line-height: 1.9;
-            font-size: 1.05rem;
-        }
-        .about-text p {
-            margin-bottom: 1.2rem;
-        }
-        .about-text strong {
-            color: #ffd200;
-        }
-        .about-highlights {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+        .hero-buttons {
+            display: flex;
             gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        .highlight-box {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 215, 0, 0.1);
-            border-radius: 12px;
-            padding: 1.2rem;
-            text-align: center;
-        }
-        .highlight-box .num {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #ffd200;
-        }
-        .highlight-box .label {
-            font-size: 0.8rem;
-            color: #94a3b8;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        /* ===== VISION & MISSION ===== */
-        .vm-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-top: 2rem;
-        }
-        .vm-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 215, 0, 0.08);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .vm-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(247, 151, 30, 0.3);
-        }
-        .vm-card i {
-            font-size: 3rem;
-            color: #ffd200;
-            margin-bottom: 1rem;
-        }
-        .vm-card h3 {
-            font-size: 1.8rem;
+        /* ========== BUTTONS ========== */
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 14px;
             font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        .vm-card p {
-            color: #cbd5e1;
-            line-height: 1.7;
-        }
-
-        /* ===== CORE AREAS ===== */
-        .core-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-        .core-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 215, 0, 0.08);
-            border-radius: 20px;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            transition: all 0.4s ease;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 30px rgba(13, 148, 136, 0.25);
             position: relative;
             overflow: hidden;
         }
-        .core-card::before {
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.6s;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 45px rgba(13, 148, 136, 0.35);
+        }
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--text);
+            border: 1.5px solid var(--glass-border);
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover {
+            border-color: var(--secondary-light);
+            background: rgba(13, 148, 136, 0.06);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+        .btn-gold {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-2);
+            color: #0a1628;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.2);
+        }
+        .btn-gold:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 45px rgba(245, 158, 11, 0.3);
+        }
+
+        /* ========== HERO STATS ========== */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        /* ========== SECTION HEADERS ========== */
+        section {
+            position: relative;
+            z-index: 2;
+            padding: 6rem 2rem;
+        }
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 4rem;
+        }
+        .section-tag {
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            background: rgba(13, 148, 136, 0.08);
+            border: 1px solid rgba(13, 148, 136, 0.15);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--secondary-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.15;
+        }
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* ========== ABOUT ========== */
+        .about {
+            padding: 6rem 2rem;
+        }
+        .about-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .about-visual {
+            position: relative;
+        }
+        .about-visual-main {
+            width: 100%;
+            aspect-ratio: 1 / 0.9;
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-glow), var(--shadow-card);
+        }
+        .about-visual-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+        .about-visual:hover .about-visual-main img {
+            transform: scale(1.04);
+        }
+        .about-visual-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(5, 10, 20, 0.7) 100%);
+        }
+        .about-visual-float {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            padding: 1.5rem 2rem;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            animation: floatBadge 4s ease-in-out infinite;
+            text-align: center;
+        }
+        .about-visual-float h4 {
+            font-size: 1.8rem;
+            color: var(--secondary-light);
+            margin-bottom: 0.2rem;
+        }
+        .about-visual-float p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .about-content h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .about-content p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        .about-content p strong {
+            color: var(--secondary-light);
+        }
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+        .about-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            transition: all 0.3s;
+        }
+        .about-feature:hover {
+            transform: translateY(-4px);
+            border-color: rgba(13, 148, 136, 0.3);
+            box-shadow: var(--shadow-glow);
+        }
+        .about-feature-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 12px;
+            background: rgba(13, 148, 136, 0.1);
+            border: 1px solid rgba(13, 148, 136, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-light);
+        }
+        .about-feature h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+        .about-feature p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* ========== VISION & MISSION ========== */
+        .vision-mission {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(13, 148, 136, 0.02) 50%, transparent 100%);
+        }
+        .vm-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .vm-card {
+            padding: 3rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .vm-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
+            background: var(--gradient-1);
             transform: scaleX(0);
-            transition: transform 0.4s ease;
+            transition: transform 0.5s;
+            transform-origin: left;
         }
-        .core-card:hover::before {
+        .vm-card:hover::before {
             transform: scaleX(1);
         }
-        .core-card:hover {
+        .vm-card:hover {
             transform: translateY(-8px);
-            background: rgba(255, 215, 0, 0.06);
-            border-color: rgba(247, 151, 30, 0.3);
+            box-shadow: var(--shadow-glow), var(--shadow-card);
+            border-color: rgba(13, 148, 136, 0.25);
         }
-        .core-card .icon {
-            font-size: 2.5rem;
-            color: #ffd200;
+        .vm-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.25);
+        }
+        .vm-card h3 {
+            font-size: 1.6rem;
             margin-bottom: 1rem;
         }
-        .core-card h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.7rem;
+        .vm-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.8;
         }
-        .core-card p {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            line-height: 1.6;
+        .vm-quote {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 4rem;
+            margin-top: 2rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            position: relative;
+        }
+        .vm-quote::before {
+            content: '"';
+            font-family: 'Outfit', sans-serif;
+            font-size: 8rem;
+            color: var(--secondary);
+            opacity: 0.06;
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            line-height: 1;
+        }
+        .vm-quote p {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--text);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .vm-quote-author {
+            margin-top: 1.5rem;
+            color: var(--secondary-light);
+            font-weight: 600;
+            font-size: 1rem;
         }
 
-        /* ===== APPROACH ===== */
+        /* ========== CORE AREAS ========== */
+        .core-areas {
+            padding: 6rem 2rem;
+        }
+        .areas-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .area-card {
+            padding: 2.5rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+        .area-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            background: var(--gradient-1);
+            transition: height 0.5s;
+            opacity: 0.04;
+        }
+        .area-card:hover::after {
+            height: 100%;
+        }
+        .area-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-glow), var(--shadow-card);
+            border-color: rgba(13, 148, 136, 0.2);
+        }
+        .area-card-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: rgba(13, 148, 136, 0.08);
+            border: 1px solid rgba(13, 148, 136, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-light);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+        .area-card:hover .area-card-icon {
+            background: var(--gradient-1);
+            color: white;
+            transform: scale(1.05) rotate(-3deg);
+            border-color: transparent;
+        }
+        .area-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+        .area-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ========== PROJECTS ========== */
+        .projects {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(13, 148, 136, 0.015) 50%, transparent 100%);
+        }
+        .projects-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        .project-card {
+            padding: 3rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+        .project-card.featured {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 3rem;
+        }
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-glow), var(--shadow-card);
+            border-color: rgba(13, 148, 136, 0.2);
+        }
+        .project-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .project-badge.green {
+            background: rgba(13, 148, 136, 0.08);
+            border-color: rgba(13, 148, 136, 0.15);
+            color: var(--secondary-light);
+        }
+        .project-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .project-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        .project-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .project-feature-tag {
+            padding: 0.3rem 0.9rem;
+            background: rgba(13, 148, 136, 0.06);
+            border: 1px solid rgba(13, 148, 136, 0.1);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--secondary-light);
+            font-weight: 500;
+        }
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .project-link:hover {
+            gap: 1rem;
+            color: var(--accent-light);
+        }
+        .project-visual {
+            width: 100%;
+            height: 260px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.06), rgba(99, 102, 241, 0.06));
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .project-visual-inner {
+            text-align: center;
+            padding: 2rem;
+        }
+        .project-visual-inner i {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        .project-visual-inner h4 {
+            font-size: 1.6rem;
+            color: var(--text);
+        }
+        .project-visual-inner p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .project-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ========== FOUNDER ========== */
+        .founder {
+            padding: 6rem 2rem;
+        }
+        .founder-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .founder-image-wrap {
+            position: relative;
+        }
+        .founder-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-glow), var(--shadow-card);
+            border: 2px solid var(--glass-border);
+        }
+        .founder-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+        .founder-image:hover img {
+            transform: scale(1.04);
+        }
+        .founder-image-ring {
+            position: absolute;
+            inset: -12px;
+            border: 2px solid rgba(13, 148, 136, 0.2);
+            border-radius: calc(var(--radius) + 8px);
+            animation: pulseRing 3s ease-in-out infinite;
+        }
+        @keyframes pulseRing {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.02);
+                opacity: 1;
+            }
+        }
+        .founder-content h3 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .founder-role {
+            color: var(--secondary-light);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .founder-content p {
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        .founder-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        .founder-skill {
+            padding: 0.4rem 1rem;
+            background: rgba(13, 148, 136, 0.06);
+            border: 1px solid rgba(13, 148, 136, 0.1);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--secondary-light);
+            font-weight: 500;
+        }
+        .founder-contact {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        .founder-contact a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .founder-contact a:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2);
+        }
+
+        /* ========== APPROACH ========== */
+        .approach {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(13, 148, 136, 0.015) 50%, transparent 100%);
+        }
         .approach-grid {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
         }
-        .approach-item {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            border: 1px solid rgba(255, 215, 0, 0.06);
-        }
-        .approach-item i {
-            font-size: 2.5rem;
-            color: #ffd200;
-            margin-bottom: 1rem;
-        }
-        .approach-item h4 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .approach-item p {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* ===== INITIATIVES ===== */
-        .init-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-        .init-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 215, 0, 0.08);
+        .approach-card {
+            padding: 2.5rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.4s ease;
+            text-align: center;
+            transition: all 0.5s;
+            position: relative;
         }
-        .init-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(247, 151, 30, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        .approach-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-glow), var(--shadow-card);
+            border-color: rgba(13, 148, 136, 0.2);
         }
-        .init-card .badge {
-            display: inline-block;
-            padding: 0.25rem 1rem;
-            background: rgba(247, 151, 30, 0.2);
-            color: #ffd200;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .approach-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.15;
+            line-height: 1;
             margin-bottom: 1rem;
         }
-        .init-card h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .approach-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
         }
-        .init-card p {
-            color: #94a3b8;
-            line-height: 1.7;
+        .approach-card p {
+            color: var(--text-muted);
             font-size: 0.95rem;
-        }
-        .init-card .features {
-            margin-top: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .init-card .features span {
-            background: rgba(255, 215, 0, 0.08);
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            color: #cbd5e1;
+            line-height: 1.8;
         }
 
-        /* ===== PAPERLESS DETAIL ===== */
-        .paperless-section {
-            background: rgba(255, 215, 0, 0.03);
-            border-radius: 30px;
-            padding: 3rem;
-            border: 1px solid rgba(255, 215, 0, 0.1);
-            margin-top: 2rem;
+        /* ========== PARTNERSHIP ========== */
+        .partnership {
+            padding: 6rem 2rem;
         }
-        .paperless-grid {
+        .partnership-grid {
+            max-width: 1000px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        .paperless-features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-        }
-        .paperless-feature {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            padding: 0.8rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .paperless-feature i {
-            color: #ffd200;
-            font-size: 1.2rem;
-        }
-        .paperless-feature span {
-            font-size: 0.9rem;
-            color: #cbd5e1;
-        }
-
-        /* ===== PARTNERS ===== */
-        .partner-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 2rem;
-            align-items: center;
-            justify-items: center;
         }
-        .partner-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 215, 0, 0.08);
+        .partnership-card {
+            padding: 3rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            transition: all 0.5s;
+        }
+        .partnership-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-card);
+            border-color: rgba(13, 148, 136, 0.2);
+        }
+        .partnership-card-icon {
+            width: 56px;
+            height: 56px;
             border-radius: 16px;
-            padding: 1.5rem 2rem;
-            text-align: center;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        .partner-card:hover {
-            background: rgba(247, 151, 30, 0.08);
-            border-color: #f7971e;
-        }
-        .partner-card h4 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #ffd200;
-        }
-        .partner-card p {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 0.3rem;
-        }
-
-        /* ===== FOUNDER ===== */
-        .founder-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: start;
-        }
-        .founder-image {
-            text-align: center;
-        }
-        .founder-image .avatar {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
+            background: var(--gradient-1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
-            font-weight: 900;
-            color: #0a0a1a;
-            margin: 0 auto 1rem;
-            box-shadow: 0 0 60px rgba(247, 151, 30, 0.2);
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2);
         }
-        .founder-image h3 {
+        .partnership-card h3 {
             font-size: 1.4rem;
-            font-weight: 700;
-        }
-        .founder-image .title {
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-        .founder-info {
-            color: #cbd5e1;
-            line-height: 1.8;
-        }
-        .founder-info p {
             margin-bottom: 1rem;
         }
-        .founder-info .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-        .founder-info .skills span {
-            background: rgba(255, 215, 0, 0.1);
-            padding: 0.3rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            color: #ffd200;
-            border: 1px solid rgba(255, 215, 0, 0.15);
-        }
-        .founder-info .certs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: 0.5rem;
-        }
-        .founder-info .certs span {
-            background: rgba(255, 255, 255, 0.04);
-            padding: 0.3rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+        .partnership-card p {
+            color: var(--text-muted);
+            line-height: 1.8;
         }
 
-        /* ===== FOOTER ===== */
+        /* ========== CTA ========== */
+        .cta-section {
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 5rem 3rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(13, 148, 136, 0.06) 0%, transparent 70%);
+            animation: rotateBg 25s linear infinite;
+        }
+        @keyframes rotateBg {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        .cta-container h2 {
+            font-size: 2.6rem;
+            margin-bottom: 1rem;
+        }
+        .cta-container p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        /* ========== FOOTER ========== */
         .footer {
-            background: rgba(255, 255, 255, 0.02);
-            border-top: 1px solid rgba(255, 215, 0, 0.06);
-            padding: 3rem 2rem;
-            margin-top: 2rem;
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid var(--glass-border);
+            position: relative;
+            z-index: 2;
+            background: rgba(5, 10, 20, 0.3);
+        }
+        [data-theme="light"] .footer {
+            background: rgba(248, 250, 252, 0.3);
         }
         .footer-grid {
             max-width: 1200px;
@@ -666,806 +1383,1213 @@
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 3rem;
+            margin-bottom: 3rem;
         }
-        .footer-brand h3 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #f7971e, #ffd200);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .footer-brand .nav-logo {
+            margin-bottom: 1rem;
         }
         .footer-brand p {
-            color: #94a3b8;
+            color: var(--text-muted);
             font-size: 0.9rem;
-            line-height: 1.7;
-            margin-top: 0.5rem;
-            max-width: 300px;
+            line-height: 1.8;
+            max-width: 320px;
         }
         .footer-col h4 {
             font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #fff;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col li {
+            margin-bottom: 0.7rem;
         }
         .footer-col a {
-            display: block;
-            color: #94a3b8;
+            color: var(--text-muted);
             text-decoration: none;
             font-size: 0.9rem;
-            padding: 0.3rem 0;
-            transition: color 0.3s ease;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         .footer-col a:hover {
-            color: #ffd200;
+            color: var(--secondary-light);
+            transform: translateX(4px);
         }
         .footer-bottom {
             max-width: 1200px;
-            margin: 2rem auto 0;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            color: #475569;
-            font-size: 0.8rem;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .footer-social {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .footer-social a {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+        .footer-social a:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2);
         }
 
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* ========== REVEAL ANIMATION ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* ===== RESPONSIVE ===== */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 1024px) {
             .about-grid,
+            .founder-container,
             .vm-grid,
-            .paperless-grid,
-            .founder-grid {
+            .partnership-grid {
                 grid-template-columns: 1fr;
             }
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
+            .areas-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             .approach-grid {
                 grid-template-columns: 1fr 1fr;
             }
+            .project-card.featured {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .about-visual-float {
+                display: none;
+            }
         }
+
         @media (max-width: 768px) {
             .navbar {
-                padding: 0.8rem 1.5rem;
+                padding: 0.8rem 1.2rem;
             }
-            .nav-links {
+            .navbar.scrolled {
+                padding: 0.6rem 1.2rem;
+            }
+            .nav-links,
+            .nav-cta {
                 display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(10, 10, 26, 0.98);
-                padding: 2rem;
-                gap: 1.5rem;
-                border-bottom: 1px solid rgba(255, 215, 0, 0.1);
             }
-            .nav-links.open {
-                display: flex;
+            .mobile-menu-btn {
+                display: block;
             }
-            .hamburger {
-                display: flex;
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+                min-height: 90vh;
             }
-            .hero-title {
-                font-size: 2.8rem;
+            .hero h1 {
+                font-size: 2.6rem;
             }
-            .hero-tagline {
-                font-size: 1.1rem;
-            }
-            .hero-desc {
-                font-size: 0.95rem;
-                padding: 0 1rem;
+            .hero p {
+                font-size: 1rem;
             }
             .hero-stats {
                 gap: 2rem;
             }
-            .stat-number {
+            .hero-stat-number {
                 font-size: 2rem;
             }
-            .section-title {
-                font-size: 2rem;
+            .hero-buttons .btn-primary,
+            .hero-buttons .btn-secondary,
+            .hero-buttons .btn-gold {
+                width: 100%;
+                justify-content: center;
             }
-            .about-highlights {
+            .about-grid,
+            .founder-container {
+                gap: 2rem;
+            }
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            .areas-grid {
+                grid-template-columns: 1fr;
+            }
+            .projects-grid {
                 grid-template-columns: 1fr;
             }
             .approach-grid {
                 grid-template-columns: 1fr;
             }
-            .paperless-features {
+            .partnership-grid {
                 grid-template-columns: 1fr;
-            }
-            .paperless-section {
-                padding: 1.5rem;
             }
             .footer-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
-            .founder-image .avatar {
-                width: 150px;
-                height: 150px;
-                font-size: 3.5rem;
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            .founder-image-wrap {
+                max-width: 280px;
+                margin: 0 auto;
+            }
+            .founder-container {
+                grid-template-columns: 1fr;
+            }
+            .vm-grid {
+                grid-template-columns: 1fr;
+            }
+            .vm-quote {
+                padding: 2rem;
+            }
+            .vm-quote p {
+                font-size: 1.1rem;
+            }
+            .cta-container {
+                padding: 3rem 1.5rem;
+            }
+            .cta-container h2 {
+                font-size: 2rem;
+            }
+            .project-card.featured {
+                padding: 2rem;
+            }
+            .project-card {
+                padding: 2rem;
+            }
+            .section-header {
+                margin-bottom: 2.5rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            section {
+                padding: 4rem 1.5rem;
+            }
+            .about-visual-main {
+                aspect-ratio: 1 / 0.8;
+            }
+            .founder-image {
+                aspect-ratio: 1;
             }
         }
+
         @media (max-width: 480px) {
-            .hero-title {
+            .hero h1 {
                 font-size: 2.2rem;
             }
-            .btn {
-                padding: 0.7rem 1.4rem;
-                font-size: 0.8rem;
+            .hero-stat-number {
+                font-size: 1.6rem;
+            }
+            .hero-stat-label {
+                font-size: 0.7rem;
+            }
+            .hero-stats {
+                gap: 1.5rem;
+            }
+            .nav-logo-text {
+                font-size: 1.1rem;
+            }
+            .nav-logo img {
+                height: 36px;
+            }
+            .project-visual {
+                height: 180px;
+            }
+            .project-card h3 {
+                font-size: 1.4rem;
+            }
+            .founder-content h3 {
+                font-size: 1.8rem;
+            }
+            .about-content h3 {
+                font-size: 1.8rem;
+            }
+            .vm-card {
+                padding: 2rem;
+            }
+            .area-card {
+                padding: 1.8rem;
+            }
+            .partnership-card {
+                padding: 2rem;
+            }
+            .approach-card {
+                padding: 2rem;
             }
         }
     </style>
 </head>
 
-<body>
+<body data-theme="dark">
 
-    <!-- ===== THREE.JS CANVAS ===== -->
-    <div id="three-canvas"></div>
+    <!-- ===== SCROLL PROGRESS ===== -->
+    <div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- ===== NAVIGATION ===== -->
+    <!-- ===== CUSTOM CURSOR ===== -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- ===== 3D CANVAS ===== -->
+    <div id="canvas-container"></div>
+
+    <!-- ===== FLOATING PARTICLES ===== -->
+    <div class="particles-float" id="particlesFloat"></div>
+
+    <!-- ===== NAVBAR ===== -->
     <nav class="navbar" id="navbar">
-        <a href="#" class="nav-logo">
-            <img src="logo.webp" alt="iMENA Hub Logo" />
-            <span>iMENA Hub</span>
+        <a href="#home" class="nav-logo">
+            <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub Logo" />
+            <span class="nav-logo-text">iMENA <span>Hub</span></span>
         </a>
-        <ul class="nav-links" id="navLinks">
+        <ul class="nav-links">
             <li><a href="#about">About</a></li>
-            <li><a href="#vision">Vision &amp; Mission</a></li>
-            <li><a href="#core">Core Areas</a></li>
-            <li><a href="#initiatives">Initiatives</a></li>
-            <li><a href="#paperless">Paperless</a></li>
-            <li><a href="#partners">Partners</a></li>
+            <li><a href="#vision">Vision</a></li>
+            <li><a href="#areas">Core Areas</a></li>
+            <li><a href="#projects">Projects</a></li>
             <li><a href="#founder">Founder</a></li>
-            <li><a href="#contact" class="nav-cta">Contact</a></li>
+            <li><a href="#approach">Approach</a></li>
+            <li><a href="#partnership">Partnership</a></li>
         </ul>
-        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <i data-lucide="sun" class="icon-sun" style="width:20px;height:20px;"></i>
+                <i data-lucide="moon" class="icon-moon" style="width:20px;height:20px;display:none;"></i>
+            </button>
+            <a href="#contact" class="nav-cta">
+                <i data-lucide="send" style="width:16px;height:16px;"></i>
+                Get in Touch
+            </a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                <i data-lucide="menu" style="width:24px;height:24px;"></i>
+            </button>
+        </div>
     </nav>
 
-    <!-- ===== OVERLAY CONTENT ===== -->
-    <div class="content">
-
-        <!-- ===== HERO ===== -->
-        <section class="hero" id="home">
-            <img src="logo.webp" alt="iMENA Hub" class="hero-logo" />
-            <h1 class="hero-title">iMENA <span>Hub</span></h1>
-            <p class="hero-tagline">
-                <strong>Empowering Future-Ready Education</strong> Through Innovation and Technology
-            </p>
-            <p class="hero-desc">
-                iMENA Hub is a Rwandan educational technology initiative dedicated to empowering
-                teachers, learners, and schools through practical digital skills, educational innovation,
-                and modern teaching methods.
-            </p>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <div class="stat-number">24K+</div>
-                    <div class="stat-label">Active Users</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">96</div>
-                    <div class="stat-label">Countries</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">247</div>
-                    <div class="stat-label">iMENA Learn Students</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">136+</div>
-                    <div class="stat-label">Trinity College Students</div>
-                </div>
-            </div>
-            <div class="hero-btns">
-                <a href="#initiatives" class="btn btn-primary">🚀 Explore Initiatives</a>
-                <a href="#about" class="btn btn-outline">📖 Learn More</a>
-                <a href="#paperless" class="btn btn-gold">📝 Paperless Platform</a>
-            </div>
-        </section>
-
-        <!-- ===== ABOUT ===== -->
-        <section class="section" id="about">
-            <h2 class="section-title">About <span class="highlight">iMENA Hub</span></h2>
-            <p class="section-subtitle">
-                Bridging the gap between classroom learning and real-world digital skills through practical education and teacher development.
-            </p>
-            <div class="about-grid">
-                <div class="about-text">
-                    <p>
-                        <strong>iMENA Hub</strong> is a Rwandan educational technology initiative dedicated to
-                        empowering teachers, learners, and schools through practical digital skills,
-                        educational innovation, and modern teaching methods.
-                    </p>
-                    <p>
-                        Our purpose is to bridge the gap between classroom learning and real-world digital
-                        skills through practical education and teacher development programs. We focus on
-                        delivering educational technology solutions, coding, AI, and digital literacy to
-                        schools and learners across Rwanda and Africa.
-                    </p>
-                    <div class="about-highlights">
-                        <div class="highlight-box">
-                            <div class="num">2024</div>
-                            <div class="label">Founded</div>
-                        </div>
-                        <div class="highlight-box">
-                            <div class="num">7+</div>
-                            <div class="label">Partners</div>
-                        </div>
-                        <div class="highlight-box">
-                            <div class="num">500+</div>
-                            <div class="label">Youth Reached Annually</div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h3 style="font-size:1.3rem;margin-bottom:1rem;color:#fff;">Our Core Purpose</h3>
-                    <ul style="list-style:none;color:#cbd5e1;line-height:2;font-size:1.05rem;">
-                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Empower teachers with digital competencies</li>
-                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Equip learners with practical digital skills</li>
-                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Partner with schools for real-world impact</li>
-                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Develop innovative EdTech solutions</li>
-                        <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Support Rwanda's Vision 2050 digital transformation</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== VISION & MISSION ===== -->
-        <section class="section" id="vision">
-            <h2 class="section-title">Vision &amp; <span class="highlight">Mission</span></h2>
-            <div class="vm-grid">
-                <div class="vm-card">
-                    <i class="fas fa-eye"></i>
-                    <h3>Vision</h3>
-                    <p>
-                        To become one of Africa's leading educational technology organizations,
-                        transforming how students and teachers engage with learning across the continent.
-                        Harnessing the power of digital tools, AI, and modern pedagogy to bridge the gap
-                        between classroom learning and real-world readiness.
-                    </p>
-                </div>
-                <div class="vm-card">
-                    <i class="fas fa-rocket"></i>
-                    <h3>Mission</h3>
-                    <p>
-                        To bridge the gap between classroom learning and real-world skills by providing
-                        practical digital education, teacher development, and educational technology solutions.
-                        We deliver hands-on digital skills training, teacher professional development, and
-                        innovative EdTech solutions to schools and learners across Rwanda and beyond.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== CORE AREAS ===== -->
-        <section class="section" id="core">
-            <h2 class="section-title">Our <span class="highlight">Core Areas</span></h2>
-            <p class="section-subtitle">
-                iMENA Hub equips learners and educators with cutting-edge digital competencies across key disciplines.
-            </p>
-            <div class="core-grid">
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-chalkboard-teacher"></i></div>
-                    <h3>Teacher Development</h3>
-                    <p>Equipping educators with modern pedagogical skills, digital tools, and innovative teaching methods to transform classroom experiences.</p>
-                </div>
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-code"></i></div>
-                    <h3>AI &amp; Coding</h3>
-                    <p>Introducing artificial intelligence concepts and programming fundamentals to build future-ready problem-solving and technical skills.</p>
-                </div>
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-laptop-code"></i></div>
-                    <h3>Digital Skills Training</h3>
-                    <p>Providing learners with practical, real-world digital competencies including web development, graphic design, and cybersecurity.</p>
-                </div>
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-graduation-cap"></i></div>
-                    <h3>iMENA Learn</h3>
-                    <p>Training youth on digital skills and ICT through our program to level up youth with technology skills for the future.</p>
-                </div>
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Cybersecurity</h3>
-                    <p>Training learners to protect digital systems, understand network security, and apply ethical hacking principles in real-world environments.</p>
-                </div>
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-globe"></i></div>
-                    <h3>Web Development</h3>
-                    <p>Teaching modern web technologies including HTML, CSS, JavaScript, and frameworks to build responsive, functional websites and applications.</p>
-                </div>
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-paint-brush"></i></div>
-                    <h3>Graphic Design</h3>
-                    <p>Developing visual communication skills using professional design tools for branding, layout, digital media, and creative content production.</p>
-                </div>
-                <div class="core-card">
-                    <div class="icon"><i class="fas fa-microchip"></i></div>
-                    <h3>EdTech Integration</h3>
-                    <p>Integrating digital tools, platforms, and smart solutions into classrooms to enhance teaching effectiveness and learning outcomes.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== APPROACH ===== -->
-        <section class="section" id="approach">
-            <h2 class="section-title">Our <span class="highlight">Approach</span></h2>
-            <p class="section-subtitle">
-                iMENA Hub combines pedagogy, technology, creativity, and practical learning to prepare learners for the future.
-            </p>
-            <div class="approach-grid">
-                <div class="approach-item">
-                    <i class="fas fa-hands-on"></i>
-                    <h4>Hands-On Learning</h4>
-                    <p>We prioritize project-based, experiential learning that connects classroom concepts to real-world digital skills and challenges.</p>
-                </div>
-                <div class="approach-item">
-                    <i class="fas fa-tools"></i>
-                    <h4>Innovative Tools</h4>
-                    <p>Leveraging cutting-edge educational technology, AI tools, and modern platforms to create engaging and effective learning environments.</p>
-                </div>
-                <div class="approach-item">
-                    <i class="fas fa-user-graduate"></i>
-                    <h4>Teacher Empowerment</h4>
-                    <p>Equipping educators with professional development, digital competencies, and innovative teaching methods to lead future-ready classrooms.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== INITIATIVES ===== -->
-        <section class="section" id="initiatives">
-            <h2 class="section-title">Current <span class="highlight">Initiatives</span></h2>
-            <p class="section-subtitle">
-                iMENA Hub is actively developing and deploying innovative tools and programs that transform how learners and teachers engage with education.
-            </p>
-            <div class="init-grid">
-                <div class="init-card">
-                    <span class="badge">🚀 Digital Learning</span>
-                    <h3>iMENA Learn</h3>
-                    <p>A digital learning platform delivering practical skills, structured courses, and educational content tailored for Rwandan learners and educators.</p>
-                    <div class="features">
-                        <span>ICT Training</span>
-                        <span>Hands-on</span>
-                        <span>4-Week Camps</span>
-                    </div>
-                </div>
-                <div class="init-card">
-                    <span class="badge">📝 Assessment</span>
-                    <h3>AfriQuiz</h3>
-                    <p>An interactive quiz platform designed to make assessment engaging, competitive, and accessible for African students and classrooms.</p>
-                    <div class="features">
-                        <span>Gamified</span>
-                        <span>Real-time</span>
-                        <span>Mobile-friendly</span>
-                    </div>
-                </div>
-                <div class="init-card">
-                    <span class="badge">🤖 AI-Powered</span>
-                    <h3>AI-Powered Tools</h3>
-                    <p>Intelligent educational tools powered by AI to personalize learning, support teachers, and enhance student outcomes at scale.</p>
-                    <div class="features">
-                        <span>Personalized</span>
-                        <span>Adaptive</span>
-                        <span>REB Aligned</span>
-                    </div>
-                </div>
-                <div class="init-card">
-                    <span class="badge">🌱 Paperless</span>
-                    <h3>Paperless Platform</h3>
-                    <p>A smart digital assessment platform that replaces paper-based processes with streamlined, eco-friendly digital workflows.</p>
-                    <div class="features">
-                        <span>Digital Tests</span>
-                        <span>Instant Feedback</span>
-                        <span>Reports</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== PAPERLESS DETAIL ===== -->
-        <section class="section" id="paperless">
-            <div class="paperless-section">
-                <h2 style="font-size:2.5rem;font-weight:800;text-align:center;margin-bottom:0.5rem;">
-                    📝 <span style="background:linear-gradient(135deg,#f7971e,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Paperless</span>
-                </h2>
-                <p style="text-align:center;color:#94a3b8;font-size:1.1rem;margin-bottom:2rem;">
-                    Smart Digital Assessment Platform for Schools
-                </p>
-                <div class="paperless-grid">
-                    <div>
-                        <p style="color:#cbd5e1;line-height:1.8;font-size:1.05rem;">
-                            <strong>Paperless</strong> transforms school assessments by enabling teachers to create digital tests,
-                            share them via simple links, and generate downloadable reports instantly — all from a mobile-friendly platform.
-                            It replaces outdated paper-based systems that drain teacher time, waste resources, and delay feedback.
-                        </p>
-                        <div style="display:flex;gap:2rem;flex-wrap:wrap;margin:1.5rem 0;">
-                            <div>
-                                <div style="font-size:1.6rem;font-weight:800;color:#ffd200;">10+</div>
-                                <div style="color:#94a3b8;font-size:0.85rem;">Languages</div>
-                            </div>
-                            <div>
-                                <div style="font-size:1.6rem;font-weight:800;color:#ffd200;">AES-256</div>
-                                <div style="color:#94a3b8;font-size:0.85rem;">Encrypted</div>
-                            </div>
-                            <div>
-                                <div style="font-size:1.6rem;font-weight:800;color:#ffd200;">Mobile</div>
-                                <div style="color:#94a3b8;font-size:0.85rem;">First Design</div>
-                            </div>
-                        </div>
-                        <a href="https://stomdevsage.github.io/IMENA.Form/" target="_blank" class="btn btn-primary" style="margin-top:0.5rem;">
-                            🚀 Try Paperless
-                        </a>
-                    </div>
-                    <div>
-                        <h4 style="font-size:1.1rem;margin-bottom:1rem;color:#fff;">Key Features</h4>
-                        <div class="paperless-features">
-                            <div class="paperless-feature"><i class="fas fa-user-plus"></i><span>Teacher Registration</span></div>
-                            <div class="paperless-feature"><i class="fas fa-file-alt"></i><span>Unlimited Assessments</span></div>
-                            <div class="paperless-feature"><i class="fas fa-list-ul"></i><span>Multiple Question Types</span></div>
-                            <div class="paperless-feature"><i class="fas fa-check-double"></i><span>Auto &amp; Manual Marking</span></div>
-                            <div class="paperless-feature"><i class="fas fa-bolt"></i><span>Instant Feedback</span></div>
-                            <div class="paperless-feature"><i class="fas fa-share-alt"></i><span>Easy Sharing &amp; Mobile</span></div>
-                            <div class="paperless-feature"><i class="fas fa-robot"></i><span>AI-Assisted Marking (Future)</span></div>
-                            <div class="paperless-feature"><i class="fas fa-chart-line"></i><span>Advanced Analytics (Future)</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== PARTNERS ===== -->
-        <section class="section" id="partners">
-            <h2 class="section-title">Partnership <span class="highlight">Vision</span></h2>
-            <p class="section-subtitle">
-                We collaborate with schools, educational organizations, NGOs, and institutions to deliver high-quality practical skills training through qualified trainers.
-            </p>
-            <div class="partner-grid">
-                <div class="partner-card">
-                    <h4>ValuEd</h4>
-                    <p>Value-Based Education Program</p>
-                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Trainer Deployment Partner</p>
-                </div>
-                <div class="partner-card">
-                    <h4>Africa Mission Alliance</h4>
-                    <p>Rusororo</p>
-                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Strategic Partner</p>
-                </div>
-                <div class="partner-card">
-                    <h4>International Schools</h4>
-                    <p>Across Rwanda</p>
-                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Curriculum Integration</p>
-                </div>
-                <div class="partner-card">
-                    <h4>REB</h4>
-                    <p>Rwanda Education Board</p>
-                    <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Alignment &amp; Standards</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== FOUNDER ===== -->
-        <section class="section" id="founder">
-            <h2 class="section-title">Meet the <span class="highlight">Founder</span></h2>
-            <p class="section-subtitle">
-                Driven by innovation and a belief that technology can close educational gaps across Africa.
-            </p>
-            <div class="founder-grid">
-                <div class="founder-image">
-                    <div class="avatar">JC</div>
-                    <h3>TUYISENGE Jean Chrisostom</h3>
-                    <p class="title">Student Teacher (Language Education) | Educational Technology Innovator</p>
-                    <p style="color:#94a3b8;font-size:0.9rem;margin-top:0.5rem;">
-                        <i class="fas fa-envelope"></i> tuyisengejeanchrisostome@gmail.com<br />
-                        <i class="fas fa-phone"></i> +250 796 717 230
-                    </p>
-                </div>
-                <div class="founder-info">
-                    <p>
-                        Dedicated Student Teacher specializing in Language Education with a passion for
-                        transforming learning through technology and innovation. Founder of iMENA Hub,
-                        an educational technology initiative committed to equipping teachers and learners
-                        with practical digital skills to thrive in a rapidly evolving world.
-                    </p>
-                    <p><strong>Vision Statement:</strong><br />
-                        <em>"Committed to transforming education through technology, innovation, and practical
-                        digital skills while empowering teachers and learners across Rwanda and Africa."</em>
-                    </p>
-                    <div>
-                        <strong>Professional Skills</strong>
-                        <div class="skills">
-                            <span>Educational Technology</span>
-                            <span>AI for Education</span>
-                            <span>Teacher Development</span>
-                            <span>Digital Skills Training</span>
-                            <span>Web Development</span>
-                            <span>HTML/CSS/JavaScript</span>
-                            <span>Canva</span>
-                            <span>Google Workspace</span>
-                            <span>Graphic Design</span>
-                            <span>Digital Assessment Systems</span>
-                            <span>ICT Integration</span>
-                        </div>
-                    </div>
-                    <div style="margin-top:1rem;">
-                        <strong>Certifications</strong>
-                        <div class="certs">
-                            <span>21st Century Learning Design</span>
-                            <span>AI for Educators</span>
-                            <span>Microsoft Educator Academy</span>
-                        </div>
-                    </div>
-                    <div style="margin-top:1rem;">
-                        <strong>Projects</strong>
-                        <ul style="list-style:none;padding-left:0;color:#cbd5e1;">
-                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Founder – iMENA Hub</li>
-                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Developer – Paperless (Smart Digital Assessment)</li>
-                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Founder – iMENA Learn</li>
-                            <li><i class="fas fa-check-circle" style="color:#ffd200;margin-right:0.5rem;"></i> Developer – AfriQuiz (Interactive Learning)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== FOOTER ===== -->
-        <footer class="footer" id="contact">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <h3>iMENA Hub</h3>
-                    <p>
-                        Empowering future-ready education through innovation and technology.
-                        Connect. Learn. Innovate.
-                    </p>
-                    <p style="color:#94a3b8;margin-top:0.5rem;">
-                        <i class="fas fa-envelope"></i> imenahub.rw@gmail.com
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <a href="#about">About</a>
-                    <a href="#vision">Vision &amp; Mission</a>
-                    <a href="#core">Core Areas</a>
-                    <a href="#initiatives">Initiatives</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Projects</h4>
-                    <a href="#paperless">Paperless</a>
-                    <a href="#">iMENA Learn</a>
-                    <a href="#">AfriQuiz</a>
-                    <a href="#">AI Tools</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Connect</h4>
-                    <a href="#">Partnerships</a>
-                    <a href="#">Contact Us</a>
-                    <a href="#founder">Founder</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; 2026 iMENA Hub — Building the future, one learner at a time.
-                <span style="display:block;margin-top:0.3rem;color:#475569;">
-                    <i class="fas fa-map-pin" style="color:#f7971e;"></i> Rwanda
-                </span>
-            </div>
-        </footer>
-
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+            <i data-lucide="x" style="width:24px;height:24px;"></i>
+        </button>
+        <ul>
+            <li><a href="#about" class="mobile-link">About</a></li>
+            <li><a href="#vision" class="mobile-link">Vision &amp; Mission</a></li>
+            <li><a href="#areas" class="mobile-link">Core Areas</a></li>
+            <li><a href="#projects" class="mobile-link">Projects</a></li>
+            <li><a href="#founder" class="mobile-link">Founder</a></li>
+            <li><a href="#approach" class="mobile-link">Our Approach</a></li>
+            <li><a href="#partnership" class="mobile-link">Partnership</a></li>
+            <li><a href="#contact" class="mobile-link">Contact</a></li>
+        </ul>
     </div>
 
-    <!-- ===== THREE.JS LIBRARY ===== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
-    </script>
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i data-lucide="globe" style="width:16px;height:16px;"></i>
+                Rwandan EdTech Initiative
+            </div>
+            <h1>
+                Empowering<br />
+                <span class="gradient-text">Future-Ready Education</span><br />
+                Through Innovation
+            </h1>
+            <p>
+                iMENA Hub is a Rwandan educational technology initiative dedicated to empowering
+                teachers, learners, and schools through practical digital skills, educational
+                innovation, and modern teaching methods.
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn-primary">
+                    <i data-lucide="rocket" style="width:18px;height:18px;"></i>
+                    Explore Our Work
+                </a>
+                <a href="#partnership" class="btn-secondary">
+                    <i data-lucide="handshake" style="width:18px;height:18px;"></i>
+                    Partner With Us
+                </a>
+                <a href="#contact" class="btn-gold">
+                    <i data-lucide="mail" style="width:18px;height:18px;"></i>
+                    Contact Us
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number" data-count="4">0</div>
+                    <div class="hero-stat-label">Active Projects</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number" data-count="9">0</div>
+                    <div class="hero-stat-label">Core Programs</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number" data-count="2025">0</div>
+                    <div class="hero-stat-label">Founded</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number" data-count="7">0</div>
+                    <div class="hero-stat-label">Partners</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- ===== 3D SCENE ===== -->
+    <!-- ===== ABOUT ===== -->
+    <section class="about" id="about">
+        <div class="about-grid">
+            <div class="about-visual reveal">
+                <div class="about-visual-main">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="iMENA Hub Education" />
+                    <div class="about-visual-overlay"></div>
+                </div>
+                <div class="about-visual-float">
+                    <h4>2025</h4>
+                    <p>Founded in Muhanga, Rwanda</p>
+                </div>
+            </div>
+            <div class="about-content reveal">
+                <div class="section-tag">About Us</div>
+                <h3>Bridging the Gap Between Classroom Learning and Real-World Digital Skills</h3>
+                <p>
+                    <strong>iMENA Hub</strong> is a Rwandan educational technology initiative dedicated
+                    to empowering teachers, learners, and schools through practical digital skills,
+                    educational innovation, and modern teaching methods.
+                </p>
+                <p>
+                    Inspired by the meaning of <strong>"Imena"</strong> — a symbol of excellence,
+                    courage, and service — our mission is to help build a generation of competent,
+                    creative, and ethical leaders prepared for the future.
+                </p>
+                <p>
+                    We focus on delivering educational technology solutions, coding, AI, and
+                    digital literacy to schools and learners across Rwanda and Africa, supporting
+                    <strong>Rwanda's Vision 2050</strong> and the country's digital transformation.
+                </p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <i data-lucide="users" style="width:20px;height:20px;"></i>
+                        </div>
+                        <div>
+                            <h4>Teacher Development</h4>
+                            <p>Modern pedagogical skills &amp; digital tools</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <i data-lucide="laptop" style="width:20px;height:20px;"></i>
+                        </div>
+                        <div>
+                            <h4>Digital Skills Training</h4>
+                            <p>Practical real-world digital competencies</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <i data-lucide="brain" style="width:20px;height:20px;"></i>
+                        </div>
+                        <div>
+                            <h4>AI &amp; Coding</h4>
+                            <p>Future-ready problem-solving skills</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <i data-lucide="shield-check" style="width:20px;height:20px;"></i>
+                        </div>
+                        <div>
+                            <h4>Cybersecurity</h4>
+                            <p>Digital safety &amp; ethical practices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== VISION & MISSION ===== -->
+    <section class="vision-mission" id="vision">
+        <div class="section-header reveal">
+            <div class="section-tag">Our Purpose</div>
+            <h2 class="section-title">Vision &amp; Mission for Africa</h2>
+            <p class="section-desc">Leading the transformation of education across Rwanda and the African continent</p>
+        </div>
+        <div class="vm-grid">
+            <div class="vm-card reveal">
+                <div class="vm-card-icon">
+                    <i data-lucide="eye" style="width:28px;height:28px;"></i>
+                </div>
+                <h3>Our Vision</h3>
+                <p>
+                    To become one of Africa's leading educational technology organizations, transforming
+                    how students and teachers engage with learning across the continent. We envision an
+                    Africa where every teacher and learner has access to practical digital skills and
+                    modern educational tools that unlock their full potential.
+                </p>
+            </div>
+            <div class="vm-card reveal">
+                <div class="vm-card-icon">
+                    <i data-lucide="target" style="width:28px;height:28px;"></i>
+                </div>
+                <h3>Our Mission</h3>
+                <p>
+                    To bridge the gap between classroom learning and real-world skills by providing
+                    practical digital education, teacher development, and educational technology solutions.
+                    We deliver hands-on training and innovative EdTech tools to schools and learners
+                    across Rwanda and beyond, empowering them for a digital future.
+                </p>
+            </div>
+            <div class="vm-quote reveal">
+                <p>
+                    Committed to transforming education through technology, innovation, and practical
+                    digital skills while empowering teachers and learners across Rwanda and Africa.
+                </p>
+                <div class="vm-quote-author">— TUYISENGE Jean Chrisostom, Founder</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CORE AREAS ===== -->
+    <section class="core-areas" id="areas">
+        <div class="section-header reveal">
+            <div class="section-tag">What We Do</div>
+            <h2 class="section-title">Our Core Areas</h2>
+            <p class="section-desc">Cutting-edge digital competencies across key technology and education domains</p>
+        </div>
+        <div class="areas-grid">
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="graduation-cap" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>Teacher Development</h3>
+                <p>Equipping educators with modern pedagogical skills, digital tools, and innovative teaching methods to transform classroom practice.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="monitor" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>Digital Skills Training</h3>
+                <p>Providing learners with practical, real-world digital competencies including web development, graphic design, and digital literacy.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="cpu" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>AI &amp; Coding</h3>
+                <p>Introducing artificial intelligence concepts and programming fundamentals to build future-ready problem-solving and technical skills.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="shield" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>Cybersecurity</h3>
+                <p>Training learners to protect digital systems, understand network security, and apply ethical hacking principles in real-world contexts.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="code-2" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>Web Development</h3>
+                <p>Teaching modern web technologies including HTML, CSS, JavaScript, and frameworks to build responsive, functional websites and applications.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="palette" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>Graphic Design</h3>
+                <p>Developing visual communication skills using professional design tools for branding, layout, digital media, and creative content.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="book-open" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>Educational Technology</h3>
+                <p>Integrating digital tools, platforms, and smart solutions into classrooms to enhance teaching effectiveness and learning outcomes.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="video" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>iMENA Learn</h3>
+                <p>Training student teachers and youth in ICT through practical, hands-on digital skills learning — online and in-person programs.</p>
+            </div>
+            <div class="area-card reveal">
+                <div class="area-card-icon">
+                    <i data-lucide="sparkles" style="width:24px;height:24px;"></i>
+                </div>
+                <h3>AI-Powered Tools</h3>
+                <p>Intelligent educational tools powered by AI to personalize learning, support teachers, and enhance student outcomes at scale.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section class="projects" id="projects">
+        <div class="section-header reveal">
+            <div class="section-tag">Current Initiatives</div>
+            <h2 class="section-title">Our Projects</h2>
+            <p class="section-desc">Innovative tools and programs transforming education across Rwanda</p>
+        </div>
+        <div class="projects-grid">
+            <!-- Paperless -->
+            <div class="project-card featured reveal">
+                <div>
+                    <span class="project-badge green">Flagship Platform</span>
+                    <h3>Paperless — Smart Digital Assessment</h3>
+                    <p>
+                        A digital school management solution replacing paper-based processes with streamlined,
+                        efficient, and eco-friendly digital workflows. Paperless transforms school assessments
+                        by enabling teachers to create digital tests, share them via simple links, and generate
+                        downloadable reports instantly — all from a mobile-friendly interface.
+                    </p>
+                    <div class="project-features">
+                        <span class="project-feature-tag">Digital Tests</span>
+                        <span class="project-feature-tag">Auto-Marking</span>
+                        <span class="project-feature-tag">Secure Links</span>
+                        <span class="project-feature-tag">Mobile-Friendly</span>
+                        <span class="project-feature-tag">Instant Reports</span>
+                        <span class="project-feature-tag">REB Integration</span>
+                    </div>
+                    <a href="https://stomdevsage.github.io/IMENA.Form/" target="_blank" class="project-link">
+                        Try Paperless <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+                    </a>
+                </div>
+                <div class="project-visual">
+                    <div class="project-visual-inner">
+                        <i data-lucide="file-text" style="width:56px;height:56px;"></i>
+                        <h4>Paperless</h4>
+                        <p>Smart Digital Assessment Platform</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AfriQuiz -->
+            <div class="project-card reveal">
+                <span class="project-badge">Interactive Learning</span>
+                <h3>AfriQuiz</h3>
+                <p>
+                    An interactive quiz platform designed to make assessment engaging, competitive,
+                    and accessible for African students and classrooms with gamified experiences.
+                </p>
+                <div class="project-features">
+                    <span class="project-feature-tag">Gamified</span>
+                    <span class="project-feature-tag">African Content</span>
+                    <span class="project-feature-tag">Classroom Ready</span>
+                </div>
+                <a href="#" class="project-link">
+                    Explore AfriQuiz <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+                </a>
+            </div>
+
+            <!-- iMENA Learn -->
+            <div class="project-card reveal">
+                <span class="project-badge green">Learning Platform</span>
+                <h3>iMENA Learn</h3>
+                <p>
+                    A digital learning platform delivering practical skills, structured courses,
+                    and educational content tailored for Rwandan learners and educators — training
+                    student teachers and youth in ICT through hands-on learning.
+                </p>
+                <div class="project-features">
+                    <span class="project-feature-tag">Online Courses</span>
+                    <span class="project-feature-tag">ICT Training</span>
+                    <span class="project-feature-tag">Youth Focused</span>
+                    <span class="project-feature-tag">4-Week Camps</span>
+                </div>
+                <a href="#" class="project-link">
+                    Start Learning <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+                </a>
+            </div>
+
+            <!-- AI Tools -->
+            <div class="project-card reveal">
+                <span class="project-badge">Coming Soon</span>
+                <h3>AI-Powered Educational Tools</h3>
+                <p>
+                    Intelligent educational tools powered by artificial intelligence to personalize
+                    learning, support teachers, and enhance student outcomes at scale across Rwanda.
+                </p>
+                <div class="project-features">
+                    <span class="project-feature-tag">AI Tutoring</span>
+                    <span class="project-feature-tag">Personalized Learning</span>
+                    <span class="project-feature-tag">Teacher Support</span>
+                </div>
+                <a href="#" class="project-link">
+                    Discover AI Tools <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOUNDER ===== -->
+    <section class="founder" id="founder">
+        <div class="section-header reveal">
+            <div class="section-tag">Leadership</div>
+            <h2 class="section-title">Meet Our Founder</h2>
+        </div>
+        <div class="founder-container">
+            <div class="founder-image-wrap reveal">
+                <div class="founder-image-ring"></div>
+                <div class="founder-image">
+                    <img src="https://i.postimg.cc/vZh5WXTm/chrisostom.jpg" alt="TUYISENGE Jean Chrisostom — Founder of iMENA Hub" />
+                </div>
+            </div>
+            <div class="founder-content reveal">
+                <h3>TUYISENGE Jean Chrisostom</h3>
+                <div class="founder-role">
+                    <i data-lucide="award" style="width:18px;height:18px;"></i>
+                    Founder &amp; Educational Technology Lead
+                </div>
+                <p>
+                    A dedicated Student Teacher specializing in Language Education with a passion for
+                    transforming learning through technology and innovation. Strong interests in
+                    Educational Technology, Artificial Intelligence, Web Development, Digital Skills
+                    Training, and Teacher Development.
+                </p>
+                <p>
+                    Founder of iMENA Hub, an educational technology initiative committed to equipping
+                    teachers and learners with practical digital skills to thrive in a rapidly evolving world.
+                </p>
+                <div class="founder-skills">
+                    <span class="founder-skill">Educational Technology</span>
+                    <span class="founder-skill">AI for Education</span>
+                    <span class="founder-skill">Web Development</span>
+                    <span class="founder-skill">Teacher Development</span>
+                    <span class="founder-skill">Digital Skills Training</span>
+                    <span class="founder-skill">ICT Integration</span>
+                    <span class="founder-skill">Google Workspace</span>
+                    <span class="founder-skill">Canva &amp; Graphic Design</span>
+                    <span class="founder-skill">Digital Assessment Systems</span>
+                    <span class="founder-skill">Cybersecurity</span>
+                </div>
+                <div class="founder-contact">
+                    <a href="mailto:tuyisengejeanchrisostome@gmail.com">
+                        <i data-lucide="mail" style="width:16px;height:16px;"></i>
+                        Email
+                    </a>
+                    <a href="tel:+250796717230">
+                        <i data-lucide="phone" style="width:16px;height:16px;"></i>
+                        +250 796 717 230
+                    </a>
+                    <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank">
+                        <i data-lucide="globe" style="width:16px;height:16px;"></i>
+                        Portfolio
+                    </a>
+                    <a href="#contact">
+                        <i data-lucide="message-circle" style="width:16px;height:16px;"></i>
+                        Message
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== APPROACH ===== -->
+    <section class="approach" id="approach">
+        <div class="section-header reveal">
+            <div class="section-tag">Our Methodology</div>
+            <h2 class="section-title">Our Approach</h2>
+            <p class="section-desc">Combining pedagogy, technology, creativity, and practical learning to prepare learners for the future</p>
+        </div>
+        <div class="approach-grid">
+            <div class="approach-card reveal">
+                <div class="approach-number">01</div>
+                <h3>Hands-On Learning</h3>
+                <p>We prioritize project-based, experiential learning that connects classroom concepts to real-world digital skills and applications.</p>
+            </div>
+            <div class="approach-card reveal">
+                <div class="approach-number">02</div>
+                <h3>Innovative Tools</h3>
+                <p>Leveraging cutting-edge educational technology, AI tools, and modern platforms to create engaging and effective learning environments.</p>
+            </div>
+            <div class="approach-card reveal">
+                <div class="approach-number">03</div>
+                <h3>Teacher Empowerment</h3>
+                <p>Equipping educators with professional development, digital competencies, and innovative teaching methods to lead future-ready classrooms.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PARTNERSHIP ===== -->
+    <section class="partnership" id="partnership">
+        <div class="section-header reveal">
+            <div class="section-tag">Collaboration</div>
+            <h2 class="section-title">Partnership Vision</h2>
+            <p class="section-desc">We collaborate with schools, educational organizations, NGOs, and institutions to deliver high-quality practical skills training through qualified trainers</p>
+        </div>
+        <div class="partnership-grid">
+            <div class="partnership-card reveal">
+                <div class="partnership-card-icon">
+                    <i data-lucide="building-2" style="width:28px;height:28px;"></i>
+                </div>
+                <h3>Institutional Collaboration</h3>
+                <p>Building lasting relationships with schools and educational institutions to expand access to quality digital skills training across Rwanda and Africa.</p>
+            </div>
+            <div class="partnership-card reveal">
+                <div class="partnership-card-icon">
+                    <i data-lucide="heart-handshake" style="width:28px;height:28px;"></i>
+                </div>
+                <h3>NGO &amp; Tech Partners</h3>
+                <p>Partnering with NGOs, development organizations, and technology companies to co-create impactful, future-ready educational solutions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA / CONTACT ===== -->
+    <section class="cta-section" id="contact">
+        <div class="cta-container reveal">
+            <div class="cta-content">
+                <div class="section-tag" style="margin-bottom:1rem;">Get Involved</div>
+                <h2>Together, We Build the Future</h2>
+                <p>
+                    Join iMENA Hub in shaping the future of education across Rwanda and Africa.
+                    Partner with us, support our mission, and help us empower the next generation
+                    — one learner, one teacher, one school at a time.
+                </p>
+                <div class="hero-buttons" style="justify-content:center;">
+                    <a href="mailto:tuyisengejeanchrisostome@gmail.com" class="btn-primary">
+                        <i data-lucide="mail" style="width:18px;height:18px;"></i>
+                        Email Us
+                    </a>
+                    <a href="tel:+250796717230" class="btn-secondary">
+                        <i data-lucide="phone" style="width:18px;height:18px;"></i>
+                        Call Now
+                    </a>
+                    <a href="https://stomdevsage.github.io/IMENA.Form/" target="_blank" class="btn-gold">
+                        <i data-lucide="file-text" style="width:18px;height:18px;"></i>
+                        Try Paperless
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#home" class="nav-logo">
+                    <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub Logo" style="height:40px;" />
+                    <span class="nav-logo-text">iMENA <span>Hub</span></span>
+                </a>
+                <p>
+                    Empowering Future-Ready Education Through Innovation and Technology.
+                    A Rwandan EdTech initiative transforming how students and teachers engage with learning.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#vision">Vision &amp; Mission</a></li>
+                    <li><a href="#areas">Core Areas</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Projects</h4>
+                <ul>
+                    <li><a href="#projects">Paperless</a></li>
+                    <li><a href="#projects">AfriQuiz</a></li>
+                    <li><a href="#projects">iMENA Learn</a></li>
+                    <li><a href="#projects">AI Tools</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:tuyisengejeanchrisostome@gmail.com">
+                            <i data-lucide="mail" style="width:14px;height:14px;"></i> Email Us
+                        </a></li>
+                    <li><a href="tel:+250796717230">
+                            <i data-lucide="phone" style="width:14px;height:14px;"></i> +250 796 717 230
+                        </a></li>
+                    <li><a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank">
+                            <i data-lucide="globe" style="width:14px;height:14px;"></i> Portfolio
+                        </a></li>
+                    <li><a href="#">
+                            <i data-lucide="map-pin" style="width:14px;height:14px;"></i> Muhanga, Rwanda
+                        </a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 iMENA Hub. All rights reserved. Empowering Future-Ready Education.</p>
+            <div class="footer-social">
+                <a href="#" aria-label="Twitter"><i data-lucide="twitter" style="width:18px;height:18px;"></i></a>
+                <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" style="width:18px;height:18px;"></i></a>
+                <a href="#" aria-label="GitHub"><i data-lucide="github" style="width:18px;height:18px;"></i></a>
+                <a href="#" aria-label="YouTube"><i data-lucide="youtube" style="width:18px;height:18px;"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
     <script>
+        // ===== INIT LUCIDE =====
+        lucide.createIcons();
+
+        // =============================================
+        // ===== THREE.JS 3D BACKGROUND =====
+        // =============================================
         (function() {
-            const container = document.getElementById('three-canvas');
+            const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0a1a);
-
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 0, 8);
-
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
-            // Lights
-            const ambient = new THREE.AmbientLight(0x404060);
-            scene.add(ambient);
-            const dirLight = new THREE.DirectionalLight(0xffd200, 1.2);
-            dirLight.position.set(2, 5, 3);
-            scene.add(dirLight);
-            const backLight = new THREE.DirectionalLight(0xf7971e, 0.6);
-            backLight.position.set(-2, -1, -4);
-            scene.add(backLight);
-            const pointLight = new THREE.PointLight(0xffd200, 0.5, 20);
-            pointLight.position.set(0, 2, 4);
-            scene.add(pointLight);
-
-            // Main group
-            const group = new THREE.Group();
-            scene.add(group);
-
-            // Core
-            const coreGeo = new THREE.IcosahedronGeometry(1.6, 1);
-            const coreMat = new THREE.MeshStandardMaterial({
-                color: 0xf7971e,
-                emissive: 0xf7971e,
-                emissiveIntensity: 0.2,
-                metalness: 0.4,
-                roughness: 0.3,
-                transparent: true,
-                opacity: 0.85
-            });
-            const core = new THREE.Mesh(coreGeo, coreMat);
-            group.add(core);
-
-            // Wireframe
-            const wireGeo = new THREE.IcosahedronGeometry(1.65, 1);
-            const wireMat = new THREE.MeshStandardMaterial({
-                color: 0xffd200,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.25
-            });
-            const wire = new THREE.Mesh(wireGeo, wireMat);
-            group.add(wire);
-
-            // Glow
-            const glowGeo = new THREE.SphereGeometry(1.2, 32, 32);
-            const glowMat = new THREE.MeshBasicMaterial({
-                color: 0xffd200,
-                transparent: true,
-                opacity: 0.08
-            });
-            const glow = new THREE.Mesh(glowGeo, glowMat);
-            group.add(glow);
-
-            // Orbiting particles
-            const ringCount = 600;
-            const ringPos = new Float32Array(ringCount * 3);
-            for (let i = 0; i < ringCount; i++) {
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos((Math.random() * 2) - 1);
-                const r = 2.4 + Math.random() * 1.6;
-                ringPos[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
-                ringPos[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
-                ringPos[i * 3 + 2] = Math.cos(phi) * r;
+            // Particles
+            const count = 600;
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+            for (let i = 0; i < count * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 20;
+                positions[i + 1] = (Math.random() - 0.5) * 20;
+                positions[i + 2] = (Math.random() - 0.5) * 20;
+                colors[i] = 0.05 + Math.random() * 0.1;
+                colors[i + 1] = 0.4 + Math.random() * 0.3;
+                colors[i + 2] = 0.5 + Math.random() * 0.2;
             }
-            const ringGeo = new THREE.BufferGeometry();
-            ringGeo.setAttribute('position', new THREE.BufferAttribute(ringPos, 3));
-            const ringMat = new THREE.PointsMaterial({
-                color: 0xffd200,
-                size: 0.035,
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            const mat = new THREE.PointsMaterial({
+                size: 0.025,
+                vertexColors: true,
                 transparent: true,
                 opacity: 0.7,
                 blending: THREE.AdditiveBlending
             });
-            const ringParticles = new THREE.Points(ringGeo, ringMat);
-            group.add(ringParticles);
+            const particles = new THREE.Points(geo, mat);
+            scene.add(particles);
 
-            // Background particles
-            const bgCount = 1200;
-            const bgPos = new Float32Array(bgCount * 3);
-            for (let i = 0; i < bgCount * 3; i++) {
-                bgPos[i] = (Math.random() - 0.5) * 30;
-            }
-            const bgGeo = new THREE.BufferGeometry();
-            bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
-            const bgMat = new THREE.PointsMaterial({
-                color: 0xf7971e,
-                size: 0.03,
+            // Icosahedrons
+            const icoGeo1 = new THREE.IcosahedronGeometry(1.6, 0);
+            const icoMat1 = new THREE.MeshBasicMaterial({
+                color: 0x0d9488,
+                wireframe: true,
                 transparent: true,
-                opacity: 0.35,
-                blending: THREE.AdditiveBlending
+                opacity: 0.08
             });
-            const bgParticles = new THREE.Points(bgGeo, bgMat);
-            scene.add(bgParticles);
+            const ico1 = new THREE.Mesh(icoGeo1, icoMat1);
+            ico1.position.set(-3, 1.5, -6);
+            scene.add(ico1);
 
-            // Torus rings
-            const torusGeo = new THREE.TorusGeometry(2.3, 0.025, 16, 100);
-            const torusMat = new THREE.MeshStandardMaterial({
-                color: 0xffd200,
-                emissive: 0xf7971e,
-                emissiveIntensity: 0.15,
+            const icoGeo2 = new THREE.IcosahedronGeometry(1.0, 0);
+            const icoMat2 = new THREE.MeshBasicMaterial({
+                color: 0x6366f1,
+                wireframe: true,
                 transparent: true,
-                opacity: 0.3
+                opacity: 0.06
+            });
+            const ico2 = new THREE.Mesh(icoGeo2, icoMat2);
+            ico2.position.set(4, -1, -7);
+            scene.add(ico2);
+
+            const torusGeo = new THREE.TorusGeometry(2.2, 0.25, 16, 100);
+            const torusMat = new THREE.MeshBasicMaterial({
+                color: 0xf59e0b,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.04
             });
             const torus = new THREE.Mesh(torusGeo, torusMat);
-            torus.rotation.x = Math.PI / 2.5;
-            torus.rotation.z = 0.3;
-            group.add(torus);
+            torus.position.set(0, -2, -8);
+            scene.add(torus);
 
-            const torus2Geo = new THREE.TorusGeometry(2.6, 0.015, 16, 100);
-            const torus2Mat = new THREE.MeshStandardMaterial({
-                color: 0xf7971e,
-                emissive: 0xffd200,
-                emissiveIntensity: 0.1,
-                transparent: true,
-                opacity: 0.2
-            });
-            const torus2 = new THREE.Mesh(torus2Geo, torus2Mat);
-            torus2.rotation.x = 1.2;
-            torus2.rotation.y = 0.8;
-            group.add(torus2);
+            camera.position.z = 5.5;
 
-            // Mouse interaction
             let mouseX = 0,
-                mouseY = 0,
-                targetX = 0,
-                targetY = 0;
+                mouseY = 0;
             document.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-                mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
             });
 
-            // Resize
-            window.addEventListener('resize', () => {
-                const w = window.innerWidth;
-                const h = window.innerHeight;
-                camera.aspect = w / h;
-                camera.updateProjectionMatrix();
-                renderer.setSize(w, h);
-            });
+            let targetX = 0,
+                targetY = 0;
+            const clock = new THREE.Clock();
 
-            // Nav toggle
-            document.getElementById('hamburger').addEventListener('click', function() {
-                document.getElementById('navLinks').classList.toggle('open');
-            });
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    document.getElementById('navLinks').classList.remove('open');
-                });
-            });
+            function animate3D() {
+                requestAnimationFrame(animate3D);
+                const t = clock.getElapsedTime();
 
-            // Scroll effect for navbar
-            window.addEventListener('scroll', function() {
-                const navbar = document.getElementById('navbar');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
+                targetX += (mouseX * 0.4 - targetX) * 0.02;
+                targetY += (mouseY * 0.4 - targetY) * 0.02;
 
-            // Animation
-            function animate() {
-                requestAnimationFrame(animate);
-                targetX += (mouseX - targetX) * 0.05;
-                targetY += (mouseY - targetY) * 0.05;
-                group.rotation.x += 0.002 + targetY * 0.002;
-                group.rotation.y += 0.005 + targetX * 0.002;
-                const pulse = 1 + Math.sin(Date.now() * 0.002) * 0.015;
-                core.scale.set(pulse, pulse, pulse);
-                glow.scale.set(pulse * 1.1, pulse * 1.1, pulse * 1.1);
-                ringParticles.rotation.x += 0.0005;
-                ringParticles.rotation.y += 0.001;
-                torus.rotation.y += 0.003;
-                torus2.rotation.y -= 0.004;
-                bgParticles.rotation.x += 0.0001;
-                bgParticles.rotation.y += 0.0002;
+                particles.rotation.y += 0.0004;
+                particles.rotation.x += 0.0002;
+
+                ico1.rotation.x = t * 0.15;
+                ico1.rotation.y = t * 0.12;
+                ico1.position.x = -3 + Math.sin(t * 0.2) * 0.4;
+
+                ico2.rotation.x = t * 0.12;
+                ico2.rotation.z = t * 0.15;
+                ico2.position.y = -1 + Math.cos(t * 0.15) * 0.3;
+
+                torus.rotation.x = t * 0.08;
+                torus.rotation.y = t * 0.12;
+
+                camera.position.x += (targetX - camera.position.x) * 0.015;
+                camera.position.y += (targetY - camera.position.y) * 0.015;
+                camera.lookAt(scene.position);
+
                 renderer.render(scene, camera);
             }
-            animate();
-        })();
-    </script>
+            animate3D();
 
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Store for theme toggle
+            window.__threeObjects = { ico1, ico2, torus, particles, mat, icoMat1, icoMat2, torusMat };
+        })();
+
+        // =============================================
+        // ===== GSAP & SCROLLTRIGGER =====
+        // =============================================
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero entrance
+        gsap.from('.hero-badge', { opacity: 0, y: 30, duration: 1, delay: 0.3, ease: 'power3.out' });
+        gsap.from('.hero h1', { opacity: 0, y: 50, duration: 1.2, delay: 0.5, ease: 'power3.out' });
+        gsap.from('.hero p', { opacity: 0, y: 30, duration: 1, delay: 0.8, ease: 'power3.out' });
+        gsap.from('.hero-buttons', { opacity: 0, y: 30, duration: 1, delay: 1, ease: 'power3.out' });
+        gsap.from('.hero-stat', { opacity: 0, y: 30, duration: 0.8, stagger: 0.15, delay: 1.2, ease: 'power3.out' });
+
+        // Reveal animations
+        document.querySelectorAll('.reveal').forEach(el => {
+            gsap.fromTo(el, { opacity: 0, y: 50 }, {
+                opacity: 1,
+                y: 0,
+                duration: 0.9,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 88%',
+                    toggleActions: 'play none none none'
+                }
+            });
+        });
+
+        // Area cards stagger
+        gsap.from('.area-card', {
+            opacity: 0,
+            y: 60,
+            duration: 0.7,
+            stagger: 0.08,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '.areas-grid',
+                start: 'top 85%'
+            }
+        });
+
+        // Project cards
+        gsap.from('.project-card', {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '.projects-grid',
+                start: 'top 85%'
+            }
+        });
+
+        // Approach cards
+        gsap.from('.approach-card', {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power3.out',
+            scrollTrigger: {
+                trigger: '.approach-grid',
+                start: 'top 85%'
+            }
+        });
+
+        // ===== COUNTER ANIMATION =====
+        document.querySelectorAll('.hero-stat-number').forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-count'));
+            gsap.to(counter, {
+                innerHTML: target,
+                duration: 2.2,
+                delay: 1.5,
+                snap: { innerHTML: 1 },
+                ease: 'power2.out'
+            });
+        });
+
+        // ===== NAVBAR SCROLL =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ===== SCROLL PROGRESS =====
+        const scrollProgress = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress.style.width = (window.scrollY / docHeight) * 100 + '%';
+        });
+
+        // ===== THEME TOGGLE =====
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const sunIcon = document.querySelector('.icon-sun');
+        const moonIcon = document.querySelector('.icon-moon');
+        const three = window.__threeObjects || {};
+
+        themeToggle.addEventListener('click', () => {
+            const current = body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', next);
+
+            if (next === 'light') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                if (three.mat) three.mat.opacity = 0.3;
+                if (three.icoMat1) three.icoMat1.opacity = 0.04;
+                if (three.icoMat2) three.icoMat2.opacity = 0.03;
+                if (three.torusMat) three.torusMat.opacity = 0.02;
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+                if (three.mat) three.mat.opacity = 0.7;
+                if (three.icoMat1) three.icoMat1.opacity = 0.08;
+                if (three.icoMat2) three.icoMat2.opacity = 0.06;
+                if (three.torusMat) three.torusMat.opacity = 0.04;
+            }
+        });
+
+        // ===== MOBILE MENU =====
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('mobileMenuOverlay');
+        const closeBtn = document.getElementById('mobileMenuClose');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        const openMenu = () => {
+            mobileMenu.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+        const closeMenu = () => {
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        menuBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+        mobileLinks.forEach(l => l.addEventListener('click', closeMenu));
+
+        // ===== CUSTOM CURSOR =====
+        const cursor = document.getElementById('cursor');
+        const dot = document.getElementById('cursorDot');
+
+        if (window.matchMedia('(pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, { x: e.clientX - 12, y: e.clientY - 12, duration: 0.1 });
+                gsap.to(dot, { x: e.clientX - 3, y: e.clientY - 3, duration: 0.05 });
+            });
+            document.querySelectorAll('a, button, .area-card, .project-card, .vm-card, .approach-card, .partnership-card')
+                .forEach(el => {
+                    el.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 2, duration: 0.3 }));
+                    el.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, duration: 0.3 }));
+                });
+        } else {
+            cursor.style.display = 'none';
+            dot.style.display = 'none';
+        }
+
+        // ===== FLOATING PARTICLES =====
+        const floatContainer = document.getElementById('particlesFloat');
+        for (let i = 0; i < 25; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle-float';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = (12 + Math.random() * 12) + 's';
+            p.style.width = (2 + Math.random() * 4) + 'px';
+            p.style.height = p.style.width;
+            floatContainer.appendChild(p);
+        }
+
+        // ===== SMOOTH SCROLL FOR ANCHORS =====
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ===== PARALLAX ORBS =====
+        gsap.utils.toArray('.glow-orb').forEach(orb => {
+            gsap.to(orb, {
+                y: -80,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: orb.parentElement,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1.5
+                }
+            });
+        });
+
+        console.log('🚀 iMENA Hub website loaded successfully!');
+        console.log('📍 Empowering future-ready education through innovation and technology.');
+        console.log('🌍 Rwanda — Africa — The World.');
+    </script>
 </body>
 </html>
