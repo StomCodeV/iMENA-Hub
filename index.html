@@ -22,6 +22,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js">
     </script>
 
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD">
+    </script>
+
     <style>
         /* ========== ROOT VARIABLES ========== */
         :root {
@@ -46,21 +50,6 @@
             --radius: 24px;
         }
 
-        [data-theme="light"] {
-            --primary: #ffffff;
-            --primary-light: #f1f5f9;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --bg: #f8fafc;
-            --bg-light: #f1f5f9;
-            --bg-card: rgba(255, 255, 255, 0.7);
-            --border: rgba(148, 163, 184, 0.2);
-            --glass: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(148, 163, 184, 0.25);
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.06);
-            --shadow-glow: 0 0 60px rgba(13, 148, 136, 0.06);
-        }
-
         /* ========== RESET & BASE ========== */
         *,
         *::before,
@@ -80,7 +69,6 @@
             color: var(--text);
             overflow-x: hidden;
             line-height: 1.7;
-            transition: background 0.4s, color 0.4s;
         }
 
         h1,
@@ -271,16 +259,10 @@
             border-bottom: 1px solid var(--glass-border);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        [data-theme="light"] .navbar {
-            background: rgba(248, 250, 252, 0.7);
-        }
         .navbar.scrolled {
             padding: 0.6rem 3rem;
             background: rgba(5, 10, 20, 0.88);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-        [data-theme="light"] .navbar.scrolled {
-            background: rgba(248, 250, 252, 0.92);
         }
 
         .nav-logo {
@@ -356,26 +338,29 @@
             align-items: center;
             gap: 1rem;
         }
-        .theme-toggle {
-            width: 44px;
-            height: 44px;
+
+        /* ========== NAV SUPPORT BUTTON ========== */
+        .nav-support-btn {
+            padding: 0.5rem 1.2rem;
+            background: var(--gradient-2);
+            color: #0a1628;
+            border: none;
             border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
-            color: var(--text);
+            font-weight: 700;
+            font-size: 0.85rem;
             cursor: pointer;
-            display: flex;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.4s;
-            backdrop-filter: blur(10px);
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2);
         }
-        .theme-toggle:hover {
-            background: var(--secondary);
-            color: white;
-            transform: rotate(180deg) scale(1.05);
-            border-color: var(--secondary);
+        .nav-support-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
         }
+
         .nav-cta {
             padding: 0.6rem 1.6rem;
             background: var(--gradient-1);
@@ -1366,6 +1351,16 @@
             line-height: 1.8;
         }
 
+        /* ========== PAYPAL BUTTON (Footer CTA) ========== */
+        #paypal-button-container {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+        #paypal-button-container .paypal-button {
+            min-width: 200px;
+        }
+
         /* ========== FOOTER ========== */
         .footer {
             padding: 4rem 2rem 2rem;
@@ -1373,9 +1368,6 @@
             position: relative;
             z-index: 2;
             background: rgba(5, 10, 20, 0.3);
-        }
-        [data-theme="light"] .footer {
-            background: rgba(248, 250, 252, 0.3);
         }
         .footer-grid {
             max-width: 1200px;
@@ -1649,7 +1641,7 @@
     </style>
 </head>
 
-<body data-theme="dark">
+<body>
 
     <!-- ===== SCROLL PROGRESS ===== -->
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -1667,7 +1659,7 @@
     <!-- ===== NAVBAR ===== -->
     <nav class="navbar" id="navbar">
         <a href="#home" class="nav-logo">
-            <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub Logo" />
+            <img src="https://i.postimg.cc/50jJ2fD6/BLAD.webp" alt="iMENA Hub Logo" />
             <span class="nav-logo-text">iMENA <span>Hub</span></span>
         </a>
         <ul class="nav-links">
@@ -1680,9 +1672,10 @@
             <li><a href="#partnership">Partnership</a></li>
         </ul>
         <div class="nav-actions">
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                <i data-lucide="sun" class="icon-sun" style="width:20px;height:20px;"></i>
-                <i data-lucide="moon" class="icon-moon" style="width:20px;height:20px;display:none;"></i>
+            <!-- Support Button - replaces theme toggle -->
+            <button class="nav-support-btn" id="navSupportBtn">
+                <i data-lucide="heart" style="width:16px;height:16px;"></i>
+                Support Us
             </button>
             <a href="#contact" class="nav-cta">
                 <i data-lucide="send" style="width:16px;height:16px;"></i>
@@ -1776,7 +1769,7 @@
                     <div class="about-visual-overlay"></div>
                 </div>
                 <div class="about-visual-float">
-                    <h4>2026</h4>   
+                    <h4>2026</h4>
                     <p>Founded by TUYISENGE Jean Chrisostom</p>
                 </div>
             </div>
@@ -2064,7 +2057,7 @@
             <div class="founder-image-wrap reveal">
                 <div class="founder-image-ring"></div>
                 <div class="founder-image">
-                    <img src="https://postimg.cc/gnVC1347" alt="TUYISENGE Jean Chrisostom — Founder of iMENA Hub" />
+                    <img src="https://i.postimg.cc/X7mnG85n/Cut-out-image.png" alt="TUYISENGE Jean Chrisostom — Founder of iMENA Hub" />
                 </div>
             </div>
             <div class="founder-content reveal">
@@ -2193,6 +2186,15 @@
                         Try Paperless
                     </a>
                 </div>
+
+                <!-- PayPal Support Button -->
+                <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--glass-border);">
+                    <p style="font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 1rem;">
+                        💙 Support Our Mission
+                    </p>
+                    <div id="paypal-button-container"></div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -2202,7 +2204,7 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="#home" class="nav-logo">
-                    <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub Logo" style="height:40px;" />
+                    <img src="https://i.postimg.cc/50jJ2fD6/BLAD.webp" alt="iMENA Hub Logo" style="height:40px;" />
                     <span class="nav-logo-text">iMENA <span>Hub</span></span>
                 </a>
                 <p>
@@ -2241,7 +2243,7 @@
                             <i data-lucide="globe" style="width:14px;height:14px;"></i> Portfolio
                         </a></li>
                     <li><a href="#">
-                            <i data-lucide="map-pin" style="width:14px;height:14px;"></i> W3GP+JQ Kayumba 
+                            <i data-lucide="map-pin" style="width:14px;height:14px;"></i> W3GP+JQ Kayumba
                         </a></li>
                 </ul>
             </div>
@@ -2476,33 +2478,18 @@
             scrollProgress.style.width = (window.scrollY / docHeight) * 100 + '%';
         });
 
-        // ===== THEME TOGGLE =====
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        const sunIcon = document.querySelector('.icon-sun');
-        const moonIcon = document.querySelector('.icon-moon');
-        const three = window.__threeObjects || {};
-
-        themeToggle.addEventListener('click', () => {
-            const current = body.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', next);
-
-            if (next === 'light') {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-                if (three.mat) three.mat.opacity = 0.3;
-                if (three.icoMat1) three.icoMat1.opacity = 0.04;
-                if (three.icoMat2) three.icoMat2.opacity = 0.03;
-                if (three.torusMat) three.torusMat.opacity = 0.02;
-            } else {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-                if (three.mat) three.mat.opacity = 0.7;
-                if (three.icoMat1) three.icoMat1.opacity = 0.08;
-                if (three.icoMat2) three.icoMat2.opacity = 0.06;
-                if (three.torusMat) three.torusMat.opacity = 0.04;
-            }
+        // =============================================
+        // ===== NAV SUPPORT BUTTON =====
+        // =============================================
+        document.getElementById('navSupportBtn').addEventListener('click', function() {
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            // Small delay then trigger PayPal button click if visible
+            setTimeout(() => {
+                const paypalButton = document.querySelector('#paypal-button-container .paypal-button');
+                if (paypalButton) {
+                    paypalButton.click();
+                }
+            }, 500);
         });
 
         // ===== MOBILE MENU =====
@@ -2585,6 +2572,45 @@
                     scrub: 1.5
                 }
             });
+        });
+
+        // =============================================
+        // ===== PAYPAL BUTTON RENDER =====
+        // =============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof paypal !== 'undefined') {
+                paypal.Buttons({
+                    // Set up the transaction
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: '5.00'
+                                },
+                                description: 'Support iMENA Hub Mission'
+                            }],
+                            application_context: {
+                                shipping_preference: 'NO_SHIPPING'
+                            }
+                        });
+                    },
+                    // Finalize the transaction
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            alert('Thank you, ' + details.payer.name.given_name + '! 🙌 Your support helps us empower education across Rwanda.');
+                            // You can also redirect to a thank you page here
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal Error:', err);
+                        alert('Payment failed. Please try again or contact us directly.');
+                    }
+                }).render('#paypal-button-container');
+            } else {
+                console.warn('PayPal SDK not loaded. Please check your internet connection.');
+                document.getElementById('paypal-button-container').innerHTML =
+                    '<p style="color: var(--text-muted); font-size: 0.9rem;">⚠️ Unable to load payment options. Please contact us directly.</p>';
+            }
         });
 
         console.log('🚀 iMENA Hub website loaded successfully!');
