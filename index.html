@@ -1,2870 +1,1320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-    <title>iMENA Hub</title>
-    <meta name="description" content="iMENA Hub is a Rwandan educational technology initiative empowering teachers, learners, and schools through practical digital skills, innovation, and modern teaching." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>iMENA Hub — Building the Digital Ecosystem for Learning, Work & Innovation</title>
+<meta name="description" content="iMENA Hub is a technology ecosystem building digital products across education, AI, software, digital skills, and innovation.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+html,body{margin:0;padding:0;background:#060a12;color:#fff;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none}
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+:root{
+  --navy:#060a12;
+  --glass:rgba(10,18,30,.72);
+  --glass-light:rgba(255,255,255,.05);
+  --border:rgba(255,255,255,.14);
+  --border-light:rgba(255,255,255,.08);
+  --cyan:#00d1ff;
+  --cyan-dim:#00a1de;
+  --blue:#3b82f6;
+  --purple:#8b5cf6;
+  --gold:#fbbf24;
+  --orange:#ff8c42;
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.68);
+  --muted-2:rgba(255,255,255,.45);
+}
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest">
-    </script>
+/* ═══════════════════════════════════════════════════════════════
+   FIXED 3D CANVAS
+   ═══════════════════════════════════════════════════════════════ */
+#canvas-host{
+  position:fixed;inset:0;z-index:1;overflow:hidden;
+}
+#canvas-host canvas{display:block;width:100%;height:100%}
+#canvas-vignette{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 75% 50%, transparent 50%, rgba(3,6,12,.4) 100%),
+    linear-gradient(180deg,rgba(3,6,12,.35) 0%,transparent 20%,transparent 85%,rgba(3,6,12,.55) 100%);
+}
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-    
-    <!-- Three.js & GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js">
-    </script>
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL PROGRESS
+   ═══════════════════════════════════════════════════════════════ */
+#scroll-progress{
+  position:fixed;top:50%;right:20px;transform:translateY(-50%);
+  z-index:60;pointer-events:none;
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  display:flex;flex-direction:column;gap:11px;align-items:flex-end;
+}
+#scroll-progress .item{
+  display:flex;align-items:center;gap:8px;
+  opacity:.3;transition:opacity .35s ease,color .35s ease;
+  color:rgba(255,255,255,.55);
+}
+#scroll-progress .item.active{opacity:1;color:#fff}
+#scroll-progress .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:currentColor;opacity:.5;
+  transition:transform .35s ease,opacity .35s ease,background .35s ease;
+}
+#scroll-progress .item.active .dot{
+  background:var(--cyan);opacity:1;
+  box-shadow:0 0 12px var(--cyan);
+  transform:scale(1.7);
+}
+#scroll-progress .num{font-variant-numeric:tabular-nums;font-weight:600}
+@media (max-width:1000px){#scroll-progress{display:none}}
 
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD">
-    </script>
+/* ═══════════════════════════════════════════════════════════════
+   TOP NAV
+   ═══════════════════════════════════════════════════════════════ */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:70;
+  padding:14px 22px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .3s ease,backdrop-filter .3s ease,border-color .3s ease;
+  pointer-events:none;
+  border-bottom:1px solid transparent;
+}
+#nav.scrolled{
+  background:rgba(6,10,18,.82);
+  backdrop-filter:blur(22px) saturate(1.4);
+  -webkit-backdrop-filter:blur(22px) saturate(1.4);
+  border-bottom-color:var(--border-light);
+  pointer-events:auto;
+}
+#nav .brand{display:flex;align-items:center;gap:10px;pointer-events:auto}
+#nav .brand img{height:32px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,209,255,.25))}
+#nav .links{display:flex;gap:26px;align-items:center;pointer-events:auto}
+#nav .links a{
+  font-size:13px;font-weight:500;color:rgba(255,255,255,.75);
+  letter-spacing:.02em;transition:color .2s ease;
+}
+#nav .links a:hover{color:#fff}
+#nav .links a.cta{
+  padding:9px 18px;border-radius:999px;
+  background:linear-gradient(135deg,var(--cyan),var(--cyan-dim));
+  color:#001018;font-weight:600;
+  box-shadow:0 4px 20px rgba(0,209,255,.3);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+#nav .links a.cta:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,209,255,.45)}
+@media (max-width:820px){#nav .links a:not(.cta){display:none}}
 
-    <style>
-        /* ========== ROOT VARIABLES ========== */
-        :root {
-            --primary: #0a1628;
-            --primary-light: #0f1f3a;
-            --secondary: #0d9488;
-            --secondary-light: #14b8a6;
-            --accent: #f59e0b;
-            --accent-light: #fbbf24;
-            --text: #e2e8f0;
-            --text-muted: #94a3b8;
-            --bg: #050a14;
-            --bg-light: #0a1628;
-            --bg-card: rgba(15, 31, 58, 0.6);
-            --border: rgba(148, 163, 184, 0.1);
-            --glass: rgba(15, 31, 58, 0.4);
-            --glass-border: rgba(148, 163, 184, 0.15);
-            --gradient-1: linear-gradient(135deg, #0d9488 0%, #0891b2 50%, #6366f1 100%);
-            --gradient-2: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-            --shadow-glow: 0 0 60px rgba(13, 148, 136, 0.12);
-            --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.4);
-            --radius: 24px;
-        }
+/* ═══════════════════════════════════════════════════════════════
+   CONTENT RAIL — LEFT SIDE, ALWAYS VISIBLE ALONGSIDE KCC
+   ═══════════════════════════════════════════════════════════════ */
+#content-rail{
+  position:relative;z-index:10;
+  width:520px;
+  margin-left:40px;
+  padding:140px 0 220px;
+  pointer-events:none;
+}
 
-        /* ========== RESET & BASE ========== */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+.panel{
+  pointer-events:auto;
+  margin-bottom:38vh;
+  opacity:0;
+  transform:translateY(36px);
+  transition:opacity .9s cubic-bezier(.16,1,.3,1),
+             transform .9s cubic-bezier(.16,1,.3,1);
+  scroll-margin-top:110px;
+}
+.panel.visible{opacity:1;transform:translateY(0)}
+.panel:last-child{margin-bottom:12vh}
 
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-        }
+/* Glass panel */
+.glass{
+  background:var(--glass);
+  backdrop-filter:blur(24px) saturate(1.4);
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:32px 34px;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+/* Hero card */
+.hero-card .logo-lg{
+  height:52px;width:auto;margin-bottom:20px;
+  filter:drop-shadow(0 4px 20px rgba(0,209,255,.4));
+}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--cyan);
+  padding:6px 12px;border-radius:999px;
+  background:rgba(0,209,255,.12);
+  border:1px solid rgba(0,209,255,.3);
+  margin-bottom:18px;
+}
+.kicker::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 12px var(--cyan);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(1.3)}
+}
+.hero-card h1{
+  font-size:clamp(24px,2.4vw,34px);
+  font-weight:700;line-height:1.12;
+  letter-spacing:-.02em;margin:0 0 16px;
+  background:linear-gradient(120deg,#fff 0%,#a8e0ff 55%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero-card p{
+  font-size:15px;line-height:1.65;color:var(--muted);
+  margin:0 0 24px;
+}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 20px;border-radius:999px;
+  font-size:13px;font-weight:600;letter-spacing:.01em;
+  transition:all .25s cubic-bezier(.16,1,.3,1);
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--cyan) 0%,var(--cyan-dim) 100%);
+  color:#001018;
+  box-shadow:0 8px 28px rgba(0,209,255,.35);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,209,255,.5)}
+.btn-ghost{
+  background:rgba(255,255,255,.06);
+  color:#fff;border:1px solid var(--border);
+}
+.btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25)}
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            line-height: 1.2;
-        }
+/* Section headers */
+.eyebrow{
+  display:inline-block;font-size:10px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:12px;
+}
+.panel h2{
+  font-size:clamp(20px,2vw,28px);
+  font-weight:600;line-height:1.18;letter-spacing:-.015em;
+  margin:0 0 14px;
+  background:linear-gradient(120deg,#fff 0%,#a8e0ff 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.panel p{
+  font-size:14px;line-height:1.68;color:var(--muted);
+  margin:0 0 14px;
+}
+.panel p:last-child{margin-bottom:0}
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+/* Ecosystem nodes */
+.eco-nodes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.eco-node{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 14px;border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  font-size:12px;font-weight:500;
+  backdrop-filter:blur(10px);
+  transition:all .3s ease;
+}
+.eco-node:hover{
+  background:rgba(0,209,255,.12);
+  border-color:rgba(0,209,255,.5);
+  transform:translateY(-2px);
+}
+.eco-node .ico{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 10px var(--cyan);
+}
 
-        img {
-            display: block;
-            max-width: 100%;
-            height: auto;
-        }
+/* Product mini grid */
+.product-mini-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;margin-top:18px;
+}
+.product-mini{
+  padding:12px 14px;border-radius:12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  backdrop-filter:blur(10px);
+  transition:all .3s ease;
+}
+.product-mini:hover{
+  background:rgba(0,209,255,.1);
+  border-color:rgba(0,209,255,.4);
+  transform:translateY(-2px);
+}
+.product-mini .name{font-weight:600;font-size:13px;margin-bottom:2px}
+.product-mini .desc{font-size:10px;color:var(--muted-2);line-height:1.4}
 
-        /* ========== SCROLL PROGRESS ========== */
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: var(--gradient-1);
-            z-index: 10000;
-            width: 0%;
-            transition: width 0.1s;
-            border-radius: 0 2px 2px 0;
-        }
+/* Vision */
+.vision-block{
+  text-align:center;
+  padding:36px 30px;
+  background:linear-gradient(135deg,rgba(0,209,255,.08),rgba(139,92,246,.06));
+  border:1px solid rgba(0,209,255,.2);
+}
+.vision-block h2{font-size:clamp(20px,2vw,26px);margin-bottom:14px}
+.vision-block p{font-size:14px;max-width:520px;margin:0 auto}
 
-        /* ========== 3D CANVAS ========== */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-        #canvas-container canvas {
-            display: block;
-        }
+/* Founder */
+.founder{display:flex;gap:20px;align-items:flex-start;margin-top:16px}
+.founder-photo{
+  width:100px;height:100px;flex-shrink:0;
+  border-radius:16px;overflow:hidden;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(0,209,255,.1),rgba(139,92,246,.05));
+}
+.founder-photo img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.founder-info h3{font-size:16px;font-weight:600;margin:0 0 4px}
+.founder-info .role{
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--cyan);font-weight:500;margin-bottom:10px;
+}
+.founder-info p{font-size:13px;line-height:1.65;color:var(--muted);margin:0}
 
-        /* ========== CUSTOM CURSOR (hidden on touch) ========== */
-        .cursor,
-        .cursor-dot {
-            display: none;
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .cursor {
-                display: block;
-                width: 24px;
-                height: 24px;
-                border: 2px solid var(--secondary-light);
-                border-radius: 50%;
-                position: fixed;
-                pointer-events: none;
-                z-index: 9999;
-                mix-blend-mode: difference;
-                transition: transform 0.15s, opacity 0.3s;
-                opacity: 0;
-            }
-            .cursor-dot {
-                display: block;
-                width: 6px;
-                height: 6px;
-                background: var(--accent-light);
-                border-radius: 50%;
-                position: fixed;
-                pointer-events: none;
-                z-index: 9999;
-                opacity: 0;
-            }
-            body:hover .cursor,
-            body:hover .cursor-dot {
-                opacity: 1;
-            }
-        }
+/* Contact */
+.contact-block{margin-top:16px}
+.contact-links{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.contact-links a{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:10px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border-light);
+  font-size:13px;font-weight:500;
+  transition:all .25s ease;
+}
+.contact-links a:hover{
+  background:rgba(0,209,255,.08);
+  border-color:rgba(0,209,255,.3);
+  transform:translateX(4px);
+}
+.contact-links .ico{
+  width:28px;height:28px;border-radius:7px;
+  background:rgba(0,209,255,.14);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);font-size:12px;font-weight:700;
+}
 
-        /* ========== GLOW ORBS ========== */
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.12;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .glow-orb-1 {
-            width: 500px;
-            height: 500px;
-            background: var(--secondary);
-            top: 10%;
-            left: -10%;
-            animation: orbFloat 25s ease-in-out infinite;
-        }
-        .glow-orb-2 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent);
-            bottom: 10%;
-            right: -10%;
-            animation: orbFloat 30s ease-in-out infinite reverse;
-        }
-        .glow-orb-3 {
-            width: 350px;
-            height: 350px;
-            background: #6366f1;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: orbFloat 20s ease-in-out infinite 3s;
-        }
+/* Developer footer — subtle, non-distracting */
+.dev-footer{
+  pointer-events:auto;
+  margin-top:70px;
+  padding:18px 0;
+  font-size:11px;
+  color:rgba(255,255,255,.35);
+  letter-spacing:.06em;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.dev-footer a{
+  color:rgba(0,209,255,.75);
+  font-weight:500;
+  transition:color .2s ease;
+}
+.dev-footer a:hover{color:#00d1ff}
 
-        @keyframes orbFloat {
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-            25% {
-                transform: translate(60px, -40px) scale(1.1);
-            }
-            50% {
-                transform: translate(-40px, 60px) scale(0.9);
-            }
-            75% {
-                transform: translate(40px, 40px) scale(1.05);
-            }
-        }
+/* ═══════════════════════════════════════════════════════════════
+   LOADING
+   ═══════════════════════════════════════════════════════════════ */
+#loading{
+  position:fixed;inset:0;z-index:300;
+  background:#060a12;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:18px;transition:opacity .8s ease;
+}
+#loading.hidden{opacity:0;pointer-events:none}
+#loading .logo{height:48px;width:auto;opacity:.95}
+#loading .bar{
+  width:220px;height:3px;border-radius:2px;
+  background:rgba(255,255,255,.08);overflow:hidden;
+}
+#loading .bar span{
+  display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--cyan),var(--purple));
+  transition:width .35s ease;border-radius:2px;
+}
+#loading .status{
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted-2);
+}
 
-        /* ========== FLOATING PARTICLES ========== */
-        .particles-float {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-        .particle-float {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--secondary);
-            border-radius: 50%;
-            opacity: 0.15;
-            animation: particleRise 20s infinite linear;
-        }
-        @keyframes particleRise {
-            0% {
-                transform: translateY(110vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.2;
-            }
-            90% {
-                opacity: 0.2;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width:1000px){
+  #content-rail{
+    width:auto;
+    margin:0 18px;
+    padding-top:120px;
+  }
+  .panel{margin-bottom:32vh}
+  #canvas-vignette{
+    background:
+      radial-gradient(ellipse at 50% 35%, transparent 35%, rgba(3,6,12,.55) 100%),
+      linear-gradient(180deg,rgba(3,6,12,.4) 0%,transparent 25%,transparent 70%,rgba(3,6,12,.65) 100%);
+  }
+}
+@media (max-width:560px){
+  .glass{padding:22px 20px;border-radius:18px}
+  .product-mini-grid{grid-template-columns:1fr}
+  .founder{flex-direction:column}
+  .founder-photo{width:80px;height:80px}
+}
 
-        /* ========== NAVBAR ========== */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 0.6rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            background: rgba(5, 10, 20, 0.55);
-            border-bottom: 1px solid var(--glass-border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            gap: 0.4rem;
-        }
-        .navbar.scrolled {
-            padding: 0.4rem 0.8rem;
-            background: rgba(5, 10, 20, 0.88);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            text-decoration: none;
-            flex-shrink: 0;
-        }
-        .nav-logo img {
-            height: 32px;
-            width: auto;
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
-        .nav-logo img:hover {
-            transform: scale(1.05);
-        }
-        .nav-logo-text {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 1rem;
-            color: var(--text);
-            letter-spacing: -0.5px;
-            white-space: nowrap;
-        }
-        .nav-logo-text span {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: none;
-            gap: 1.2rem;
-            list-style: none;
-            align-items: center;
-        }
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-1);
-            transition: width 0.35s ease;
-            border-radius: 2px;
-        }
-        .nav-links a:hover {
-            color: var(--text);
-        }
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        .nav-links a.active {
-            color: var(--text);
-        }
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            flex-shrink: 0;
-        }
-
-        .nav-support-btn {
-            padding: 0.3rem 0.8rem;
-            background: var(--gradient-2);
-            color: #0a1628;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2);
-            white-space: nowrap;
-            min-height: 34px;
-        }
-        .nav-support-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
-        }
-        .nav-support-btn i {
-            width: 14px;
-            height: 14px;
-        }
-
-        .nav-cta {
-            padding: 0.3rem 0.8rem;
-            background: var(--gradient-1);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: none;
-            align-items: center;
-            gap: 0.3rem;
-            box-shadow: 0 4px 20px rgba(13, 148, 136, 0.25);
-            white-space: nowrap;
-            min-height: 34px;
-        }
-        .nav-cta:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(13, 148, 136, 0.4);
-        }
-        .nav-cta i {
-            width: 14px;
-            height: 14px;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            background: none;
-            border: none;
-            color: var(--text);
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 8px;
-            transition: background 0.3s;
-            align-items: center;
-            justify-content: center;
-            min-height: 34px;
-            min-width: 34px;
-        }
-        .mobile-menu-btn:hover {
-            background: var(--glass);
-        }
-        .mobile-menu-btn i {
-            width: 22px;
-            height: 22px;
-        }
-
-        /* ========== MOBILE MENU ========== */
-        .mobile-menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s;
-            backdrop-filter: blur(4px);
-        }
-        .mobile-menu-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 85%;
-            max-width: 320px;
-            height: 100vh;
-            background: var(--bg);
-            backdrop-filter: blur(40px);
-            z-index: 2000;
-            padding: 4.5rem 1.2rem 1.2rem;
-            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 1px solid var(--glass-border);
-            overflow-y: auto;
-        }
-        .mobile-menu.active {
-            right: 0;
-        }
-        .mobile-menu-close {
-            position: absolute;
-            top: 0.8rem;
-            right: 0.8rem;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text);
-            cursor: pointer;
-            padding: 8px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .mobile-menu-close:hover {
-            background: var(--secondary);
-            color: white;
-        }
-        .mobile-menu-close i {
-            width: 22px;
-            height: 22px;
-        }
-        .mobile-menu ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-        .mobile-menu li a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 600;
-            display: block;
-            padding: 0.7rem 0.8rem;
-            border-radius: 12px;
-            transition: all 0.3s;
-        }
-        .mobile-menu li a:hover {
-            background: rgba(13, 148, 136, 0.1);
-            color: var(--secondary-light);
-        }
-        .mobile-menu .mobile-divider {
-            height: 1px;
-            background: var(--glass-border);
-            margin: 0.6rem 0;
-        }
-        .mobile-menu .mobile-support-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.7rem 1rem;
-            background: var(--gradient-2);
-            color: #0a1628;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            width: 100%;
-            justify-content: center;
-            margin-top: 0.5rem;
-            min-height: 48px;
-        }
-
-        /* ========== HERO ========== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            padding: 5rem 1rem 2.5rem;
-            overflow: hidden;
-        }
-        .hero-content {
-            text-align: center;
-            max-width: 900px;
-            z-index: 2;
-            position: relative;
-            width: 100%;
-        }
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.3rem 1rem;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 100px;
-            font-size: 0.65rem;
-            color: var(--secondary-light);
-            margin-bottom: 1.2rem;
-            backdrop-filter: blur(10px);
-            font-weight: 500;
-            animation: floatBadge 3s ease-in-out infinite;
-        }
-        .hero-badge i {
-            width: 14px;
-            height: 14px;
-        }
-        @keyframes floatBadge {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-6px);
-            }
-        }
-        .hero h1 {
-            font-size: clamp(2rem, 7vw, 4.5rem);
-            font-weight: 900;
-            line-height: 1.08;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
-        }
-        .hero h1 .gradient-text {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero p {
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            color: var(--text-muted);
-            max-width: 650px;
-            margin: 0 auto 1.8rem;
-            line-height: 1.7;
-            padding: 0 0.5rem;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 0.6rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .hero-buttons .btn-primary,
-        .hero-buttons .btn-secondary,
-        .hero-buttons .btn-gold {
-            flex: 1 1 auto;
-            min-width: 140px;
-            max-width: 220px;
-            justify-content: center;
-            padding: 0.7rem 1.2rem;
-            font-size: 0.8rem;
-        }
-
-        /* ========== BUTTONS ========== */
-        .btn-primary,
-        .btn-secondary,
-        .btn-gold {
-            padding: 0.7rem 1.4rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            border: none;
-            min-height: 44px;
-            min-width: 44px;
-            touch-action: manipulation;
-        }
-        .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 8px 30px rgba(13, 148, 136, 0.25);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 45px rgba(13, 148, 136, 0.35);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--text);
-            border: 1.5px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-        }
-        .btn-secondary:hover {
-            border-color: var(--secondary-light);
-            background: rgba(13, 148, 136, 0.06);
-            transform: translateY(-3px);
-        }
-        .btn-gold {
-            background: var(--gradient-2);
-            color: #0a1628;
-            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.2);
-        }
-        .btn-gold:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 45px rgba(245, 158, 11, 0.3);
-        }
-
-        /* ========== HERO STATS ========== */
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-top: 2.5rem;
-            flex-wrap: wrap;
-        }
-        .hero-stat {
-            text-align: center;
-            min-width: 60px;
-            flex: 1 1 auto;
-            max-width: 100px;
-        }
-        .hero-stat-number {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-        }
-        .hero-stat-label {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            margin-top: 0.2rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* ========== SECTION HEADERS ========== */
-        section {
-            position: relative;
-            z-index: 2;
-            padding: 3rem 1rem;
-        }
-        .section-header {
-            text-align: center;
-            max-width: 720px;
-            margin: 0 auto 2.5rem;
-        }
-        .section-tag {
-            display: inline-block;
-            padding: 0.25rem 0.9rem;
-            background: rgba(13, 148, 136, 0.08);
-            border: 1px solid rgba(13, 148, 136, 0.15);
-            border-radius: 100px;
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: var(--secondary-light);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 0.6rem;
-        }
-        .section-title {
-            font-size: clamp(1.6rem, 4.5vw, 2.8rem);
-            font-weight: 800;
-            margin-bottom: 0.6rem;
-            line-height: 1.15;
-        }
-        .section-desc {
-            color: var(--text-muted);
-            font-size: clamp(0.85rem, 2vw, 1rem);
-            line-height: 1.7;
-            padding: 0 0.5rem;
-        }
-
-        /* ========== ABOUT ========== */
-        .about-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            align-items: center;
-        }
-        .about-visual-main {
-            width: 100%;
-            aspect-ratio: 1 / 0.8;
-            border-radius: var(--radius);
-            overflow: hidden;
-            position: relative;
-            box-shadow: var(--shadow-glow), var(--shadow-card);
-        }
-        .about-visual-main img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s;
-        }
-        .about-visual:hover .about-visual-main img {
-            transform: scale(1.04);
-        }
-        .about-visual-float {
-            display: none;
-        }
-        .about-content h3 {
-            font-size: clamp(1.3rem, 3vw, 1.8rem);
-            margin-bottom: 0.8rem;
-            line-height: 1.2;
-        }
-        .about-content p {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-size: clamp(0.85rem, 1.8vw, 0.95rem);
-            line-height: 1.7;
-        }
-        .about-content p strong {
-            color: var(--secondary-light);
-        }
-        .about-features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.6rem;
-            margin-top: 1.2rem;
-        }
-        .about-feature {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.6rem;
-            padding: 0.6rem 0.8rem;
-            background: var(--bg-card);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            transition: all 0.3s;
-        }
-        .about-feature:hover {
-            transform: translateY(-4px);
-            border-color: rgba(13, 148, 136, 0.3);
-        }
-        .about-feature-icon {
-            width: 32px;
-            height: 32px;
-            min-width: 32px;
-            border-radius: 10px;
-            background: rgba(13, 148, 136, 0.1);
-            border: 1px solid rgba(13, 148, 136, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary-light);
-            font-size: 0.9rem;
-        }
-        .about-feature-icon i {
-            width: 18px;
-            height: 18px;
-        }
-        .about-feature h4 {
-            font-size: 0.75rem;
-            margin-bottom: 0.05rem;
-        }
-        .about-feature p {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        /* ========== VISION & MISSION ========== */
-        .vm-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.2rem;
-        }
-        .vm-card {
-            padding: 1.6rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .vm-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--gradient-1);
-            transform: scaleX(0);
-            transition: transform 0.5s;
-            transform-origin: left;
-        }
-        .vm-card:hover::before {
-            transform: scaleX(1);
-        }
-        .vm-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-glow), var(--shadow-card);
-        }
-        .vm-card-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            background: var(--gradient-1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin-bottom: 1rem;
-            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.25);
-        }
-        .vm-card-icon i {
-            width: 24px;
-            height: 24px;
-        }
-        .vm-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.6rem;
-        }
-        .vm-card p {
-            color: var(--text-muted);
-            font-size: clamp(0.85rem, 1.6vw, 0.95rem);
-            line-height: 1.7;
-        }
-        .vm-quote {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 1.6rem 1.2rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            position: relative;
-        }
-        .vm-quote p {
-            font-size: clamp(0.95rem, 2vw, 1.1rem);
-            font-style: italic;
-            color: var(--text);
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-        .vm-quote-author {
-            margin-top: 0.8rem;
-            color: var(--secondary-light);
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        /* ========== CORE AREAS ========== */
-        .areas-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-        }
-        .area-card {
-            padding: 1.2rem 1rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-        .area-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 0;
-            background: var(--gradient-1);
-            transition: height 0.5s;
-            opacity: 0.04;
-        }
-        .area-card:hover::after {
-            height: 100%;
-        }
-        .area-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-glow), var(--shadow-card);
-            border-color: rgba(13, 148, 136, 0.2);
-        }
-        .area-card-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: rgba(13, 148, 136, 0.08);
-            border: 1px solid rgba(13, 148, 136, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--secondary-light);
-            margin-bottom: 0.6rem;
-            transition: all 0.3s;
-        }
-        .area-card-icon i {
-            width: 20px;
-            height: 20px;
-        }
-        .area-card:hover .area-card-icon {
-            background: var(--gradient-1);
-            color: white;
-            transform: scale(1.05) rotate(-3deg);
-            border-color: transparent;
-        }
-        .area-card h3 {
-            font-size: 0.95rem;
-            margin-bottom: 0.3rem;
-        }
-        .area-card p {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* ========== PROJECTS ========== */
-        .projects-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.2rem;
-        }
-        .project-card {
-            padding: 1.5rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            transition: all 0.5s;
-            position: relative;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-        .project-card.featured {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            padding: 1.5rem;
-        }
-        .project-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-glow), var(--shadow-card);
-            border-color: rgba(13, 148, 136, 0.2);
-        }
-        .project-badge {
-            display: inline-block;
-            padding: 0.2rem 0.7rem;
-            background: rgba(245, 158, 11, 0.08);
-            border: 1px solid rgba(245, 158, 11, 0.15);
-            border-radius: 100px;
-            font-size: 0.55rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .project-badge.green {
-            background: rgba(13, 148, 136, 0.08);
-            border-color: rgba(13, 148, 136, 0.15);
-            color: var(--secondary-light);
-        }
-        .project-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.6rem;
-        }
-        .project-card p {
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            line-height: 1.7;
-            font-size: clamp(0.85rem, 1.6vw, 0.95rem);
-        }
-        .project-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
-            margin-bottom: 1rem;
-        }
-        .project-feature-tag {
-            padding: 0.15rem 0.6rem;
-            background: rgba(13, 148, 136, 0.06);
-            border: 1px solid rgba(13, 148, 136, 0.1);
-            border-radius: 100px;
-            font-size: 0.6rem;
-            color: var(--secondary-light);
-            font-weight: 500;
-        }
-        .project-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            color: var(--secondary-light);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-        .project-link:hover {
-            gap: 0.7rem;
-            color: var(--accent-light);
-        }
-        .project-link i {
-            width: 16px;
-            height: 16px;
-        }
-        .project-visual {
-            width: 100%;
-            min-height: 140px;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            background: linear-gradient(135deg, rgba(13, 148, 136, 0.06), rgba(99, 102, 241, 0.06));
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .project-visual-inner {
-            text-align: center;
-        }
-        .project-visual-inner i {
-            color: var(--secondary);
-            margin-bottom: 0.6rem;
-            width: 44px;
-            height: 44px;
-        }
-        .project-visual-inner h4 {
-            font-size: 1.1rem;
-            color: var(--text);
-        }
-        .project-visual-inner p {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        /* ========== FOUNDER ========== */
-        .founder-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            align-items: center;
-        }
-        .founder-image-wrap {
-            position: relative;
-            max-width: 220px;
-            margin: 0 auto;
-        }
-        .founder-image {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: var(--radius);
-            overflow: hidden;
-            position: relative;
-            box-shadow: var(--shadow-glow), var(--shadow-card);
-            border: 2px solid var(--glass-border);
-        }
-        .founder-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s;
-        }
-        .founder-image:hover img {
-            transform: scale(1.04);
-        }
-        .founder-image-ring {
-            position: absolute;
-            inset: -10px;
-            border: 2px solid rgba(13, 148, 136, 0.2);
-            border-radius: calc(var(--radius) + 8px);
-            animation: pulseRing 3s ease-in-out infinite;
-        }
-        @keyframes pulseRing {
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 0.4;
-            }
-            50% {
-                transform: scale(1.02);
-                opacity: 1;
-            }
-        }
-        .founder-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.2rem;
-        }
-        .founder-role {
-            color: var(--secondary-light);
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-        }
-        .founder-role i {
-            width: 18px;
-            height: 18px;
-        }
-        .founder-content p {
-            color: var(--text-muted);
-            margin-bottom: 0.8rem;
-            font-size: clamp(0.85rem, 1.6vw, 0.95rem);
-            line-height: 1.7;
-        }
-        .founder-skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
-            margin: 1rem 0;
-        }
-        .founder-skill {
-            padding: 0.2rem 0.7rem;
-            background: rgba(13, 148, 136, 0.06);
-            border: 1px solid rgba(13, 148, 136, 0.1);
-            border-radius: 100px;
-            font-size: 0.65rem;
-            color: var(--secondary-light);
-            font-weight: 500;
-        }
-        .founder-contact {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-        .founder-contact a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.4rem 0.9rem;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 500;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-            min-height: 40px;
-        }
-        .founder-contact a:hover {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2);
-        }
-        .founder-contact a i {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* ========== APPROACH ========== */
-        .approach-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.2rem;
-        }
-        .approach-card {
-            padding: 1.5rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.5s;
-            position: relative;
-            touch-action: manipulation;
-        }
-        .approach-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-glow), var(--shadow-card);
-            border-color: rgba(13, 148, 136, 0.2);
-        }
-        .approach-number {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.4rem;
-            font-weight: 900;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            opacity: 0.15;
-            line-height: 1;
-            margin-bottom: 0.6rem;
-        }
-        .approach-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.6rem;
-        }
-        .approach-card p {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-
-        /* ========== PARTNERSHIP ========== */
-        .partnership-grid {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.2rem;
-        }
-        .partnership-card {
-            padding: 1.5rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            transition: all 0.5s;
-            touch-action: manipulation;
-        }
-        .partnership-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-card);
-            border-color: rgba(13, 148, 136, 0.2);
-        }
-        .partnership-card-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            background: var(--gradient-1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin-bottom: 1rem;
-            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2);
-        }
-        .partnership-card-icon i {
-            width: 24px;
-            height: 24px;
-        }
-        .partnership-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.6rem;
-        }
-        .partnership-card p {
-            color: var(--text-muted);
-            line-height: 1.7;
-            font-size: clamp(0.85rem, 1.6vw, 0.95rem);
-        }
-
-        /* ========== CTA ========== */
-        .cta-section {
-            padding: 3rem 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .cta-container {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 2rem 1.2rem;
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            position: relative;
-            overflow: hidden;
-        }
-        .cta-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(13, 148, 136, 0.06) 0%, transparent 70%);
-            animation: rotateBg 25s linear infinite;
-        }
-        @keyframes rotateBg {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .cta-content {
-            position: relative;
-            z-index: 1;
-        }
-        .cta-container h2 {
-            font-size: clamp(1.5rem, 4vw, 2.4rem);
-            margin-bottom: 0.6rem;
-        }
-        .cta-container p {
-            color: var(--text-muted);
-            font-size: clamp(0.85rem, 1.8vw, 1rem);
-            margin-bottom: 1.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-        }
-        #paypal-button-container {
-            margin-top: 1.2rem;
-            display: flex;
-            justify-content: center;
-        }
-        #paypal-button-container .paypal-button {
-            min-width: 160px;
-        }
-
-        /* ========== FOOTER ========== */
-        .footer {
-            padding: 2.5rem 1rem 1.2rem;
-            border-top: 1px solid var(--glass-border);
-            position: relative;
-            z-index: 2;
-            background: rgba(5, 10, 20, 0.3);
-        }
-        .footer-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.8rem;
-            margin-bottom: 1.5rem;
-        }
-        .footer-brand .nav-logo {
-            margin-bottom: 0.6rem;
-        }
-        .footer-brand .nav-logo img {
-            height: 34px;
-        }
-        .footer-brand p {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            line-height: 1.7;
-            max-width: 320px;
-        }
-        .footer-col h4 {
-            font-size: 0.85rem;
-            margin-bottom: 0.8rem;
-            color: var(--text);
-        }
-        .footer-col ul {
-            list-style: none;
-        }
-        .footer-col li {
-            margin-bottom: 0.4rem;
-        }
-        .footer-col a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .footer-col a:hover {
-            color: var(--secondary-light);
-            transform: translateX(4px);
-        }
-        .footer-col a i {
-            width: 14px;
-            height: 14px;
-        }
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 1.2rem;
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .footer-bottom p {
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            text-align: center;
-        }
-        .footer-social {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .footer-social a {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            transition: all 0.3s;
-        }
-        .footer-social a:hover {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2);
-        }
-        .footer-social a i {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* ========== REVEAL ANIMATION ========== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ========== RESPONSIVE BREAKPOINTS ========== */
-        @media (min-width: 380px) {
-            .nav-logo img {
-                height: 36px;
-            }
-            .nav-logo-text {
-                font-size: 1.1rem;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            .hero-stat-number {
-                font-size: 2rem;
-            }
-            .btn-primary,
-            .btn-secondary,
-            .btn-gold {
-                padding: 0.8rem 1.6rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (min-width: 480px) {
-            .navbar {
-                padding: 0.8rem 1.5rem;
-            }
-            .navbar.scrolled {
-                padding: 0.5rem 1.5rem;
-            }
-            .nav-logo img {
-                height: 40px;
-            }
-            .nav-logo-text {
-                font-size: 1.2rem;
-            }
-            .nav-support-btn {
-                padding: 0.4rem 1rem;
-                font-size: 0.75rem;
-            }
-            .nav-support-btn i {
-                width: 16px;
-                height: 16px;
-            }
-            .nav-cta {
-                display: inline-flex;
-                padding: 0.4rem 1rem;
-                font-size: 0.75rem;
-            }
-            .nav-cta i {
-                width: 16px;
-                height: 16px;
-            }
-            .hero {
-                padding: 6rem 1.5rem 3rem;
-            }
-            .hero h1 {
-                font-size: 2.6rem;
-            }
-            .hero-stat-number {
-                font-size: 2.4rem;
-            }
-            .hero-stats {
-                gap: 2rem;
-            }
-            .hero-stat {
-                min-width: 70px;
-                max-width: 120px;
-            }
-            .about-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 2.5rem;
-            }
-            .areas-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-            .projects-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .project-card.featured {
-                grid-template-columns: 1fr 1fr;
-                gap: 1.8rem;
-                padding: 2rem;
-            }
-            .vm-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .approach-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .partnership-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .founder-container {
-                grid-template-columns: 240px 1fr;
-                gap: 2.5rem;
-            }
-            .founder-image-wrap {
-                max-width: 240px;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .about-features {
-                grid-template-columns: 1fr 1fr;
-            }
-            .cta-container {
-                padding: 3rem 2rem;
-            }
-            .cta-container h2 {
-                font-size: 2rem;
-            }
-            .footer-bottom {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-            .footer-bottom p {
-                font-size: 0.75rem;
-            }
-            .hero-buttons .btn-primary,
-            .hero-buttons .btn-secondary,
-            .hero-buttons .btn-gold {
-                flex: none;
-                min-width: 160px;
-                max-width: 200px;
-            }
-        }
-
-        @media (min-width: 640px) {
-            .nav-links {
-                display: flex;
-            }
-            .mobile-menu-btn {
-                display: none;
-            }
-            .nav-cta {
-                display: inline-flex;
-            }
-            .approach-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .vm-quote {
-                grid-column: 1 / -1;
-            }
-            .hero-stat-number {
-                font-size: 2.8rem;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .hero h1 {
-                font-size: 3.2rem;
-            }
-            .hero-stat-number {
-                font-size: 3rem;
-            }
-            .areas-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .projects-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .founder-container {
-                grid-template-columns: 280px 1fr;
-                gap: 3rem;
-            }
-            .founder-image-wrap {
-                max-width: 280px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .navbar {
-                padding: 1rem 3rem;
-            }
-            .navbar.scrolled {
-                padding: 0.6rem 3rem;
-            }
-            .areas-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1.5rem;
-            }
-            .footer-grid {
-                grid-template-columns: 2fr 1fr 1fr 1fr;
-            }
-            .hero h1 {
-                font-size: 4.5rem;
-            }
-            .hero-stat-number {
-                font-size: 3.2rem;
-            }
-            .about-grid {
-                gap: 4rem;
-            }
-            .founder-container {
-                gap: 4rem;
-            }
-            .founder-image-wrap {
-                max-width: 320px;
-            }
-            section {
-                padding: 5rem 2rem;
-            }
-        }
-
-        @media (min-width: 1280px) {
-            .hero h1 {
-                font-size: 5.2rem;
-            }
-            .hero-stat-number {
-                font-size: 3.6rem;
-            }
-        }
-
-        /* ========== TOUCH-FRIENDLY ========== */
-        button,
-        a,
-        .area-card,
-        .project-card,
-        .vm-card,
-        .approach-card,
-        .partnership-card {
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* ===== PAYPAL OVERLAY ===== */
-        #paypal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 99999;
-            align-items: center;
-            justify-content: center;
-            padding: 1.2rem;
-        }
-        #paypal-overlay.active {
-            display: flex;
-        }
-        #paypal-overlay-inner {
-            background: var(--bg);
-            border-radius: var(--radius);
-            padding: 1.8rem 1.2rem;
-            max-width: 400px;
-            width: 100%;
-            position: relative;
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow-card);
-        }
-        #paypal-overlay-close {
-            position: absolute;
-            top: 0.6rem;
-            right: 0.6rem;
-            background: var(--glass);
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-        }
-        #paypal-overlay-close:hover {
-            background: var(--secondary);
-            color: white;
-        }
-        #paypal-overlay-inner h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.4rem;
-            text-align: center;
-        }
-        #paypal-overlay-inner p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: center;
-            margin-bottom: 1.2rem;
-        }
-        #paypal-overlay-button {
-            min-height: 44px;
-        }
-
-        /* ===== LOADING SPINNER ===== */
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* ===== SMALL PHONE TWEAKS ===== */
-        @media (max-width: 359px) {
-            .nav-logo-text {
-                font-size: 0.85rem;
-            }
-            .nav-logo img {
-                height: 28px;
-            }
-            .nav-support-btn {
-                font-size: 0.6rem;
-                padding: 0.2rem 0.6rem;
-                min-height: 28px;
-            }
-            .hero h1 {
-                font-size: 1.7rem;
-            }
-            .hero-stat-number {
-                font-size: 1.5rem;
-            }
-            .hero-stat-label {
-                font-size: 0.5rem;
-            }
-            .hero-stats {
-                gap: 0.8rem;
-            }
-            .btn-primary,
-            .btn-secondary,
-            .btn-gold {
-                font-size: 0.7rem;
-                padding: 0.5rem 1rem;
-                min-height: 38px;
-            }
-            .about-features {
-                grid-template-columns: 1fr;
-            }
-            .areas-grid {
-                grid-template-columns: 1fr;
-            }
-            .section-title {
-                font-size: 1.3rem;
-            }
-            .vm-card {
-                padding: 1.2rem;
-            }
-            .project-card {
-                padding: 1.2rem;
-            }
-            .project-card.featured {
-                padding: 1.2rem;
-            }
-            .founder-container {
-                gap: 1.5rem;
-            }
-            .founder-image-wrap {
-                max-width: 160px;
-            }
-        }
-    </style>
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.15s !important;scroll-behavior:auto !important}
+  .panel{transform:none !important}
+}
+</style>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
 </head>
-
 <body>
 
-    <!-- ===== SCROLL PROGRESS ===== -->
-    <div class="scroll-progress" id="scrollProgress"></div>
+<!-- LOADING -->
+<div id="loading">
+  <img class="logo" src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub">
+  <div class="bar"><span id="load-bar"></span></div>
+  <div class="status" id="load-status">Initializing experience…</div>
+</div>
 
-    <!-- ===== CUSTOM CURSOR ===== -->
-    <div class="cursor" id="cursor"></div>
-    <div class="cursor-dot" id="cursorDot"></div>
+<!-- FIXED 3D CANVAS -->
+<div id="canvas-host"></div>
+<div id="canvas-vignette"></div>
 
-    <!-- ===== 3D CANVAS ===== -->
-    <div id="canvas-container"></div>
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress" aria-hidden="true">
+  <div class="item" data-i="0"><span class="num">01</span><span>Welcome</span><span class="dot"></span></div>
+  <div class="item" data-i="1"><span class="num">02</span><span>About</span><span class="dot"></span></div>
+  <div class="item" data-i="2"><span class="num">03</span><span>Ecosystem</span><span class="dot"></span></div>
+  <div class="item" data-i="3"><span class="num">04</span><span>Products</span><span class="dot"></span></div>
+  <div class="item" data-i="4"><span class="num">05</span><span>Vision</span><span class="dot"></span></div>
+  <div class="item" data-i="5"><span class="num">06</span><span>Founder</span><span class="dot"></span></div>
+  <div class="item" data-i="6"><span class="num">07</span><span>Contact</span><span class="dot"></span></div>
+</div>
 
-    <!-- ===== FLOATING PARTICLES ===== -->
-    <div class="particles-float" id="particlesFloat"></div>
+<!-- NAV -->
+<nav id="nav">
+  <a class="brand" href="#hero" aria-label="iMENA Hub">
+    <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub">
+  </a>
+  <div class="links">
+    <a href="#about">About</a>
+    <a href="#ecosystem">Ecosystem</a>
+    <a href="#products">Products</a>
+    <a href="#vision">Vision</a>
+    <a href="#founder">Founder</a>
+    <a href="#contact" class="cta">Get in touch</a>
+  </div>
+</nav>
 
-    <!-- ===== NAVBAR ===== -->
-    <nav class="navbar" id="navbar">
-        <a href="#home" class="nav-logo">
-            <!-- ✅ iMENA Hub logo (replaced BLAD) -->
-            <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub Logo" />
-            <span class="nav-logo-text">iMENA <span>Hub</span></span>
-        </a>
-        <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#vision">Vision</a></li>
-            <li><a href="#areas">Core Areas</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#founder">Founder</a></li>
-            <li><a href="#approach">Approach</a></li>
-            <li><a href="#partnership">Partnership</a></li>
-        </ul>
-        <div class="nav-actions">
-            <button class="nav-support-btn" id="navSupportBtn">
-                <i data-lucide="heart"></i>
-                Support
-            </button>
-            <a href="#contact" class="nav-cta">
-                <i data-lucide="send"></i>
-                Contact
-            </a>
-            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
-                <i data-lucide="menu"></i>
-            </button>
-        </div>
-    </nav>
+<!-- CONTENT RAIL — scrolls alongside the fixed KCC backdrop -->
+<aside id="content-rail">
 
-    <!-- ===== MOBILE MENU ===== -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
-            <i data-lucide="x"></i>
-        </button>
-        <ul>
-            <li><a href="#about" class="mobile-link">About</a></li>
-            <li><a href="#vision" class="mobile-link">Vision &amp; Mission</a></li>
-            <li><a href="#areas" class="mobile-link">Core Areas</a></li>
-            <li><a href="#projects" class="mobile-link">Projects</a></li>
-            <li><a href="#founder" class="mobile-link">Founder</a></li>
-            <li><a href="#approach" class="mobile-link">Our Approach</a></li>
-            <li><a href="#partnership" class="mobile-link">Partnership</a></li>
-            <li><a href="#contact" class="mobile-link">Contact</a></li>
-        </ul>
-        <div class="mobile-divider"></div>
-        <button class="mobile-support-btn" id="mobileSupportBtn">
-            <i data-lucide="heart"></i> Support iMENA Hub
-        </button>
+  <!-- 01 · HERO -->
+  <section class="panel" id="hero" data-i="0">
+    <div class="glass hero-card">
+      <img class="logo-lg" src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub">
+      <div class="kicker">Technology · Education · Innovation</div>
+      <h1>Building the Digital Ecosystem for Learning, Work &amp; Innovation.</h1>
+      <p>iMENA Hub is a growing technology ecosystem building digital products and solutions across education, AI, software, digital skills, and innovation.</p>
+      <div class="actions">
+        <a href="#ecosystem" class="btn btn-primary">Explore the Ecosystem</a>
+        <a href="#products" class="btn btn-ghost">Discover Our Products</a>
+      </div>
     </div>
+  </section>
 
-    <!-- ===== PAYPAL OVERLAY ===== -->
-    <div id="paypal-overlay">
-        <div id="paypal-overlay-inner">
-            <button id="paypal-overlay-close" aria-label="Close payment">&times;</button>
-            <h3>💙 Support iMENA Hub</h3>
-            <p>Your contribution helps us empower education across Rwanda.</p>
-            <div id="paypal-overlay-button"></div>
-        </div>
+  <!-- 02 · ABOUT -->
+  <section class="panel" id="about" data-i="1">
+    <div class="glass">
+      <span class="eyebrow">About iMENA Hub</span>
+      <h2>A technology ecosystem, not a training site.</h2>
+      <p>We build interconnected digital products, educational solutions, and innovation initiatives that use ICT, AI, EdTech, and modern web development to solve real problems — and create opportunities for people to learn, work, and innovate.</p>
+      <p>iMENA Hub is a growing ecosystem rooted in Rwanda. We design, build, and operate digital products that span education, career development, artificial intelligence, and everyday productivity.</p>
     </div>
+  </section>
 
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="home">
-        <div class="glow-orb glow-orb-1"></div>
-        <div class="glow-orb glow-orb-2"></div>
-        <div class="glow-orb glow-orb-3"></div>
-        <div class="hero-content">
-            <div class="hero-badge">
-                <i data-lucide="globe"></i>
-                Rwandan EdTech Initiative
-            </div>
-            <h1>
-                Empowering<br />
-                <span class="gradient-text">Future-Ready Education</span><br />
-                Through Innovation
-            </h1>
-            <p>
-                iMENA Hub is a Rwandan educational technology initiative dedicated to empowering
-                teachers, learners, and schools through practical digital skills, educational
-                innovation, and modern teaching methods.
-            </p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn-primary">
-                    <i data-lucide="rocket"></i>
-                    Explore Work
-                </a>
-                <a href="#partnership" class="btn-secondary">
-                    <i data-lucide="handshake"></i>
-                    Partner
-                </a>
-                <a href="#contact" class="btn-gold">
-                    <i data-lucide="mail"></i>
-                    Contact
-                </a>
-            </div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <div class="hero-stat-number" data-count="4">0</div>
-                    <div class="hero-stat-label">Active Projects</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-number" data-count="9">0</div>
-                    <div class="hero-stat-label">Core Programs</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-number" data-count="2025">0</div>
-                    <div class="hero-stat-label">Founded</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-number" data-count="7">0</div>
-                    <div class="hero-stat-label">Partners</div>
-                </div>
-            </div>
+  <!-- 03 · ECOSYSTEM -->
+  <section class="panel" id="ecosystem" data-i="2">
+    <div class="glass">
+      <span class="eyebrow">Our Ecosystem</span>
+      <h2>Interconnected by design.</h2>
+      <p>The iMENA Hub ecosystem spans five focus areas. Every product we build lives somewhere in this map.</p>
+      <div class="eco-nodes">
+        <div class="eco-node"><span class="ico"></span>Education</div>
+        <div class="eco-node"><span class="ico"></span>Artificial Intelligence</div>
+        <div class="eco-node"><span class="ico"></span>Software</div>
+        <div class="eco-node"><span class="ico"></span>Digital Skills</div>
+        <div class="eco-node"><span class="ico"></span>Innovation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · PRODUCTS -->
+  <section class="panel" id="products" data-i="3">
+    <div class="glass">
+      <span class="eyebrow">What We Build</span>
+      <h2>Digital products that solve real problems.</h2>
+      <p>Each product is live. Explore them and see the ecosystem in action.</p>
+      <div class="product-mini-grid">
+        <div class="product-mini"><div class="name">iMENA Learn</div><div class="desc">Learning platform</div></div>
+        <div class="product-mini"><div class="name">iMENA Lab</div><div class="desc">Innovation studio</div></div>
+        <div class="product-mini"><div class="name">iMENA CV Builder</div><div class="desc">Career toolkit</div></div>
+        <div class="product-mini"><div class="name">iMENA Test</div><div class="desc">Assessment</div></div>
+        <div class="product-mini"><div class="name">ChrisostomAi</div><div class="desc">AI assistant</div></div>
+        <div class="product-mini"><div class="name">Paperless</div><div class="desc">Digital workflow</div></div>
+        <div class="product-mini"><div class="name">AfriQuiz</div><div class="desc">Interactive learning</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · VISION -->
+  <section class="panel" id="vision" data-i="4">
+    <div class="glass vision-block">
+      <h2>From Rwanda, building technology for learning, work, creation, and innovation.</h2>
+      <p>We believe technology should not be an end in itself. It should open doors — for learners, for workers, for creators. That belief shapes every product we build.</p>
+    </div>
+  </section>
+
+  <!-- 06 · FOUNDER -->
+  <section class="panel" id="founder" data-i="5">
+    <div class="glass">
+      <span class="eyebrow">Founder</span>
+      <h2>The person behind the ecosystem.</h2>
+      <div class="founder">
+        <div class="founder-photo">
+          <img src="https://i.postimg.cc/X7mnG85n/Cut-out-image.png" alt="TUYISENGE Jean Chrisostom — Founder of iMENA Hub">
         </div>
-    </section>
-
-    <!-- ===== ABOUT ===== -->
-    <section class="about" id="about">
-        <div class="about-grid">
-            <div class="about-visual reveal">
-                <div class="about-visual-main">
-                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="iMENA Hub Education" />
-                </div>
-            </div>
-            <div class="about-content reveal">
-                <div class="section-tag">About Us</div>
-                <h3>Bridging the Gap Between Classroom Learning and Real-World Digital Skills</h3>
-                <p>
-                    <strong>iMENA Hub</strong> is a Rwandan educational technology initiative dedicated
-                    to empowering teachers, learners, and schools through practical digital skills,
-                    educational innovation, and modern teaching methods.
-                </p>
-                <p>
-                    Inspired by the meaning of <strong>"Imena"</strong> — a symbol of excellence,
-                    courage, and service — our mission is to help build a generation of competent,
-                    creative, and ethical leaders prepared for the future.
-                </p>
-                <p>
-                    We focus on delivering educational technology solutions, coding, AI, and
-                    digital literacy to schools and learners across Rwanda and Africa, supporting
-                    <strong>Rwanda's Vision 2050</strong> and the country's digital transformation.
-                </p>
-                <div class="about-features">
-                    <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <i data-lucide="users"></i>
-                        </div>
-                        <div>
-                            <h4>Teacher Development</h4>
-                            <p>Modern pedagogical skills &amp; digital tools</p>
-                        </div>
-                    </div>
-                    <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <i data-lucide="laptop"></i>
-                        </div>
-                        <div>
-                            <h4>Digital Skills Training</h4>
-                            <p>Practical real-world digital competencies</p>
-                        </div>
-                    </div>
-                    <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <i data-lucide="brain"></i>
-                        </div>
-                        <div>
-                            <h4>AI &amp; Coding</h4>
-                            <p>Future-ready problem-solving skills</p>
-                        </div>
-                    </div>
-                    <div class="about-feature">
-                        <div class="about-feature-icon">
-                            <i data-lucide="shield-check"></i>
-                        </div>
-                        <div>
-                            <h4>Cybersecurity</h4>
-                            <p>Digital safety &amp; ethical practices</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="founder-info">
+          <h3>TUYISENGE Jean Chrisostom</h3>
+          <div class="role">Founder &amp; Owner · iMENA Hub</div>
+          <p>Jean Chrisostom founded iMENA Hub with a clear conviction: technology, when built thoughtfully, can create real opportunities for people — to learn, to work, to create, and to innovate.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- ===== VISION & MISSION ===== -->
-    <section class="vision-mission" id="vision">
-        <div class="section-header reveal">
-            <div class="section-tag">Our Purpose</div>
-            <h2 class="section-title">Vision &amp; Mission for Africa</h2>
-            <p class="section-desc">Leading the transformation of education across Rwanda and the African continent</p>
-        </div>
-        <div class="vm-grid">
-            <div class="vm-card reveal">
-                <div class="vm-card-icon">
-                    <i data-lucide="eye"></i>
-                </div>
-                <h3>Our Vision</h3>
-                <p>
-                    To become one of Africa's leading educational technology organizations, transforming
-                    how students and teachers engage with learning across the continent. We envision an
-                    Africa where every teacher and learner has access to practical digital skills and
-                    modern educational tools that unlock their full potential.
-                </p>
-            </div>
-            <div class="vm-card reveal">
-                <div class="vm-card-icon">
-                    <i data-lucide="target"></i>
-                </div>
-                <h3>Our Mission</h3>
-                <p>
-                    To bridge the gap between classroom learning and real-world skills by providing
-                    practical digital education, teacher development, and educational technology solutions.
-                    We deliver hands-on training and innovative EdTech tools to schools and learners
-                    across Rwanda and beyond, empowering them for a digital future.
-                </p>
-            </div>
-            <div class="vm-quote reveal">
-                <p>
-                    Committed to transforming education through technology, innovation, and practical
-                    digital skills while empowering teachers and learners across Rwanda and Africa.
-                </p>
-                <div class="vm-quote-author">— TUYISENGE Jean Chrisostom, Founder</div>
-            </div>
-        </div>
-    </section>
+  <!-- 07 · CONTACT -->
+  <section class="panel" id="contact" data-i="6">
+    <div class="glass contact-block">
+      <span class="eyebrow">Contact</span>
+      <h2>Let's build something together.</h2>
+      <p>Whether you want to collaborate, partner, or learn more about the ecosystem — reach out. We're always open to conversations with people who believe technology should create opportunities.</p>
+      <div class="contact-links">
+        <a href="https://imena-hub.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> Main hub — imena-hub.vercel.app</a>
+        <a href="https://imenalearn.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> iMENA Learn</a>
+        <a href="https://imena-lab.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> iMENA Lab</a>
+        <a href="https://imena-cv-builder.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> iMENA CV Builder</a>
+      </div>
+    </div>
+  </section>
 
-    <!-- ===== CORE AREAS ===== -->
-    <section class="core-areas" id="areas">
-        <div class="section-header reveal">
-            <div class="section-tag">What We Do</div>
-            <h2 class="section-title">Our Core Areas</h2>
-            <p class="section-desc">Cutting-edge digital competencies across key technology and education domains</p>
-        </div>
-        <div class="areas-grid">
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="graduation-cap"></i>
-                </div>
-                <h3>Teacher Development</h3>
-                <p>Equipping educators with modern pedagogical skills, digital tools, and innovative teaching methods.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="monitor"></i>
-                </div>
-                <h3>Digital Skills Training</h3>
-                <p>Providing learners with practical, real-world digital competencies including web development, graphic design, and digital literacy.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="cpu"></i>
-                </div>
-                <h3>AI &amp; Coding</h3>
-                <p>Introducing artificial intelligence concepts and programming fundamentals to build future-ready problem-solving skills.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="shield"></i>
-                </div>
-                <h3>Cybersecurity</h3>
-                <p>Training learners to protect digital systems, understand network security, and apply ethical hacking principles.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="code-2"></i>
-                </div>
-                <h3>Web Development</h3>
-                <p>Teaching modern web technologies including HTML, CSS, JavaScript, and frameworks to build responsive, functional websites.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="palette"></i>
-                </div>
-                <h3>Graphic Design</h3>
-                <p>Developing visual communication skills using professional design tools for branding, layout, digital media, and creative content.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="book-open"></i>
-                </div>
-                <h3>Educational Technology</h3>
-                <p>Integrating digital tools, platforms, and smart solutions into classrooms to enhance teaching effectiveness and learning outcomes.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="video"></i>
-                </div>
-                <h3>iMENA Learn</h3>
-                <p>Training student teachers and youth in ICT through practical, hands-on digital skills learning — online and in-person programs.</p>
-            </div>
-            <div class="area-card reveal">
-                <div class="area-card-icon">
-                    <i data-lucide="sparkles"></i>
-                </div>
-                <h3>AI-Powered Tools</h3>
-                <p>Intelligent educational tools powered by AI to personalize learning, support teachers, and enhance student outcomes at scale.</p>
-            </div>
-        </div>
-    </section>
+  <!-- DEVELOPER FOOTER — subtle, non-distracting -->
+  <footer class="dev-footer">
+    Developed by <a href="https://imena-hub.vercel.app" target="_blank" rel="noopener">iMENA Hub</a>
+  </footer>
 
-    <!-- ===== PROJECTS ===== -->
-    <section class="projects" id="projects">
-        <div class="section-header reveal">
-            <div class="section-tag">Current Initiatives</div>
-            <h2 class="section-title">Our Projects</h2>
-            <p class="section-desc">Innovative tools and programs transforming education across Rwanda</p>
-        </div>
-        <div class="projects-grid">
-            <!-- Paperless -->
-            <div class="project-card featured reveal">
-                <div>
-                    <span class="project-badge green">Flagship Platform</span>
-                    <h3>Paperless — Smart Digital Assessment</h3>
-                    <p>
-                        A digital school management solution replacing paper-based processes with streamlined,
-                        efficient, and eco-friendly digital workflows. Paperless transforms school assessments
-                        by enabling teachers to create digital tests, share them via simple links, and generate
-                        downloadable reports instantly — all from a mobile-friendly interface.
-                    </p>
-                    <div class="project-features">
-                        <span class="project-feature-tag">Digital Tests</span>
-                        <span class="project-feature-tag">Auto-Marking</span>
-                        <span class="project-feature-tag">Secure Links</span>
-                        <span class="project-feature-tag">Mobile-Friendly</span>
-                        <span class="project-feature-tag">Instant Reports</span>
-                        <span class="project-feature-tag">REB Integration</span>
-                    </div>
-                    <a href="https://stomdevsage.github.io/AfriQuiz/" target="_blank" class="project-link">
-                        Try Paperless <i data-lucide="arrow-right"></i>
-                    </a>
-                </div>
-                <div class="project-visual">
-                    <div class="project-visual-inner">
-                        <i data-lucide="file-text"></i>
-                        <h4>Paperless</h4>
-                        <p>Smart Digital Assessment Platform</p>
-                    </div>
-                </div>
-            </div>
+</aside>
 
-            <!-- AfriQuiz -->
-            <div class="project-card reveal">
-                <span class="project-badge">Interactive Learning</span>
-                <h3>AfriQuiz</h3>
-                <p>
-                    An interactive quiz platform designed to make assessment engaging, competitive,
-                    and accessible for African students and classrooms with gamified experiences.
-                </p>
-                <div class="project-features">
-                    <span class="project-feature-tag">Gamified</span>
-                    <span class="project-feature-tag">African Content</span>
-                    <span class="project-feature-tag">Classroom Ready</span>
-                </div>
-                <a href="#" class="project-link">
-                    Explore AfriQuiz <i data-lucide="arrow-right"></i>
-                </a>
-            </div>
+<!-- ═══════════════════════════════════════════════════════════════
+     3D SCENE
+     ═══════════════════════════════════════════════════════════════ -->
+<script type="module">
+import * as THREE from 'three';
+import {Sky} from 'three/addons/objects/Sky.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
-            <!-- iMENA Learn -->
-            <div class="project-card reveal">
-                <span class="project-badge green">Learning Platform</span>
-                <h3>iMENA Learn</h3>
-                <p>
-                    A digital learning platform delivering practical skills, structured courses,
-                    and educational content tailored for Rwandan learners and educators — training
-                    student teachers and youth in ICT through hands-on learning.
-                </p>
-                <div class="project-features">
-                    <span class="project-feature-tag">Online Courses</span>
-                    <span class="project-feature-tag">ICT Training</span>
-                    <span class="project-feature-tag">Youth Focused</span>
-                    <span class="project-feature-tag">4-Week Camps</span>
-                </div>
-                <a href="#" class="project-link">
-                    Start Learning <i data-lucide="arrow-right"></i>
-                </a>
-            </div>
+/* ─────────────── CONFIG ─────────────── */
+const $ = id => document.getElementById(id);
+const PI = Math.PI;
+const rnd = (a,b) => a + Math.random()*(b-a);
+const V = (x,y,z) => new THREE.Vector3(x,y,z);
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const lerp = (a,b,t) => a + (b-a)*t;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile = matchMedia('(max-width: 1000px)').matches;
+const lowPower = isMobile || (navigator.hardwareConcurrency||4) < 4;
 
-            <!-- AI Tools -->
-            <div class="project-card reveal">
-                <span class="project-badge">Coming Soon</span>
-                <h3>AI-Powered Educational Tools</h3>
-                <p>
-                    Intelligent educational tools powered by artificial intelligence to personalize
-                    learning, support teachers, and enhance student outcomes at scale across Rwanda.
-                </p>
-                <div class="project-features">
-                    <span class="project-feature-tag">AI Tutoring</span>
-                    <span class="project-feature-tag">Personalized Learning</span>
-                    <span class="project-feature-tag">Teacher Support</span>
-                </div>
-                <a href="#" class="project-link">
-                    Discover AI Tools <i data-lucide="arrow-right"></i>
-                </a>
-            </div>
-        </div>
-    </section>
+const progress = async (p,s) => {
+  $('load-bar').style.width = p + '%';
+  $('load-status').textContent = s;
+  await new Promise(r => setTimeout(r, 28));
+};
 
-    <!-- ===== FOUNDER ===== -->
-    <section class="founder" id="founder">
-        <div class="section-header reveal">
-            <div class="section-tag">Leadership</div>
-            <h2 class="section-title">Meet Our Founder</h2>
-        </div>
-        <div class="founder-container">
-            <div class="founder-image-wrap reveal">
-                <div class="founder-image-ring"></div>
-                <div class="founder-image">
-                    <img src="https://i.postimg.cc/X7mnG85n/Cut-out-image.png" alt="TUYISENGE Jean Chrisostom — Founder of iMENA Hub" />
-                </div>
-            </div>
-            <div class="founder-content reveal">
-                <h3>TUYISENGE Jean Chrisostom</h3>
-                <div class="founder-role">
-                    <i data-lucide="award"></i>
-                    Founder &amp; Educational Technology Lead
-                </div>
-                <p>
-                    A dedicated Student Teacher specializing in Language Education with a passion for
-                    transforming learning through technology and innovation. Strong interests in
-                    Educational Technology, Artificial Intelligence, Web Development, Digital Skills
-                    Training, and Teacher Development.
-                </p>
-                <p>
-                    Founder of iMENA Hub, an educational technology initiative committed to equipping
-                    teachers and learners with practical digital skills to thrive in a rapidly evolving world.
-                </p>
-                <div class="founder-skills">
-                    <span class="founder-skill">Educational Technology</span>
-                    <span class="founder-skill">AI for Education</span>
-                    <span class="founder-skill">Web Development</span>
-                    <span class="founder-skill">Teacher Development</span>
-                    <span class="founder-skill">Digital Skills Training</span>
-                    <span class="founder-skill">ICT Integration</span>
-                    <span class="founder-skill">Google Workspace</span>
-                    <span class="founder-skill">Canva &amp; Graphic Design</span>
-                    <span class="founder-skill">Digital Assessment Systems</span>
-                    <span class="founder-skill">Cybersecurity</span>
-                </div>
-                <div class="founder-contact">
-                    <a href="mailto:tuyisengejeanchrisostome@gmail.com">
-                        <i data-lucide="mail"></i>
-                        Email
-                    </a>
-                    <a href="tel:+250796717230">
-                        <i data-lucide="phone"></i>
-                        +250 796 717 230
-                    </a>
-                    <a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank">
-                        <i data-lucide="globe"></i>
-                        Portfolio
-                    </a>
-                    <a href="#contact">
-                        <i data-lucide="message-circle"></i>
-                        Message
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+await progress(5,'Initialising renderer');
 
-    <!-- ===== APPROACH ===== -->
-    <section class="approach" id="approach">
-        <div class="section-header reveal">
-            <div class="section-tag">Our Methodology</div>
-            <h2 class="section-title">Our Approach</h2>
-            <p class="section-desc">Combining pedagogy, technology, creativity, and practical learning to prepare learners for the future</p>
-        </div>
-        <div class="approach-grid">
-            <div class="approach-card reveal">
-                <div class="approach-number">01</div>
-                <h3>Hands-On Learning</h3>
-                <p>We prioritize project-based, experiential learning that connects classroom concepts to real-world digital skills and applications.</p>
-            </div>
-            <div class="approach-card reveal">
-                <div class="approach-number">02</div>
-                <h3>Innovative Tools</h3>
-                <p>Leveraging cutting-edge educational technology, AI tools, and modern platforms to create engaging and effective learning environments.</p>
-            </div>
-            <div class="approach-card reveal">
-                <div class="approach-number">03</div>
-                <h3>Teacher Empowerment</h3>
-                <p>Equipping educators with professional development, digital competencies, and innovative teaching methods to lead future-ready classrooms.</p>
-            </div>
-        </div>
-    </section>
+/* ─────────────── RENDERER ─────────────── */
+const renderer = new THREE.WebGLRenderer({
+  antialias: !lowPower,
+  alpha: true,
+  powerPreference: 'high-performance'
+});
+renderer.setPixelRatio(Math.min(devicePixelRatio, lowPower ? 1.5 : 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = !lowPower;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setClearColor(0x000000, 0);
+$('canvas-host').appendChild(renderer.domElement);
 
-    <!-- ===== PARTNERSHIP ===== -->
-    <section class="partnership" id="partnership">
-        <div class="section-header reveal">
-            <div class="section-tag">Collaboration</div>
-            <h2 class="section-title">Partnership Vision</h2>
-            <p class="section-desc">We collaborate with schools, educational organizations, NGOs, and institutions to deliver high-quality practical skills training through qualified trainers</p>
-        </div>
-        <div class="partnership-grid">
-            <div class="partnership-card reveal">
-                <div class="partnership-card-icon">
-                    <i data-lucide="building-2"></i>
-                </div>
-                <h3>Institutional Collaboration</h3>
-                <p>Building lasting relationships with schools and educational institutions to expand access to quality digital skills training across Rwanda and Africa.</p>
-            </div>
-            <div class="partnership-card reveal">
-                <div class="partnership-card-icon">
-                    <i data-lucide="heart-handshake"></i>
-                </div>
-                <h3>NGO &amp; Tech Partners</h3>
-                <p>Partnering with NGOs, development organizations, and technology companies to co-create impactful, future-ready educational solutions.</p>
-            </div>
-        </div>
-    </section>
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0xbcd5e8, 0.0008);
 
-    <!-- ===== CTA / CONTACT ===== -->
-    <section class="cta-section" id="contact">
-        <div class="cta-container reveal">
-            <div class="cta-content">
-                <div class="section-tag" style="margin-bottom:0.8rem;">Get Involved</div>
-                <h2>Together, We Build the Future</h2>
-                <p>
-                    Join iMENA Hub in shaping the future of education across Rwanda and Africa.
-                    Partner with us, support our mission, and help us empower the next generation
-                    — one learner, one teacher, one school at a time.
-                </p>
-                <div class="hero-buttons" style="justify-content:center;">
-                    <a href="mailto:tuyisengejeanchrisostome@gmail.com" class="btn-primary">
-                        <i data-lucide="mail"></i>
-                        Email Us
-                    </a>
-                    <a href="tel:+250796717230" class="btn-secondary">
-                        <i data-lucide="phone"></i>
-                        Call Now
-                    </a>
-                    <a href="https://stomdevsage.github.io/IMENA.Form/" target="_blank" class="btn-gold">
-                        <i data-lucide="file-text"></i>
-                        Try Paperless
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.5, 6000);
+camera.position.set(0, 30, 220);
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="footer">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <a href="#home" class="nav-logo">
-                    <!-- ✅ iMENA Hub logo (replaced BLAD) -->
-                    <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub Logo" style="height:36px;" />
-                    <span class="nav-logo-text">iMENA <span>Hub</span></span>
-                </a>
-                <p>
-                    Empowering Future-Ready Education Through Innovation and Technology.
-                    A Rwandan EdTech initiative transforming how students and teachers engage with learning.
-                </p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#vision">Vision &amp; Mission</a></li>
-                    <li><a href="#areas">Core Areas</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Projects</h4>
-                <ul>
-                    <li><a href="#projects">Paperless</a></li>
-                    <li><a href="#projects">AfriQuiz</a></li>
-                    <li><a href="#projects">iMENA Learn</a></li>
-                    <li><a href="#projects">AI Tools</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <ul>
-                    <li><a href="mailto:tuyisengejeanchrisostome@gmail.com">
-                            <i data-lucide="mail"></i> imenahub.rw@gmail.com
-                        </a></li>
-                    <li><a href="tel:+250796717230">
-                            <i data-lucide="phone"></i> +250 796 717 230
-                        </a></li>
-                    <li><a href="https://stomcodev.github.io/TUYISENGE-Jean-Chrisostom/" target="_blank">
-                            <i data-lucide="globe"></i> Portfolio
-                        </a></li>
-                    <li><a href="#">
-                            <i data-lucide="map-pin"></i> W3GP+JQ Kayumba
-                        </a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 iMENA Hub. All rights reserved. Empowering Future-Ready Education.</p>
-            <div class="footer-social">
-                <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
-                <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
-                <a href="#" aria-label="GitHub"><i data-lucide="github"></i></a>
-                <a href="#" aria-label="YouTube"><i data-lucide="youtube"></i></a>
-            </div>
-        </div>
-    </footer>
+/* ─────────────── HELPERS ─────────────── */
+const mats = [];
+const M = (o, T = THREE.MeshStandardMaterial) => {
+  const m = new T(o);
+  m.userData.e = o.envMapIntensity ?? 1;
+  mats.push(m);
+  return m;
+};
+const add = (g,m,x=0,y=0,z=0) => {
+  const o = new THREE.Mesh(g,m);
+  o.position.set(x,y,z);
+  o.castShadow = !lowPower;
+  o.receiveShadow = !lowPower;
+  scene.add(o);
+  return o;
+};
+const D = new THREE.Object3D(), C = new THREE.Color();
+const mk = (g,m,n) => {
+  const o = new THREE.InstancedMesh(g,m,n);
+  o.castShadow = !lowPower;
+  o.receiveShadow = !lowPower;
+  scene.add(o);
+  return o;
+};
+const sp = (o,i,x,y,z,sx,sy,sz,c,ry=rnd(0,6)) => {
+  D.position.set(x,y,z);
+  D.scale.set(sx,sy,sz);
+  D.rotation.set(0,ry,0);
+  D.updateMatrix();
+  o.setMatrixAt(i, D.matrix);
+  if (c != null) o.setColorAt(i, C.setHex(c).offsetHSL(rnd(-.015,.015), rnd(-.05,.05), rnd(-.04,.04)));
+};
+const mkTex = (w,h,fn,rep) => {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  fn(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  if (rep) t.repeat.set(...rep);
+  return t;
+};
+const Y0 = 3;
+const DY = Y0 + 6.5;
+const gh = r => r < 95 ? Y0 : r < 145 ? Y0*(145-r)/50 : 0;
 
-    <!-- ============================================================== -->
-    <!-- ===== SCRIPTS ===== -->
-    <!-- ============================================================== -->
-    <script>
-        // ===== INIT LUCIDE =====
-        lucide.createIcons();
+/* ─────────────── SKY & CLOUDS ─────────────── */
+const sky = new Sky();
+sky.scale.setScalar(4500);
+scene.add(sky);
+const su = sky.material.uniforms;
+su.mieDirectionalG.value = 0.8;
 
-        // =============================================
-        // ===== THREE.JS 3D BACKGROUND =====
-        // =============================================
-        (function() {
-            const container = document.getElementById('canvas-container');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            container.appendChild(renderer.domElement);
+const cloudT = mkTex(512,512,g => {
+  for (let i = 0; i < 260; i++) {
+    const x = rnd(0,512), y = rnd(0,512), r = rnd(25,90);
+    const gr = g.createRadialGradient(x,y,0,x,y,r);
+    gr.addColorStop(0,'rgba(255,255,255,.22)');
+    gr.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle = gr;
+    g.fillRect(x-r,y-r,2*r,2*r);
+  }
+}, [3,3]);
+const cloudM = new THREE.MeshBasicMaterial({
+  map: cloudT, transparent: true, depthWrite: false, fog: false, opacity: 0.55
+});
+const clouds = new THREE.Mesh(new THREE.PlaneGeometry(8000,8000), cloudM);
+clouds.rotation.x = PI/2;
+clouds.position.y = 1400;
+scene.add(clouds);
 
-            const count = 600;
-            const positions = new Float32Array(count * 3);
-            const colors = new Float32Array(count * 3);
-            for (let i = 0; i < count * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 20;
-                positions[i + 1] = (Math.random() - 0.5) * 20;
-                positions[i + 2] = (Math.random() - 0.5) * 20;
-                colors[i] = 0.05 + Math.random() * 0.1;
-                colors[i + 1] = 0.4 + Math.random() * 0.3;
-                colors[i + 2] = 0.5 + Math.random() * 0.2;
-            }
-            const geo = new THREE.BufferGeometry();
-            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            const mat = new THREE.PointsMaterial({
-                size: 0.025,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.7,
-                blending: THREE.AdditiveBlending
-            });
-            const particles = new THREE.Points(geo, mat);
-            scene.add(particles);
+/* ─────────────── LIGHTS ─────────────── */
+const sun = new THREE.DirectionalLight(0xfff5e6, 3.2);
+sun.castShadow = !lowPower;
+if (!lowPower) {
+  sun.shadow.mapSize.set(2048,2048);
+  Object.assign(sun.shadow.camera, {left:-120,right:120,top:120,bottom:-120,near:1,far:700});
+  sun.shadow.bias = -0.0004;
+}
+scene.add(sun);
+const hemi = new THREE.HemisphereLight(0x87ceeb, 0x3a6b35, 0.55);
+const amb = new THREE.AmbientLight(0xa0b8d0, 0.35);
+scene.add(hemi, amb);
 
-            const icoGeo1 = new THREE.IcosahedronGeometry(1.6, 0);
-            const icoMat1 = new THREE.MeshBasicMaterial({
-                color: 0x0d9488,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.08
-            });
-            const ico1 = new THREE.Mesh(icoGeo1, icoMat1);
-            ico1.position.set(-3, 1.5, -6);
-            scene.add(ico1);
+/* ─────────────── TERRAIN ─────────────── */
+await progress(14,'Building terrain');
 
-            const icoGeo2 = new THREE.IcosahedronGeometry(1.0, 0);
-            const icoMat2 = new THREE.MeshBasicMaterial({
-                color: 0x6366f1,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.06
-            });
-            const ico2 = new THREE.Mesh(icoGeo2, icoMat2);
-            ico2.position.set(4, -1, -7);
-            scene.add(ico2);
+const gt = mkTex(256,256,g => {
+  for (let i = 0; i < 4; i++) {
+    g.fillStyle = i%2 ? '#4d8a3c' : '#5a9847';
+    g.fillRect(0, i*64, 256, 64);
+  }
+  for (let i = 0; i < 2500; i++) {
+    g.fillStyle = `rgba(${rnd(20,60)|0},${rnd(70,120)|0},30,.18)`;
+    g.fillRect(rnd(0,256), rnd(0,256), 2, 2);
+  }
+}, [40,40]);
+const gt2 = gt.clone();
+gt2.repeat.set(10,10);
+gt2.needsUpdate = true;
 
-            const torusGeo = new THREE.TorusGeometry(2.2, 0.25, 16, 100);
-            const torusMat = new THREE.MeshBasicMaterial({
-                color: 0xf59e0b,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.04
-            });
-            const torus = new THREE.Mesh(torusGeo, torusMat);
-            torus.position.set(0, -2, -8);
-            scene.add(torus);
+const pav = rep => mkTex(256,256,g => {
+  g.fillStyle = '#b9b3a6';
+  g.fillRect(0,0,256,256);
+  for (let x = 0; x < 256; x += 32)
+    for (let y = 0; y < 256; y += 32) {
+      const s = 165 + rnd(0,28) | 0;
+      g.fillStyle = `rgb(${s},${s-4},${s-12})`;
+      g.fillRect(x+1, y+1, 30, 30);
+    }
+}, rep);
 
-            camera.position.z = 5.5;
+add(new THREE.CircleGeometry(400,96), M({map:gt, roughness:1})).rotation.x = -PI/2;
+add(new THREE.CircleGeometry(4000,48), M({color:0x4a6b44, roughness:1}), 0, -0.2, 0).rotation.x = -PI/2;
+add(new THREE.CylinderGeometry(95,145,3,96), M({map:gt2, roughness:1}), 0, 1.5, 0);
 
-            let mouseX = 0,
-                mouseY = 0;
-            document.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-            });
+const flat = (g,m,x,y,z) => {
+  const o = add(g,m,x,y,z);
+  o.rotation.x = -PI/2;
+  o.castShadow = false;
+  return o;
+};
+flat(new THREE.RingGeometry(50,70,128), M({map:pav([40,40]), roughness:0.85}), 0, Y0+0.05, 0);
+flat(new THREE.RingGeometry(86,94,128), M({color:0x2c2c2c, roughness:0.95}), 0, Y0+0.06, 0);
+flat(new THREE.RingGeometry(78,83,64,1,-PI*0.92,PI*0.84), M({map:pav([20,2]), roughness:0.85}), 0, Y0+0.08, 0);
+{
+  const w = add(new THREE.PlaneGeometry(9,18), M({map:pav([3,6]), roughness:0.85}), 0, Y0+0.07, 78);
+  w.rotation.x = -PI/2;
+  w.castShadow = false;
+}
+const dash = mk(new THREE.BoxGeometry(3,0.03,0.3), M({color:0xffffff, roughness:0.7}), 72);
+for (let i = 0; i < 72; i++) {
+  const a = i/72*2*PI;
+  sp(dash, i, 90*Math.cos(a), Y0+0.1, 90*Math.sin(a), 1, 1, 1, null, -(a+PI/2));
+}
 
-            let targetX = 0,
-                targetY = 0;
-            const clock = new THREE.Clock();
+/* ─────────────── VEGETATION ─────────────── */
+await progress(26,'Planting vegetation');
 
-            function animate3D() {
-                requestAnimationFrame(animate3D);
-                const t = clock.getElapsedTime();
+const avoid = [[-105,28,40],[105,25,40],[150,-70,45]];
+const pick = () => {
+  for (;;) {
+    const a = rnd(0,2*PI), r = rnd(72,200);
+    const x = r*Math.cos(a), z = r*Math.sin(a);
+    if ((r > 76 && r < 97) || avoid.some(([ax,az,d]) => Math.hypot(x-ax,z-az) < d)) continue;
+    return [x, gh(r), z];
+  }
+};
+const white = () => M({color:0xffffff, roughness:0.9});
+const bark = white();
 
-                targetX += (mouseX * 0.4 - targetX) * 0.02;
-                targetY += (mouseY * 0.4 - targetY) * 0.02;
+const aT = mk(new THREE.CylinderGeometry(0.25,0.5,6,6), bark, 50);
+const aC = mk(new THREE.SphereGeometry(1,10,7), white(), 250);
+const heroTrees = [[-42,100],[-78,84],[66,112],[92,72]];
+for (let i = 0; i < 50; i++) {
+  let [x,y,z] = pick();
+  if (i < 4) { [x,z] = heroTrees[i]; y = gh(Math.hypot(x,z)); }
+  const s = i < 4 ? rnd(1.3,1.6) : rnd(0.8,1.3);
+  sp(aT, i, x, y+3*s, z, s, s, s, 0x5a4130);
+  for (let l = 0; l < 5; l++) {
+    const a = l/5*6.28;
+    sp(aC, i*5+l,
+      x+Math.cos(a)*(l?3.2:0)*s,
+      y+(6.4+rnd(0,0.8))*s,
+      z+Math.sin(a)*(l?3.2:0)*s,
+      s*rnd(3.8,5.2), s*1.05, s*rnd(3.8,5.2), 0x3f7a2e);
+  }
+}
 
-                particles.rotation.y += 0.0004;
-                particles.rotation.x += 0.0002;
+const eT = mk(new THREE.CylinderGeometry(0.2,0.35,16,6), bark, 30);
+const eC = mk(new THREE.SphereGeometry(1,10,7), white(), 90);
+for (let i = 0; i < 30; i++) {
+  const [x,y,z] = pick(), s = rnd(0.8,1.3);
+  sp(eT, i, x, y+8*s, z, s, s, s, 0x8a7a66);
+  for (let l = 0; l < 3; l++)
+    sp(eC, i*3+l, x+rnd(-0.8,0.8), y+(12+l*3)*s, z+rnd(-0.8,0.8), 2.2*s, 5*s, 2.2*s, 0x56795a);
+}
 
-                ico1.rotation.x = t * 0.15;
-                ico1.rotation.y = t * 0.12;
-                ico1.position.x = -3 + Math.sin(t * 0.2) * 0.4;
+const ico = new THREE.IcosahedronGeometry(1,1);
+const ip = ico.attributes.position;
+for (let i = 0; i < ip.count; i++) {
+  const x = ip.getX(i), y = ip.getY(i), z = ip.getZ(i);
+  const n = 1 + 0.25*Math.sin(x*7.3 + y*5.1 + z*9.7);
+  ip.setXYZ(i, x*n, y*n, z*n);
+}
+ico.computeVertexNormals();
+const shM = M({color:0xffffff, roughness:0.95, flatShading:true});
+const sh = mk(ico, shM, 150);
+const fb = mk(ico, shM, 60);
+const fl = mk(new THREE.SphereGeometry(1,6,5), M({color:0xffffff, roughness:0.6}), 360);
+for (let i = 0; i < 150; i++) {
+  const [x,y,z] = pick(), s = rnd(0.7,1.4);
+  sp(sh, i, x, y+0.5, z, s*1.4, s, s*1.4, 0x2d5a27);
+}
+for (let i = 0; i < 60; i++) {
+  const [x,y,z] = pick(), s = rnd(0.9,1.4);
+  sp(fb, i, x, y+0.6, z, s*1.3, s, s*1.3, 0x2f6a2c);
+  for (let l = 0; l < 6; l++) {
+    const a = rnd(0,2*PI), u = rnd(0,1);
+    sp(fl, i*6+l,
+      x+Math.cos(a)*1.3*s,
+      y+0.7*s+u*0.9*s,
+      z+Math.sin(a)*1.3*s,
+      0.2, 0.2, 0.2, [0xd62839,0xff6fa5,0xffd23f][l%3]);
+  }
+}
+for (let i = 0; i < 12; i++) {
+  const a = i/12*2*PI + rnd(-0.2,0.2), r = rnd(600,1200);
+  const h = new THREE.Mesh(
+    new THREE.SphereGeometry(1,12,6,0,2*PI,0,PI/2),
+    M({color:new THREE.Color().setHSL(0.3,0.35,rnd(0.28,0.4)), roughness:1, flatShading:true})
+  );
+  h.scale.set(rnd(160,320), rnd(40,90), rnd(160,320));
+  h.position.set(r*Math.cos(a), 0, r*Math.sin(a));
+  scene.add(h);
+}
+const skl = mk(new THREE.BoxGeometry(1,1,1), white(), 70);
+for (let i = 0; i < 70; i++) {
+  const a = rnd(0.3,1.5), r = rnd(750,950), h = rnd(8,45), w = rnd(12,26);
+  sp(skl, i, r*Math.cos(a), h/2, r*Math.sin(a), w, h, w, 0xc8d0d6, a);
+}
 
-                ico2.rotation.x = t * 0.12;
-                ico2.rotation.z = t * 0.15;
-                ico2.position.y = -1 + Math.cos(t * 0.15) * 0.3;
+/* ─────────────── PODIUM ─────────────── */
+await progress(38,'Podium & concourse');
 
-                torus.rotation.x = t * 0.08;
-                torus.rotation.y = t * 0.12;
+const winTex = (lit,rep) => mkTex(512,64,(g,w,h) => {
+  g.fillStyle = lit ? '#000' : '#9a9a92';
+  g.fillRect(0,0,w,h);
+  for (let i = 0; i < 16; i++) {
+    if (lit) {
+      const b = rnd(150,255) | 0;
+      g.fillStyle = `rgb(${b},${b*0.78|0},${b*0.45|0})`;
+    } else {
+      const gr = g.createLinearGradient(0,8,0,56);
+      gr.addColorStop(0,'#2d4252');
+      gr.addColorStop(1,'#0e1a24');
+      g.fillStyle = gr;
+    }
+    g.fillRect(i*32+2, 8, 28, 48);
+  }
+}, rep);
+const glass = rep => M({
+  color:0xffffff,
+  map:winTex(0,rep),
+  emissive:0xffffff,
+  emissiveMap:winTex(1,rep),
+  emissiveIntensity:0,
+  metalness:0.5,
+  roughness:0.2
+});
+const podM = glass([13,1]);
+const baseM = glass([7,1]);
+const conc = M({color:0xc9c6bd, roughness:0.85});
+const steelM = M({color:0xaab2b9, metalness:0.85, roughness:0.35});
 
-                camera.position.x += (targetX - camera.position.x) * 0.015;
-                camera.position.y += (targetY - camera.position.y) * 0.015;
-                camera.lookAt(scene.position);
+add(new THREE.CylinderGeometry(50,50,5.5,128), podM, 0, Y0+2.75, 0);
+add(new THREE.CylinderGeometry(50.8,50.8,1,128), conc, 0, Y0+6, 0);
+{
+  const t = add(new THREE.TorusGeometry(50.4,0.35,6,128), conc, 0, Y0+6.9, 0);
+  t.rotation.x = PI/2;
+}
+add(new THREE.BoxGeometry(34,0.5,16), steelM, 0, Y0+5.2, 58);
+for (const x of [-15,-9,-3,3,9,15])
+  add(new THREE.CylinderGeometry(0.25,0.25,5,8), steelM, x, Y0+2.5, 64);
+for (let s = 0; s < 3; s++)
+  add(new THREE.BoxGeometry(30-s*2,0.25,4), conc, 0, Y0+0.12+s*0.25, 69-s*1.5);
 
-                renderer.render(scene, camera);
-            }
-            animate3D();
+/* ─────────────── DOME ─────────────── */
+await progress(52,'Constructing dome');
 
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        })();
+const R = 28.5, NT = 9, y0 = 7, Ht = 32, tH = Ht/NT;
+const dome = new THREE.Group();
+dome.position.y = DY;
+scene.add(dome);
+const E = y => R*Math.sqrt(Math.max(0, 1 - Math.pow((y-y0)/Ht/1.04, 1.5)));
 
-        // =============================================
-        // ===== GSAP & SCROLLTRIGGER =====
-        // =============================================
-        gsap.registerPlugin(ScrollTrigger);
+const facet = mkTex(128,64,(g,w,h) => {
+  g.fillStyle = '#c9d3d9';
+  g.fillRect(0,0,w,h);
+  g.fillStyle = '#f2f7fa';
+  g.beginPath();
+  g.moveTo(0,h);
+  g.lineTo(w/2,0);
+  g.lineTo(w,h);
+  g.fill();
+  g.strokeStyle = '#5f6b75';
+  g.lineWidth = 3;
+  g.beginPath();
+  g.moveTo(0,h); g.lineTo(w/2,0); g.lineTo(w,h);
+  g.moveTo(0,1); g.lineTo(w,1);
+  g.moveTo(0,h-1); g.lineTo(w,h-1);
+  g.stroke();
+}, [48,1]);
 
-        gsap.from('.hero-badge', { opacity: 0, y: 30, duration: 1, delay: 0.3, ease: 'power3.out' });
-        gsap.from('.hero h1', { opacity: 0, y: 50, duration: 1.2, delay: 0.5, ease: 'power3.out' });
-        gsap.from('.hero p', { opacity: 0, y: 30, duration: 1, delay: 0.8, ease: 'power3.out' });
-        gsap.from('.hero-buttons', { opacity: 0, y: 30, duration: 1, delay: 1, ease: 'power3.out' });
-        gsap.from('.hero-stat', { opacity: 0, y: 30, duration: 0.8, stagger: 0.15, delay: 1.2, ease: 'power3.out' });
+const ledgeM = M({color:0xe8edf0, metalness:0.6, roughness:0.3, emissive:0xffffff, emissiveIntensity:0});
+const railP = [];
+const tierM = [];
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            gsap.fromTo(el, { opacity: 0, y: 50 }, {
-                opacity: 1,
-                y: 0,
-                duration: 0.9,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: el,
-                    start: 'top 88%',
-                    toggleActions: 'play none none none'
-                }
-            });
-        });
+for (let i = 0; i < NT; i++) {
+  const yb = y0 + i*tH, rb = E(yb), rt = E(yb+tH) + 0.6;
+  const m = M({
+    color:0xffffff,
+    map:facet,
+    roughness:0.38,
+    metalness:0.12,
+    emissive:0x2bd04f,
+    emissiveMap:facet,
+    emissiveIntensity:0
+  });
+  tierM.push(m);
 
-        gsap.from('.area-card', {
-            opacity: 0,
-            y: 60,
-            duration: 0.7,
-            stagger: 0.08,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '.areas-grid',
-                start: 'top 85%'
-            }
-        });
+  const t = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, tH, 96, 1, true), m);
+  t.position.y = yb + tH/2;
+  t.castShadow = !lowPower;
+  t.receiveShadow = !lowPower;
+  dome.add(t);
 
-        gsap.from('.project-card', {
-            opacity: 0,
-            y: 50,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '.projects-grid',
-                start: 'top 85%'
-            }
-        });
+  const l = new THREE.Mesh(new THREE.CylinderGeometry(rb+1.1, rb+1.1, 0.4, 96), ledgeM);
+  l.position.y = yb;
+  l.castShadow = !lowPower;
+  l.receiveShadow = !lowPower;
+  dome.add(l);
 
-        gsap.from('.approach-card', {
-            opacity: 0,
-            y: 50,
-            duration: 0.8,
-            stagger: 0.12,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: '.approach-grid',
-                start: 'top 85%'
-            }
-        });
+  for (let j = 0; j < 96; j++) {
+    const a = j/96*2*PI;
+    const x = (rb+1.1)*Math.cos(a), z = (rb+1.1)*Math.sin(a);
+    railP.push(x, yb+0.2, z, x, yb+1.1, z);
+  }
+  const rl = new THREE.Mesh(new THREE.TorusGeometry(rb+1.1, 0.05, 5, 96), steelM);
+  rl.rotation.x = PI/2;
+  rl.position.y = yb + 1.1;
+  dome.add(rl);
+}
+{
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(railP, 3));
+  dome.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({color:0xdde3e8})));
+}
+{
+  const top = y0 + Ht;
+  const c = new THREE.Mesh(new THREE.CylinderGeometry(E(top)+0.6, E(top)+0.6, 0.5, 48), steelM);
+  c.position.y = top;
+  dome.add(c);
+  const sp1 = new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.4,9,8), steelM);
+  sp1.position.y = top + 4.5;
+  sp1.castShadow = !lowPower;
+  dome.add(sp1);
+  const fn = new THREE.Mesh(new THREE.SphereGeometry(0.35,10,8), steelM);
+  fn.position.y = top + 9;
+  dome.add(fn);
+}
+{
+  const d = new THREE.Mesh(new THREE.CylinderGeometry(29.6,29.6,y0,128), baseM);
+  d.position.y = y0/2;
+  d.castShadow = !lowPower;
+  dome.add(d);
+  const bg = [], tb = (a,b,r) => bg.push(new THREE.TubeGeometry(new THREE.LineCurve3(a,b), 1, r, 5));
+  const dd = 2*PI/64, p = (a,y) => V(29.9*Math.cos(a), y, 29.9*Math.sin(a));
+  for (let j = 0; j < 64; j++) {
+    const a = j*dd;
+    tb(p(a,0), p(a,y0), 0.2);
+    if (j % 2 === 0) {
+      tb(p(a,0), p(a+dd,5.2), 0.15);
+      tb(p(a+2*dd,0), p(a+dd,5.2), 0.15);
+    }
+  }
+  const m = new THREE.Mesh(mergeGeometries(bg), steelM);
+  m.castShadow = !lowPower;
+  dome.add(m);
+  for (const y of [0,3.5,y0]) {
+    const t = new THREE.Mesh(new THREE.TorusGeometry(29.9,0.22,6,128), steelM);
+    t.rotation.x = PI/2;
+    t.position.y = y;
+    dome.add(t);
+  }
+}
+const domeLight = new THREE.PointLight(0x2bd04f, 0, 130, 2);
+domeLight.position.y = 24;
+dome.add(domeLight);
 
-        // ===== COUNTER ANIMATION =====
-        document.querySelectorAll('.hero-stat-number').forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-count'));
-            gsap.to(counter, {
-                innerHTML: target,
-                duration: 2.2,
-                delay: 1.5,
-                snap: { innerHTML: 1 },
-                ease: 'power2.out'
-            });
-        });
+/* ─────────────── HOTEL ─────────────── */
+await progress(68,'Hotel & IT Park');
 
-        // ===== NAVBAR SCROLL =====
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-        });
+const hotel = new THREE.Group();
+const HP = [-105, 28];
+hotel.position.set(HP[0], gh(Math.hypot(...HP)), HP[1]);
+hotel.rotation.y = -0.35;
+scene.add(hotel);
 
-        // ===== SCROLL PROGRESS =====
-        const scrollProgress = document.getElementById('scrollProgress');
-        window.addEventListener('scroll', () => {
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            scrollProgress.style.width = (window.scrollY / docHeight) * 100 + '%';
-        });
+const hAdd = (g,m,x,y,z) => {
+  const o = new THREE.Mesh(g,m);
+  o.position.set(x,y,z);
+  o.castShadow = !lowPower;
+  o.receiveShadow = !lowPower;
+  hotel.add(o);
+  return o;
+};
+hAdd(new RoundedBoxGeometry(60,22,22,3,0.4), M({color:0xd9d2c5, roughness:0.8}), 0, 11, 0);
+const pal = [0x00A1DE,0xFAD201,0x20603D,0xE8A87C,0xC38D9E,0x8B5E3C,0xD4A76A]
+  .map(c => M({color:c, metalness:0.55, roughness:0.28}));
+const winMat = M({
+  color:0x0b1a24,
+  metalness:0.9,
+  roughness:0.08,
+  emissive:0xffd88a,
+  emissiveIntensity:0
+});
+const brown = M({color:0x6b4a2f, roughness:0.7});
+let rc = 0;
+for (const s of [1,-1]) {
+  for (let i = 0; i < 22; i++)
+    hAdd(new THREE.BoxGeometry(1.2,22,0.15), pal[rc++%7], -30+(i+0.5)*60/22, 11, s*(11.1+(i%2)*0.14));
+  for (let i = 0; i < 10; i++)
+    hAdd(new THREE.BoxGeometry(0.15,22,1.2), pal[rc++%7], s*(30.1+(i%2)*0.14), 11, -11+(i+0.5)*2.2);
+  hAdd(new THREE.BoxGeometry(58,20.5,0.1), winMat, 0, 11.25, s*11.04);
+  hAdd(new THREE.BoxGeometry(0.1,20.5,20), winMat, s*30.04, 11.25, 0);
+  for (let f = 1; f < 6; f++)
+    hAdd(new THREE.BoxGeometry(60.4,0.3,0.3), brown, 0, 3.6*f, s*11.2);
+}
+hAdd(new THREE.BoxGeometry(61,0.6,23), M({color:0x8d8d8d, roughness:0.9}), 0, 22.3, 0);
+[[-20,-4,8,4,6],[-2,5,6,3,5],[14,-3,9,4,7],[22,4,5,3,5]]
+  .forEach(([x,z,w,h,d]) =>
+    hAdd(new THREE.BoxGeometry(w,h,d), M({color:0xb0b0b0, metalness:0.4, roughness:0.6}), x, 22.6+h/2, z));
 
-        // =============================================
-        // ===== PAYPAL DIRECT PAYMENT =====
-        // =============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const supportBtn = document.getElementById('navSupportBtn');
-            const mobileSupportBtn = document.getElementById('mobileSupportBtn');
-            const overlay = document.getElementById('paypal-overlay');
-            const overlayClose = document.getElementById('paypal-overlay-close');
-            const overlayButtonContainer = document.getElementById('paypal-overlay-button');
-            let paypalRendered = false;
+const it = new THREE.Group();
+it.position.set(105, gh(108), 25);
+scene.add(it);
+const cg = M({color:0x7e9db0, metalness:0.85, roughness:0.1});
+[[0,0,50,12,22],[-8,-26,34,8,16],[30,-24,8,18,8]].forEach(([x,z,w,h,d]) => {
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), cg);
+  b.position.set(x, h/2, z);
+  b.castShadow = !lowPower;
+  b.receiveShadow = !lowPower;
+  it.add(b);
+  for (let y = 0; y <= h; y += 3) {
+    const s = new THREE.Mesh(new THREE.BoxGeometry(w+0.6,0.4,d+0.6), conc);
+    s.position.set(x, y, z);
+    s.castShadow = !lowPower;
+    it.add(s);
+  }
+});
 
-            function renderPayPalButton(container) {
-                if (typeof paypal === 'undefined') {
-                    container.innerHTML =
-                        '<p style="color: var(--text-muted); font-size: 0.9rem;">⚠️ Payment unavailable. Please contact us directly.</p>';
-                    return;
-                }
-                paypal.Buttons({
-                    createOrder: function(data, actions) {
-                        return actions.order.create({
-                            purchase_units: [{
-                                amount: { value: '5.00' },
-                                description: 'Support iMENA Hub Mission'
-                            }],
-                            application_context: { shipping_preference: 'NO_SHIPPING' }
-                        });
-                    },
-                    onApprove: function(data, actions) {
-                        return actions.order.capture().then(function(details) {
-                            alert('Thank you, ' + details.payer.name.given_name +
-                                '! 🙌 Your support helps us empower education across Rwanda.');
-                            overlay.classList.remove('active');
-                        });
-                    },
-                    onError: function(err) {
-                        console.error('PayPal Error:', err);
-                        alert('Payment failed. Please try again or contact us directly.');
-                    }
-                }).render(container);
-                paypalRendered = true;
-            }
+/* ─────────────── LAMPS ─────────────── */
+const lamps = [];
+const lampBulbM = M({color:0xffcc88, emissive:0xffcc88, emissiveIntensity:2});
+for (let i = 0; i < 14; i++) {
+  const a = i/14*2*PI, x = 62*Math.cos(a), z = 62*Math.sin(a);
+  add(new THREE.CylinderGeometry(0.12,0.15,4,6), steelM, x, Y0+2, z);
+  add(new THREE.SphereGeometry(0.4,10,8), lampBulbM, x, Y0+4.2, z);
+  const l = new THREE.PointLight(0xffcc88, 400, 30, 2);
+  l.position.set(x, Y0+4.5, z);
+  scene.add(l);
+  lamps.push(l);
+}
 
-            function openOverlay(e) {
-                if (e) e.preventDefault();
-                overlay.classList.add('active');
-                if (!paypalRendered) {
-                    renderPayPalButton(overlayButtonContainer);
-                }
-            }
+/* ═══════════════════════════════════════════════════════════════
+   LIGHT STAGES — interpolated by scroll
+   ═══════════════════════════════════════════════════════════════ */
+const dir = (az,el) => {
+  az *= PI/180;
+  el *= PI/180;
+  return [Math.sin(az)*Math.cos(el), Math.sin(el), Math.cos(az)*Math.cos(el)];
+};
 
-            supportBtn.addEventListener('click', openOverlay);
-            if (mobileSupportBtn) {
-                mobileSupportBtn.addEventListener('click', function(e) {
-                    openOverlay(e);
-                    // Close mobile menu
-                    document.getElementById('mobileMenu').classList.remove('active');
-                    document.getElementById('mobileMenuOverlay').classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
+const LIGHT_STOPS = [
+  { at:0.00, sun:[100,180,80], sc:0xfff5e6, si:3.2, hs:0x87ceeb, hg:0x3a6b35, hi:0.55,
+    ac:0xa0b8d0, ai:0.35, fog:0xbcd5e8, fd:0.0008, ex:1.05, env:1,
+    sky:[8,2.5,0.005], lit:0, cl:[0xffffff,0.55] },
+  { at:0.32, sun:dir(150,12), sc:0xff8c42, si:2.4, hs:0xff9060, hg:0x4a3020, hi:0.4,
+    ac:0xc09070, ai:0.2, fog:0xffa575, fd:0.0018, ex:1.0, env:0.6,
+    sky:[10,3,0.005], lit:0, cl:[0xff9a70,0.6] },
+  { at:0.65, sun:dir(230,5), sc:0xff8a55, si:0.6, hs:0x3a5a9a, hg:0x101820, hi:0.5,
+    ac:0x2a3a60, ai:0.3, fog:0x3a4f78, fd:0.0014, ex:1.1, env:0.3,
+    sky:[3,2.2,0.01], lit:1.3, cl:[0x6a7aa8,0.55] },
+  { at:1.00, sun:[-80,140,-60], sc:0x4466aa, si:0.3, hs:0x1a2540, hg:0x0a0e1a, hi:0.12,
+    ac:0x0a1020, ai:0.15, fog:0x0a0e1a, fd:0.0025, ex:0.85, env:0.1,
+    sky:[2,0.15,0.005], lit:1.8, cl:[0x151c2e,0.5] }
+];
 
-            overlayClose.addEventListener('click', function() {
-                overlay.classList.remove('active');
-            });
-            overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) {
-                    overlay.classList.remove('active');
-                }
-            });
+const colCache = {};
+const col = hex => {
+  if (!colCache[hex]) colCache[hex] = new THREE.Color(hex);
+  return colCache[hex];
+};
+const tmpA = new THREE.Color();
 
-            // Pre-render PayPal in the main CTA
-            const ctaContainer = document.getElementById('paypal-button-container');
-            if (ctaContainer && typeof paypal !== 'undefined') {
-                paypal.Buttons({
-                    createOrder: function(data, actions) {
-                        return actions.order.create({
-                            purchase_units: [{
-                                amount: { value: '5.00' },
-                                description: 'Support iMENA Hub Mission'
-                            }],
-                            application_context: { shipping_preference: 'NO_SHIPPING' }
-                        });
-                    },
-                    onApprove: function(data, actions) {
-                        return actions.order.capture().then(function(details) {
-                            alert('Thank you, ' + details.payer.name.given_name +
-                                '! 🙌 Your support helps us empower education across Rwanda.');
-                        });
-                    },
-                    onError: function(err) {
-                        console.error('PayPal Error:', err);
-                        alert('Payment failed. Please try again or contact us directly.');
-                    }
-                }).render(ctaContainer);
-            }
-        });
+let currentLit = 0;
 
-        // ===== MOBILE MENU =====
-        const menuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const overlayMenu = document.getElementById('mobileMenuOverlay');
-        const closeBtn = document.getElementById('mobileMenuClose');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
+function applyLightProgress(p) {
+  p = clamp(p, 0, 1);
+  let a = LIGHT_STOPS[0], b = LIGHT_STOPS[0], t = 0;
+  for (let i = 0; i < LIGHT_STOPS.length - 1; i++) {
+    if (p >= LIGHT_STOPS[i].at && p <= LIGHT_STOPS[i+1].at) {
+      a = LIGHT_STOPS[i]; b = LIGHT_STOPS[i+1];
+      t = (p - a.at) / (b.at - a.at);
+      break;
+    }
+  }
+  const e = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
 
-        const openMenu = () => {
-            mobileMenu.classList.add('active');
-            overlayMenu.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        };
-        const closeMenu = () => {
-            mobileMenu.classList.remove('active');
-            overlayMenu.classList.remove('active');
-            document.body.style.overflow = '';
-        };
+  const sx = lerp(a.sun[0], b.sun[0], e);
+  const sy = lerp(a.sun[1], b.sun[1], e);
+  const sz = lerp(a.sun[2], b.sun[2], e);
+  sun.position.set(sx, sy, sz).normalize().multiplyScalar(260);
+  tmpA.copy(col(a.sc)).lerp(col(b.sc), e);
+  sun.color.copy(tmpA);
+  sun.intensity = lerp(a.si, b.si, e);
 
-        menuBtn.addEventListener('click', openMenu);
-        closeBtn.addEventListener('click', closeMenu);
-        overlayMenu.addEventListener('click', closeMenu);
-        mobileLinks.forEach(l => l.addEventListener('click', closeMenu));
+  tmpA.copy(col(a.hs)).lerp(col(b.hs), e);
+  hemi.color.copy(tmpA);
+  tmpA.copy(col(a.hg)).lerp(col(b.hg), e);
+  hemi.groundColor.copy(tmpA);
+  hemi.intensity = lerp(a.hi, b.hi, e);
 
-        // ===== CUSTOM CURSOR (Desktop only) =====
-        const cursor = document.getElementById('cursor');
-        const dot = document.getElementById('cursorDot');
+  tmpA.copy(col(a.ac)).lerp(col(b.ac), e);
+  amb.color.copy(tmpA);
+  amb.intensity = lerp(a.ai, b.ai, e);
 
-        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-            document.addEventListener('mousemove', (e) => {
-                gsap.to(cursor, { x: e.clientX - 12, y: e.clientY - 12, duration: 0.1 });
-                gsap.to(dot, { x: e.clientX - 3, y: e.clientY - 3, duration: 0.05 });
-            });
-            document.querySelectorAll('a, button, .area-card, .project-card, .vm-card, .approach-card, .partnership-card')
-                .forEach(el => {
-                    el.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 2, duration: 0.3 }));
-                    el.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, duration: 0.3 }));
-                });
-        }
+  tmpA.copy(col(a.fog)).lerp(col(b.fog), e);
+  scene.fog.color.copy(tmpA);
+  scene.fog.density = lerp(a.fd, b.fd, e);
 
-        // ===== FLOATING PARTICLES =====
-        const floatContainer = document.getElementById('particlesFloat');
-        for (let i = 0; i < 25; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle-float';
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animationDelay = Math.random() * 20 + 's';
-            p.style.animationDuration = (12 + Math.random() * 12) + 's';
-            p.style.width = (2 + Math.random() * 4) + 'px';
-            p.style.height = p.style.width;
-            floatContainer.appendChild(p);
-        }
+  renderer.toneMappingExposure = lerp(a.ex, b.ex, e);
 
-        // ===== SMOOTH SCROLL FOR ANCHORS =====
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (href === '#') return;
-                const target = document.querySelector(href);
-                if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
+  const envMul = lerp(a.env, b.env, e);
+  for (const x of mats) x.envMapIntensity = (x.userData.e ?? 1) * envMul;
 
-        // ===== PARALLAX ORBS =====
-        gsap.utils.toArray('.glow-orb').forEach(orb => {
-            gsap.to(orb, {
-                y: -80,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: orb.parentElement,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 1.5
-                }
-            });
-        });
+  su.turbidity.value = lerp(a.sky[0], b.sky[0], e);
+  su.rayleigh.value = lerp(a.sky[1], b.sky[1], e);
+  su.mieCoefficient.value = lerp(a.sky[2], b.sky[2], e);
+  su.sunPosition.value.set(sx, sy, sz).normalize();
 
-        console.log('🚀 iMENA Hub website loaded successfully!');
-        console.log('📍 Empowering future-ready education through innovation and technology.');
-        console.log('🌍 Rwanda — Africa — The World.');
-    </script>
+  tmpA.copy(col(a.cl[0])).lerp(col(b.cl[0]), e);
+  cloudM.color.copy(tmpA);
+  cloudM.opacity = lerp(a.cl[1], b.cl[1], e);
+
+  currentLit = lerp(a.lit, b.lit, e);
+  const lit = currentLit;
+  lamps.forEach(l => l.visible = lit > 0.05);
+  domeLight.intensity = lit * 3500;
+  ledgeM.emissiveIntensity = lit * 0.5;
+  for (const g of [podM, baseM, winMat]) g.emissiveIntensity = lit * 1.3;
+}
+
+/* LED facade bands */
+const BL = col(0x1e8cff), YE = col(0xffb81c), GR = col(0x2bd04f);
+const BAND = [GR,GR,GR,YE,YE,YE,BL,BL,BL];
+const CY = [GR,YE,BL];
+const ledTmp = new THREE.Color();
+
+function updateLED(now) {
+  const T = now/1000 % 6;
+  tierM.forEach((m,i) => {
+    const isFlag = Math.floor(now/8000) % 2 === 0;
+    if (isFlag) {
+      ledTmp.copy(BAND[i]);
+    } else if (T < 4.5) {
+      ledTmp.copy([BL,YE,GR][T/1.5|0]);
+    } else {
+      const w = (((i/9*3 - (T-4.5)*2) % 3) + 3) % 3;
+      const f = w | 0;
+      ledTmp.copy(CY[f]).lerp(CY[(f+1)%3], w-f);
+    }
+    m.emissive.copy(ledTmp);
+    m.emissiveIntensity = currentLit * (1 + 0.07*Math.sin(now/600 + i));
+  });
+  domeLight.color.copy(tierM[4].emissive);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CAMERA KEYFRAMES — one per content panel
+   The KCC is offset to the RIGHT so it sits beside the left content rail.
+   ═══════════════════════════════════════════════════════════════ */
+const CAM_KEYS = [
+  { pos:[0,26,235],   tgt:[0,22,0],  offset:28 }, // 01 Hero — wide front
+  { pos:[85,32,175],  tgt:[0,25,0],  offset:24 }, // 02 About — angled side
+  { pos:[58,45,105],  tgt:[0,30,0],  offset:15 }, // 03 Ecosystem — closer
+  { pos:[30,42,72],   tgt:[0,30,0],  offset:10 }, // 04 Products — close
+  { pos:[75,26,88],   tgt:[0,26,0],  offset:17 }, // 05 Vision — low angle
+  { pos:[-120,40,90], tgt:[0,20,0],  offset:15 }, // 06 Founder — hotel side
+  { pos:[0,22,215],   tgt:[0,22,0],  offset:26 }  // 07 Contact — pull back
+];
+
+const camPos = new THREE.Vector3();
+const camTgt = new THREE.Vector3();
+
+function applyCameraProgress(p) {
+  p = clamp(p, 0, 1);
+  const n = CAM_KEYS.length;
+  const scaled = p * (n - 1);
+  const i = Math.floor(scaled);
+  const t = scaled - i;
+  const a = CAM_KEYS[Math.min(i, n-1)];
+  const b = CAM_KEYS[Math.min(i+1, n-1)];
+  const e = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
+
+  camPos.set(
+    lerp(a.pos[0], b.pos[0], e),
+    lerp(a.pos[1], b.pos[1], e),
+    lerp(a.pos[2], b.pos[2], e)
+  );
+
+  const bx = lerp(a.tgt[0], b.tgt[0], e);
+  const by = lerp(a.tgt[1], b.tgt[1], e);
+  const bz = lerp(a.tgt[2], b.tgt[2], e);
+  const off = lerp(a.offset, b.offset, e);
+  const sideFactor = window.innerWidth > 1000 ? 1 : 0;
+
+  camTgt.set(bx - off * sideFactor, by, bz);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL DRIVER
+   ═══════════════════════════════════════════════════════════════ */
+const panels = [...document.querySelectorAll('.panel')];
+const progressItems = [...document.querySelectorAll('#scroll-progress .item')];
+const nav = document.getElementById('nav');
+
+let targetProgress = 0;
+let smoothProgress = 0;
+
+function computeProgress() {
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  targetProgress = clamp(scrollY / Math.max(maxScroll, 1), 0, 1);
+}
+
+function updatePanelVisibility() {
+  panels.forEach(panel => {
+    const r = panel.getBoundingClientRect();
+    const inView = r.bottom > 80 && r.top < window.innerHeight - 80;
+    panel.classList.toggle('visible', inView);
+  });
+}
+
+function updateActivePanel() {
+  let activeIdx = 0;
+  let minDist = Infinity;
+  panels.forEach((panel, i) => {
+    const r = panel.getBoundingClientRect();
+    const center = r.top + r.height/2;
+    const dist = Math.abs(center - window.innerHeight * 0.5);
+    if (dist < minDist) {
+      minDist = dist;
+      activeIdx = i;
+    }
+  });
+  progressItems.forEach((el, i) => el.classList.toggle('active', i === activeIdx));
+}
+
+addEventListener('scroll', () => {
+  computeProgress();
+  updatePanelVisibility();
+  updateActivePanel();
+  nav.classList.toggle('scrolled', scrollY > 60);
+}, { passive: true });
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATION LOOP
+   ═══════════════════════════════════════════════════════════════ */
+let paused = false;
+document.addEventListener('visibilitychange', () => { paused = document.hidden; });
+
+function tick() {
+  requestAnimationFrame(tick);
+  if (paused) return;
+
+  const now = performance.now();
+
+  // Smooth scroll follow
+  const followRate = reduceMotion ? 1 : 0.075;
+  smoothProgress += (targetProgress - smoothProgress) * followRate;
+  if (Math.abs(targetProgress - smoothProgress) < 0.0005) smoothProgress = targetProgress;
+
+  // Apply camera + lighting
+  applyCameraProgress(smoothProgress);
+  applyLightProgress(smoothProgress);
+
+  // Camera
+  camera.position.copy(camPos);
+  camera.lookAt(camTgt);
+
+  // LED animation
+  updateLED(now);
+
+  // Cloud drift
+  cloudT.offset.x += 0.00003;
+
+  // Resize check
+  const w = innerWidth, h = innerHeight;
+  if (renderer.domElement.width !== w || renderer.domElement.height !== h) {
+    renderer.setSize(w, h);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+
+  renderer.render(scene, camera);
+}
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════════════════ */
+computeProgress();
+updatePanelVisibility();
+updateActivePanel();
+
+await progress(100,'Ready');
+
+setTimeout(() => {
+  document.getElementById('loading').classList.add('hidden');
+}, 450);
+
+tick();
+</script>
+
 </body>
 </html>
