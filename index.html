@@ -3,16 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>iMENA Hub — Building the Digital Ecosystem for Learning, Work & Innovation</title>
+<title>iMENA Hub</title>
 <meta name="description" content="iMENA Hub is a technology ecosystem building digital products across education, AI, software, digital skills, and innovation.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════════════════════
-   BASE
-   ═══════════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 html,body{margin:0;padding:0;background:#060a12;color:#fff;
@@ -24,28 +21,18 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:none;background:none}
 
 :root{
-  --navy:#060a12;
   --glass:rgba(10,18,30,.72);
-  --glass-light:rgba(255,255,255,.05);
   --border:rgba(255,255,255,.14);
   --border-light:rgba(255,255,255,.08);
   --cyan:#00d1ff;
   --cyan-dim:#00a1de;
-  --blue:#3b82f6;
   --purple:#8b5cf6;
-  --gold:#fbbf24;
-  --orange:#ff8c42;
-  --text:#ffffff;
   --muted:rgba(255,255,255,.68);
   --muted-2:rgba(255,255,255,.45);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   FIXED 3D CANVAS
-   ═══════════════════════════════════════════════════════════════ */
-#canvas-host{
-  position:fixed;inset:0;z-index:1;overflow:hidden;
-}
+/* ── FIXED 3D CANVAS ── */
+#canvas-host{position:fixed;inset:0;z-index:1;overflow:hidden;background:#87a8c0}
 #canvas-host canvas{display:block;width:100%;height:100%}
 #canvas-vignette{
   position:fixed;inset:0;z-index:2;pointer-events:none;
@@ -54,9 +41,7 @@ button{font:inherit;cursor:pointer;border:none;background:none}
     linear-gradient(180deg,rgba(3,6,12,.35) 0%,transparent 20%,transparent 85%,rgba(3,6,12,.55) 100%);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   SCROLL PROGRESS
-   ═══════════════════════════════════════════════════════════════ */
+/* ── SCROLL PROGRESS ── */
 #scroll-progress{
   position:fixed;top:50%;right:20px;transform:translateY(-50%);
   z-index:60;pointer-events:none;
@@ -80,68 +65,79 @@ button{font:inherit;cursor:pointer;border:none;background:none}
   transform:scale(1.7);
 }
 #scroll-progress .num{font-variant-numeric:tabular-nums;font-weight:600}
-@media (max-width:1000px){#scroll-progress{display:none}}
+@media (max-width:1100px){#scroll-progress{display:none}}
 
-/* ═══════════════════════════════════════════════════════════════
-   TOP NAV
-   ═══════════════════════════════════════════════════════════════ */
+/* ── NAV ── */
 #nav{
   position:fixed;top:0;left:0;right:0;z-index:70;
-  padding:14px 22px;
+  padding:12px 20px;
   display:flex;align-items:center;justify-content:space-between;
-  transition:background .3s ease,backdrop-filter .3s ease,border-color .3s ease;
+  transition:background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
   pointer-events:none;
   border-bottom:1px solid transparent;
+  background:transparent;
+  gap:16px;
 }
 #nav.scrolled{
-  background:rgba(6,10,18,.82);
-  backdrop-filter:blur(22px) saturate(1.4);
-  -webkit-backdrop-filter:blur(22px) saturate(1.4);
-  border-bottom-color:var(--border-light);
+  background:rgba(6,10,18,.5);
+  backdrop-filter:blur(14px) saturate(1.2);
+  -webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom-color:rgba(255,255,255,.06);
   pointer-events:auto;
 }
-#nav .brand{display:flex;align-items:center;gap:10px;pointer-events:auto}
-#nav .brand img{height:32px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,209,255,.25))}
-#nav .links{display:flex;gap:26px;align-items:center;pointer-events:auto}
+#nav .brand{display:flex;align-items:center;gap:10px;pointer-events:auto;flex-shrink:0}
+#nav .brand img{height:30px;width:auto;filter:drop-shadow(0 2px 8px rgba(0,209,255,.25))}
+#nav .links{
+  display:flex;gap:22px;align-items:center;
+  pointer-events:auto;overflow-x:auto;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+#nav .links::-webkit-scrollbar{display:none}
 #nav .links a{
-  font-size:13px;font-weight:500;color:rgba(255,255,255,.75);
+  font-size:13px;font-weight:500;color:rgba(255,255,255,.8);
   letter-spacing:.02em;transition:color .2s ease;
+  white-space:nowrap;
 }
 #nav .links a:hover{color:#fff}
 #nav .links a.cta{
-  padding:9px 18px;border-radius:999px;
+  padding:8px 16px;border-radius:999px;
   background:linear-gradient(135deg,var(--cyan),var(--cyan-dim));
   color:#001018;font-weight:600;
   box-shadow:0 4px 20px rgba(0,209,255,.3);
   transition:transform .2s ease,box-shadow .2s ease;
 }
 #nav .links a.cta:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,209,255,.45)}
-@media (max-width:820px){#nav .links a:not(.cta){display:none}}
+@media (max-width:760px){
+  #nav{padding:10px 14px}
+  #nav .brand img{height:26px}
+  #nav .links{gap:14px}
+  #nav .links a{font-size:12px}
+  #nav .links a.cta{padding:7px 12px;font-size:11px}
+}
+@media (max-width:520px){
+  #nav .links a:not(.cta):nth-child(n+4){display:none}
+}
 
-/* ═══════════════════════════════════════════════════════════════
-   CONTENT RAIL — LEFT SIDE, ALWAYS VISIBLE ALONGSIDE KCC
-   ═══════════════════════════════════════════════════════════════ */
+/* ── CONTENT RAIL ── */
 #content-rail{
   position:relative;z-index:10;
   width:520px;
   margin-left:40px;
-  padding:140px 0 220px;
+  padding:120px 0 180px;
   pointer-events:none;
 }
-
-.panel{
+.panel, .stats-panel{
   pointer-events:auto;
   margin-bottom:38vh;
   opacity:0;
   transform:translateY(36px);
   transition:opacity .9s cubic-bezier(.16,1,.3,1),
              transform .9s cubic-bezier(.16,1,.3,1);
-  scroll-margin-top:110px;
+  scroll-margin-top:100px;
 }
-.panel.visible{opacity:1;transform:translateY(0)}
-.panel:last-child{margin-bottom:12vh}
+.panel.visible, .stats-panel.visible{opacity:1;transform:translateY(0)}
+.panel:last-child{margin-bottom:6vh}
 
-/* Glass panel */
 .glass{
   background:var(--glass);
   backdrop-filter:blur(24px) saturate(1.4);
@@ -154,7 +150,36 @@ button{font:inherit;cursor:pointer;border:none;background:none}
     inset 0 1px 0 rgba(255,255,255,.08);
 }
 
-/* Hero card */
+/* Stats at a glance */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  padding:22px 18px;border-radius:20px;
+  background:var(--glass);
+  backdrop-filter:blur(24px) saturate(1.4);
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);
+  border:1px solid var(--border);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+.stats-grid .stat{
+  text-align:center;padding:6px 8px;
+  border-right:1px solid rgba(255,255,255,.08);
+}
+.stats-grid .stat:last-child{border-right:none}
+.stats-grid .n{
+  font-size:clamp(20px,2.2vw,26px);font-weight:700;
+  background:linear-gradient(135deg,#fff 0%,var(--cyan) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  line-height:1.1;
+}
+.stats-grid .l{
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted-2);margin-top:5px;line-height:1.3;
+}
+
+/* Hero */
 .hero-card .logo-lg{
   height:52px;width:auto;margin-bottom:20px;
   filter:drop-shadow(0 4px 20px rgba(0,209,255,.4));
@@ -195,11 +220,13 @@ button{font:inherit;cursor:pointer;border:none;background:none}
   padding:12px 20px;border-radius:999px;
   font-size:13px;font-weight:600;letter-spacing:.01em;
   transition:all .25s cubic-bezier(.16,1,.3,1);
+  cursor:pointer;
 }
 .btn-primary{
   background:linear-gradient(135deg,var(--cyan) 0%,var(--cyan-dim) 100%);
   color:#001018;
   box-shadow:0 8px 28px rgba(0,209,255,.35);
+  border:none;
 }
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,209,255,.5)}
 .btn-ghost{
@@ -208,7 +235,6 @@ button{font:inherit;cursor:pointer;border:none;background:none}
 }
 .btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25)}
 
-/* Section headers */
 .eyebrow{
   display:inline-block;font-size:10px;font-weight:600;
   letter-spacing:.2em;text-transform:uppercase;
@@ -228,7 +254,6 @@ button{font:inherit;cursor:pointer;border:none;background:none}
 }
 .panel p:last-child{margin-bottom:0}
 
-/* Ecosystem nodes */
 .eco-nodes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .eco-node{
   display:flex;align-items:center;gap:7px;
@@ -249,27 +274,54 @@ button{font:inherit;cursor:pointer;border:none;background:none}
   background:var(--cyan);box-shadow:0 0 10px var(--cyan);
 }
 
-/* Product mini grid */
-.product-mini-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:8px;margin-top:18px;
+/* Products */
+.products-list{
+  display:flex;flex-direction:column;gap:10px;margin-top:18px;
 }
-.product-mini{
-  padding:12px 14px;border-radius:12px;
+.product-item{
+  padding:16px 18px;border-radius:14px;
   background:rgba(255,255,255,.05);
   border:1px solid var(--border);
   backdrop-filter:blur(10px);
   transition:all .3s ease;
+  display:flex;flex-direction:column;gap:10px;
 }
-.product-mini:hover{
-  background:rgba(0,209,255,.1);
+.product-item:hover{
+  background:rgba(0,209,255,.08);
   border-color:rgba(0,209,255,.4);
   transform:translateY(-2px);
 }
-.product-mini .name{font-weight:600;font-size:13px;margin-bottom:2px}
-.product-mini .desc{font-size:10px;color:var(--muted-2);line-height:1.4}
+.product-item .p-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.product-item .p-name{
+  font-weight:600;font-size:15px;letter-spacing:-.005em;
+}
+.product-item .p-desc{
+  font-size:12px;color:var(--muted-2);line-height:1.5;
+}
+.product-item .view-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:999px;
+  font-size:11px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--cyan);
+  background:rgba(0,209,255,.1);
+  border:1px solid rgba(0,209,255,.35);
+  transition:all .25s ease;
+  white-space:nowrap;
+  align-self:flex-start;
+}
+.product-item .view-btn:hover{
+  background:var(--cyan);
+  color:#001018;
+  transform:translateX(2px);
+}
+.product-item .view-btn::after{
+  content:'→';transition:transform .25s ease;
+}
+.product-item .view-btn:hover::after{transform:translateX(3px)}
 
-/* Vision */
 .vision-block{
   text-align:center;
   padding:36px 30px;
@@ -279,7 +331,6 @@ button{font:inherit;cursor:pointer;border:none;background:none}
 .vision-block h2{font-size:clamp(20px,2vw,26px);margin-bottom:14px}
 .vision-block p{font-size:14px;max-width:520px;margin:0 auto}
 
-/* Founder */
 .founder{display:flex;gap:20px;align-items:flex-start;margin-top:16px}
 .founder-photo{
   width:100px;height:100px;flex-shrink:0;
@@ -295,99 +346,214 @@ button{font:inherit;cursor:pointer;border:none;background:none}
 }
 .founder-info p{font-size:13px;line-height:1.65;color:var(--muted);margin:0}
 
-/* Contact */
-.contact-block{margin-top:16px}
-.contact-links{display:flex;flex-direction:column;gap:8px;margin-top:16px}
-.contact-links a{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;border-radius:10px;
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border-light);
-  font-size:13px;font-weight:500;
+/* Contact form */
+.contact-form{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin-top:20px;
+}
+.contact-form .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted-2);
+}
+.field input,
+.field select,
+.field textarea{
+  font:inherit;font-size:13px;color:#fff;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px 14px;
+  transition:border-color .2s ease,background .2s ease;
+  outline:none;width:100%;
+  font-family:inherit;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--cyan);
+  background:rgba(0,209,255,.06);
+  box-shadow:0 0 0 3px rgba(0,209,255,.1);
+}
+.field textarea{resize:vertical;min-height:100px;line-height:1.55;font-family:inherit}
+.field select option{background:#0b1220;color:#fff}
+.contact-form button{
+  grid-column:1/-1;
+  padding:13px 22px;border-radius:10px;
+  background:linear-gradient(135deg,var(--cyan),var(--cyan-dim));
+  color:#001018;font-weight:600;font-size:14px;
+  transition:transform .2s ease,box-shadow .2s ease;
+  box-shadow:0 8px 24px rgba(0,209,255,.3);
+}
+.contact-form button:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,209,255,.45)}
+.contact-form button:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.form-status{
+  grid-column:1/-1;font-size:12px;padding:10px 14px;
+  border-radius:8px;display:none;
+}
+.form-status.success{
+  display:block;background:rgba(0,209,255,.12);
+  border:1px solid rgba(0,209,255,.3);color:var(--cyan);
+}
+.form-status.error{
+  display:block;background:rgba(255,107,107,.1);
+  border:1px solid rgba(255,107,107,.3);color:#ff6b6b;
+}
+
+/* Footer */
+#site-footer{
+  position:relative;z-index:20;
+  background:linear-gradient(180deg,rgba(6,10,18,.95) 0%,#060a12 100%);
+  border-top:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+  margin-top:60px;
+  padding:60px 40px 30px;
+}
+.footer-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1.4fr;
+  gap:48px;
+}
+.footer-brand img{height:40px;width:auto;margin-bottom:16px;
+  filter:drop-shadow(0 2px 10px rgba(0,209,255,.25));}
+.footer-brand p{
+  font-size:13px;line-height:1.7;color:var(--muted-2);
+  margin:0 0 18px;max-width:320px;
+}
+.footer-socials{display:flex;gap:10px}
+.footer-socials a{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  color:var(--muted);
   transition:all .25s ease;
 }
-.contact-links a:hover{
-  background:rgba(0,209,255,.08);
-  border-color:rgba(0,209,255,.3);
-  transform:translateX(4px);
+.footer-socials a:hover{
+  background:rgba(0,209,255,.12);
+  border-color:rgba(0,209,255,.4);
+  color:var(--cyan);
+  transform:translateY(-2px);
 }
-.contact-links .ico{
-  width:28px;height:28px;border-radius:7px;
-  background:rgba(0,209,255,.14);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--cyan);font-size:12px;font-weight:700;
+.footer-socials svg{width:16px;height:16px;fill:currentColor}
+.footer-col h4{
+  font-size:11px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--cyan);
+  margin:0 0 18px;
 }
-
-/* Developer footer — subtle, non-distracting */
-.dev-footer{
-  pointer-events:auto;
-  margin-top:70px;
-  padding:18px 0;
-  font-size:11px;
-  color:rgba(255,255,255,.35);
-  letter-spacing:.06em;
-  border-top:1px solid rgba(255,255,255,.08);
+.footer-col ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.footer-col li a{
+  font-size:13px;color:var(--muted-2);
+  transition:color .2s ease,padding .2s ease;
+  display:inline-flex;align-items:center;gap:6px;
 }
-.dev-footer a{
-  color:rgba(0,209,255,.75);
-  font-weight:500;
-  transition:color .2s ease;
+.footer-col li a:hover{color:#fff;padding-left:4px}
+.footer-col li a::before{content:'›';opacity:.4;transition:opacity .2s ease}
+.footer-col li a:hover::before{opacity:1;color:var(--cyan)}
+.footer-contact p{
+  font-size:13px;line-height:1.7;color:var(--muted-2);margin:0 0 8px;
+  display:flex;align-items:center;gap:8px;
 }
-.dev-footer a:hover{color:#00d1ff}
-
-/* ═══════════════════════════════════════════════════════════════
-   LOADING
-   ═══════════════════════════════════════════════════════════════ */
-#loading{
-  position:fixed;inset:0;z-index:300;
-  background:#060a12;
+.footer-contact p svg{width:14px;height:14px;fill:var(--cyan);flex-shrink:0}
+.footer-map{
+  margin-top:18px;border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);
+  height:180px;
+}
+.footer-map iframe{width:100%;height:100%;border:0;display:block;filter:grayscale(.3) contrast(1.05)}
+.footer-bottom{
+  max-width:1200px;margin:50px auto 0;
+  padding-top:24px;
+  border-top:1px solid rgba(255,255,255,.06);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:18px;transition:opacity .8s ease;
+  text-align:center;gap:8px;
+  font-size:12px;color:var(--muted-2);
 }
-#loading.hidden{opacity:0;pointer-events:none}
-#loading .logo{height:48px;width:auto;opacity:.95}
-#loading .bar{
-  width:220px;height:3px;border-radius:2px;
-  background:rgba(255,255,255,.08);overflow:hidden;
+.footer-bottom a{color:rgba(0,209,255,.75);transition:color .2s ease}
+.footer-bottom a:hover{color:var(--cyan)}
+
+/* Tablet */
+@media (max-width:1100px){
+  #content-rail{width:460px;margin-left:28px}
+  .footer-grid{grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+  .footer-contact{grid-column:1/-1}
+  .footer-map{height:200px}
 }
-#loading .bar span{
-  display:block;height:100%;width:0;
-  background:linear-gradient(90deg,var(--cyan),var(--purple));
-  transition:width .35s ease;border-radius:2px;
-}
-#loading .status{
-  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--muted-2);
+@media (max-width:900px){
+  .footer-grid{grid-template-columns:1fr 1fr;gap:28px}
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════════ */
-@media (max-width:1000px){
+/* Mobile — KCC always visible at top */
+@media (max-width:760px){
   #content-rail{
-    width:auto;
-    margin:0 18px;
-    padding-top:120px;
+    width:100%;
+    margin:0;
+    padding:0;
   }
-  .panel{margin-bottom:32vh}
+  .panel, .stats-panel{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:80px 14px 32px;
+    margin-bottom:0;
+  }
+  .panel .glass, .stats-grid{
+    padding:20px 22px;
+    border-radius:18px;
+    background:rgba(6,10,18,.78);
+    max-height:78vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .stats-grid{grid-template-columns:1fr 1fr;gap:6px;padding:18px}
+  .stats-grid .stat{
+    padding:8px 4px;
+    border-right:none;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .stats-grid .stat:nth-last-child(-n+2){border-bottom:none}
+
+  .hero-card .logo-lg{height:44px}
+  .hero-card h1{font-size:22px}
+  .hero-card p{font-size:14px}
+  .panel h2{font-size:20px}
+  .panel p{font-size:13px}
+  .contact-form{grid-template-columns:1fr;gap:12px}
+  .field input,.field select,.field textarea{font-size:14px;padding:12px 14px}
+  .founder{flex-direction:row;gap:14px}
+  .founder-photo{width:80px;height:80px}
+  .founder-info h3{font-size:15px}
+  .founder-info p{font-size:12px}
+  .btn{padding:11px 18px;font-size:12px}
+  .actions{flex-direction:column}
+  .actions .btn{width:100%;justify-content:center}
+
   #canvas-vignette{
     background:
-      radial-gradient(ellipse at 50% 35%, transparent 35%, rgba(3,6,12,.55) 100%),
-      linear-gradient(180deg,rgba(3,6,12,.4) 0%,transparent 25%,transparent 70%,rgba(3,6,12,.65) 100%);
+      radial-gradient(ellipse at 50% 25%, transparent 30%, rgba(3,6,12,.55) 100%),
+      linear-gradient(180deg,rgba(3,6,12,.5) 0%,transparent 25%,transparent 55%,rgba(3,6,12,.75) 100%);
   }
-}
-@media (max-width:560px){
-  .glass{padding:22px 20px;border-radius:18px}
-  .product-mini-grid{grid-template-columns:1fr}
-  .founder{flex-direction:column}
-  .founder-photo{width:80px;height:80px}
+
+  #site-footer{padding:44px 20px 24px;margin-top:0}
+  .footer-grid{grid-template-columns:1fr;gap:32px}
+  .footer-map{height:180px}
+  .footer-bottom{margin-top:36px;padding-top:20px;gap:6px}
 }
 
-/* Reduced motion */
+@media (max-width:400px){
+  .panel .glass{padding:16px 16px}
+  .hero-card h1{font-size:20px}
+  .stats-grid .n{font-size:18px}
+  .stats-grid .l{font-size:8px}
+}
+
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.01ms !important;animation-iteration-count:1 !important;
     transition-duration:.15s !important;scroll-behavior:auto !important}
-  .panel{transform:none !important}
+  .panel,.stats-panel{transform:none !important}
 }
 </style>
 <script type="importmap">
@@ -399,13 +565,6 @@ button{font:inherit;cursor:pointer;border:none;background:none}
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading">
-  <img class="logo" src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub">
-  <div class="bar"><span id="load-bar"></span></div>
-  <div class="status" id="load-status">Initializing experience…</div>
-</div>
-
 <!-- FIXED 3D CANVAS -->
 <div id="canvas-host"></div>
 <div id="canvas-vignette"></div>
@@ -413,12 +572,13 @@ button{font:inherit;cursor:pointer;border:none;background:none}
 <!-- SCROLL PROGRESS -->
 <div id="scroll-progress" aria-hidden="true">
   <div class="item" data-i="0"><span class="num">01</span><span>Welcome</span><span class="dot"></span></div>
-  <div class="item" data-i="1"><span class="num">02</span><span>About</span><span class="dot"></span></div>
-  <div class="item" data-i="2"><span class="num">03</span><span>Ecosystem</span><span class="dot"></span></div>
-  <div class="item" data-i="3"><span class="num">04</span><span>Products</span><span class="dot"></span></div>
-  <div class="item" data-i="4"><span class="num">05</span><span>Vision</span><span class="dot"></span></div>
-  <div class="item" data-i="5"><span class="num">06</span><span>Founder</span><span class="dot"></span></div>
-  <div class="item" data-i="6"><span class="num">07</span><span>Contact</span><span class="dot"></span></div>
+  <div class="item" data-i="1"><span class="num">02</span><span>At a Glance</span><span class="dot"></span></div>
+  <div class="item" data-i="2"><span class="num">03</span><span>About</span><span class="dot"></span></div>
+  <div class="item" data-i="3"><span class="num">04</span><span>Ecosystem</span><span class="dot"></span></div>
+  <div class="item" data-i="4"><span class="num">05</span><span>Products</span><span class="dot"></span></div>
+  <div class="item" data-i="5"><span class="num">06</span><span>Vision</span><span class="dot"></span></div>
+  <div class="item" data-i="6"><span class="num">07</span><span>Founder</span><span class="dot"></span></div>
+  <div class="item" data-i="7"><span class="num">08</span><span>Contact</span><span class="dot"></span></div>
 </div>
 
 <!-- NAV -->
@@ -436,10 +596,9 @@ button{font:inherit;cursor:pointer;border:none;background:none}
   </div>
 </nav>
 
-<!-- CONTENT RAIL — scrolls alongside the fixed KCC backdrop -->
+<!-- CONTENT RAIL -->
 <aside id="content-rail">
 
-  <!-- 01 · HERO -->
   <section class="panel" id="hero" data-i="0">
     <div class="glass hero-card">
       <img class="logo-lg" src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub">
@@ -453,8 +612,16 @@ button{font:inherit;cursor:pointer;border:none;background:none}
     </div>
   </section>
 
-  <!-- 02 · ABOUT -->
-  <section class="panel" id="about" data-i="1">
+  <section class="stats-panel" id="stats" data-i="1">
+    <div class="stats-grid">
+      <div class="stat"><div class="n">54+</div><div class="l">Learners<br>Trained</div></div>
+      <div class="stat"><div class="n">14</div><div class="l">Certified<br>Graduates</div></div>
+      <div class="stat"><div class="n">4+</div><div class="l">Institutions<br>Reached</div></div>
+      <div class="stat"><div class="n">08</div><div class="l">Products<br>Launched</div></div>
+    </div>
+  </section>
+
+  <section class="panel" id="about" data-i="2">
     <div class="glass">
       <span class="eyebrow">About iMENA Hub</span>
       <h2>A technology ecosystem, not a training site.</h2>
@@ -463,8 +630,7 @@ button{font:inherit;cursor:pointer;border:none;background:none}
     </div>
   </section>
 
-  <!-- 03 · ECOSYSTEM -->
-  <section class="panel" id="ecosystem" data-i="2">
+  <section class="panel" id="ecosystem" data-i="3">
     <div class="glass">
       <span class="eyebrow">Our Ecosystem</span>
       <h2>Interconnected by design.</h2>
@@ -479,34 +645,55 @@ button{font:inherit;cursor:pointer;border:none;background:none}
     </div>
   </section>
 
-  <!-- 04 · PRODUCTS -->
-  <section class="panel" id="products" data-i="3">
+  <section class="panel" id="products" data-i="4">
     <div class="glass">
       <span class="eyebrow">What We Build</span>
       <h2>Digital products that solve real problems.</h2>
-      <p>Each product is live. Explore them and see the ecosystem in action.</p>
-      <div class="product-mini-grid">
-        <div class="product-mini"><div class="name">iMENA Learn</div><div class="desc">Learning platform</div></div>
-        <div class="product-mini"><div class="name">iMENA Lab</div><div class="desc">Innovation studio</div></div>
-        <div class="product-mini"><div class="name">iMENA CV Builder</div><div class="desc">Career toolkit</div></div>
-        <div class="product-mini"><div class="name">iMENA Test</div><div class="desc">Assessment</div></div>
-        <div class="product-mini"><div class="name">ChrisostomAi</div><div class="desc">AI assistant</div></div>
-        <div class="product-mini"><div class="name">Paperless</div><div class="desc">Digital workflow</div></div>
-        <div class="product-mini"><div class="name">AfriQuiz</div><div class="desc">Interactive learning</div></div>
+      <p>Each product is live and used in the field. Explore them below.</p>
+      <div class="products-list">
+
+        <div class="product-item">
+          <div class="p-head"><span class="p-name">iMENA Learn</span></div>
+          <div class="p-desc">Digital skills training platform — 54+ learners trained across 4+ institutions.</div>
+          <a class="view-btn" href="https://imenalearn.vercel.app/" target="_blank" rel="noopener">View Project</a>
+        </div>
+
+        <div class="product-item">
+          <div class="p-head"><span class="p-name">iMENA Lab</span></div>
+          <div class="p-desc">Innovation studio producing 3D websites, mobile apps, and experimental digital tools.</div>
+          <a class="view-btn" href="https://imena-lab.vercel.app/" target="_blank" rel="noopener">View Project</a>
+        </div>
+
+        <div class="product-item">
+          <div class="p-head"><span class="p-name">iMENA CV Builder</span></div>
+          <div class="p-desc">Professional CV toolkit that helps job seekers build clean, modern resumes in minutes.</div>
+          <a class="view-btn" href="https://imena-cv-builder.vercel.app/" target="_blank" rel="noopener">View Project</a>
+        </div>
+
+        <div class="product-item">
+          <div class="p-head"><span class="p-name">iMENA Test</span></div>
+          <div class="p-desc">Online assessment platform for skills, learning, and knowledge evaluation.</div>
+          <a class="view-btn" href="https://imena-test.web.app/" target="_blank" rel="noopener">View Project</a>
+        </div>
+
+        <div class="product-item">
+          <div class="p-head"><span class="p-name">ChrisostomAi</span></div>
+          <div class="p-desc">AI-powered assistant designed for learning, productivity, and everyday digital work.</div>
+          <a class="view-btn" href="https://stomcodev.github.io/ChrisostomAi/" target="_blank" rel="noopener">View Project</a>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- 05 · VISION -->
-  <section class="panel" id="vision" data-i="4">
+  <section class="panel" id="vision" data-i="5">
     <div class="glass vision-block">
       <h2>From Rwanda, building technology for learning, work, creation, and innovation.</h2>
       <p>We believe technology should not be an end in itself. It should open doors — for learners, for workers, for creators. That belief shapes every product we build.</p>
     </div>
   </section>
 
-  <!-- 06 · FOUNDER -->
-  <section class="panel" id="founder" data-i="5">
+  <section class="panel" id="founder" data-i="6">
     <div class="glass">
       <span class="eyebrow">Founder</span>
       <h2>The person behind the ecosystem.</h2>
@@ -517,36 +704,127 @@ button{font:inherit;cursor:pointer;border:none;background:none}
         <div class="founder-info">
           <h3>TUYISENGE Jean Chrisostom</h3>
           <div class="role">Founder &amp; Owner · iMENA Hub</div>
-          <p>Jean Chrisostom founded iMENA Hub with a clear conviction: technology, when built thoughtfully, can create real opportunities for people — to learn, to work, to create, and to innovate.</p>
+          <p>Student teacher at TTC Muhanga and full-stack developer focused on EdTech. He founded iMENA Hub to help people learn, work, create, and innovate through technology.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 07 · CONTACT -->
-  <section class="panel" id="contact" data-i="6">
-    <div class="glass contact-block">
+  <section class="panel" id="contact" data-i="7">
+    <div class="glass">
       <span class="eyebrow">Contact</span>
       <h2>Let's build something together.</h2>
-      <p>Whether you want to collaborate, partner, or learn more about the ecosystem — reach out. We're always open to conversations with people who believe technology should create opportunities.</p>
-      <div class="contact-links">
-        <a href="https://imena-hub.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> Main hub — imena-hub.vercel.app</a>
-        <a href="https://imenalearn.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> iMENA Learn</a>
-        <a href="https://imena-lab.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> iMENA Lab</a>
-        <a href="https://imena-cv-builder.vercel.app/" target="_blank" rel="noopener"><span class="ico">↗</span> iMENA CV Builder</a>
-      </div>
+      <p>Have a project, need a service, or want to collaborate? Fill out the form below and we'll get back to you.</p>
+      <form class="contact-form" id="imenaContactForm" novalidate>
+        <div class="field">
+          <label for="cf-name">Full name</label>
+          <input type="text" id="cf-name" name="name" required placeholder="Your full name" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="cf-email">Email</label>
+          <input type="email" id="cf-email" name="email" required placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field full">
+          <label for="cf-service">Service</label>
+          <select id="cf-service" name="service" required>
+            <option value="">Choose a service…</option>
+            <option value="web-development">Web Development</option>
+            <option value="3d-website">3D Website (Three.js / WebGL)</option>
+            <option value="mobile-app">Mobile App</option>
+            <option value="custom-platform">Custom Platform / Dashboard</option>
+            <option value="certificate-verification">Certificate Design &amp; Verification</option>
+            <option value="digital-skills-training">Digital Skills Training</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="cf-message">Project description</label>
+          <textarea id="cf-message" name="message" required placeholder="Tell us about your project, goals, and timeline…"></textarea>
+        </div>
+        <button type="submit" id="cf-submit">Send Message</button>
+        <div class="form-status" id="cf-status"></div>
+      </form>
     </div>
   </section>
 
-  <!-- DEVELOPER FOOTER — subtle, non-distracting -->
-  <footer class="dev-footer">
-    Developed by <a href="https://imena-hub.vercel.app" target="_blank" rel="noopener">iMENA Hub</a>
-  </footer>
-
 </aside>
 
+<!-- FOOTER -->
+<footer id="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="https://i.postimg.cc/C174zVC4/i-MENA-Hub-logo.png" alt="iMENA Hub">
+      <p>Building the Digital Ecosystem for Learning, Work &amp; Innovation. A technology ecosystem rooted in Rwanda.</p>
+      <div class="footer-socials">
+        <a href="https://www.facebook.com/tuyisengejeanchrisostom" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/blad.rw/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16m0 1.8c-3.14 0-3.51.01-4.75.07-1.15.05-1.77.24-2.19.4-.55.22-.95.47-1.36.88-.41.41-.66.81-.88 1.36-.16.42-.35 1.04-.4 2.19-.06 1.24-.07 1.61-.07 4.75s.01 3.51.07 4.75c.05 1.15.24 1.77.4 2.19.22.55.47.95.88 1.36.41.41.81.66 1.36.88.42.16 1.04.35 2.19.4 1.24.06 1.61.07 4.75.07s3.51-.01 4.75-.07c1.15-.05 1.77-.24 2.19-.4.55-.22.95-.47 1.36-.88.41-.41.66-.81.88-1.36.16-.42.35-1.04.4-2.19.06-1.24.07-1.61.07-4.75s-.01-3.51-.07-4.75c-.05-1.15-.24-1.77-.4-2.19-.22-.55-.47-.95-.88-1.36-.41-.41-.81-.66-1.36-.88-.42-.16-1.04-.35-2.19-.4C15.51 3.97 15.14 3.96 12 3.96zm0 3.06a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zm5.2-2.13a1.17 1.17 0 1 1 0 2.34 1.17 1.17 0 0 1 0-2.34z"/></svg>
+        </a>
+        <a href="https://wa.me/250796717230" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.64-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.09 4.49.71.31 1.27.49 1.7.63.72.23 1.37.2 1.89.12.58-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15c-1.55 0-3.07-.42-4.4-1.2l-.32-.19-3.12.82.83-3.04-.21-.32a8.2 8.2 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24s-3.7 8.24-8.24 8.24z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="https://imenalearn.vercel.app/" target="_blank" rel="noopener">iMENA Learn</a></li>
+        <li><a href="https://imena-lab.vercel.app/" target="_blank" rel="noopener">iMENA Lab</a></li>
+        <li><a href="https://imena-cv-builder.vercel.app/" target="_blank" rel="noopener">iMENA CV Builder</a></li>
+        <li><a href="https://imena-test.web.app/" target="_blank" rel="noopener">iMENA Test</a></li>
+        <li><a href="https://stomcodev.github.io/ChrisostomAi/" target="_blank" rel="noopener">ChrisostomAi</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Ecosystem</h4>
+      <ul>
+        <li><a href="#about">About iMENA Hub</a></li>
+        <li><a href="#ecosystem">Our Ecosystem</a></li>
+        <li><a href="#products">What We Build</a></li>
+        <li><a href="#vision">Vision</a></li>
+        <li><a href="#founder">Founder</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-contact">
+      <h4>Contact</h4>
+      <p><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg> Bugesera, Ntarama, Rwanda</p>
+      <p><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg> imenahub.rw@gmail.com</p>
+      <p><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg> +250 796 717 230</p>
+      <div class="footer-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3104.621310088029!2d30.08429737496741!3d-2.073485597907933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dcab005bc384fd%3A0xe460f1d53ebb4fab!2sTUYISENGE%20Jean%20Chrisostom!5e1!3m2!1sen!2srw!4v1791094516201!5m2!1sen!2srw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="iMENA Hub location map"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div>© <span id="year"></span> iMENA Hub. All rights reserved.</div>
+    <div>Developed by <a href="https://imena-hub.vercel.app" target="_blank" rel="noopener">iMENA Hub</a> · Kigali, Rwanda</div>
+  </div>
+</footer>
+
+<!-- Boot panels instantly so no blank state before Three.js loads -->
+<script>
+  (function(){
+    function reveal(){
+      document.querySelectorAll('.panel, .stats-panel').forEach(p => {
+        const r = p.getBoundingClientRect();
+        if (r.bottom > 60 && r.top < innerHeight - 60) p.classList.add('visible');
+      });
+    }
+    reveal();
+    window.addEventListener('load', reveal);
+    setTimeout(reveal, 300);
+    setTimeout(reveal, 900);
+  })();
+</script>
+
 <!-- ═══════════════════════════════════════════════════════════════
-     3D SCENE
+     3D SCENE — KCC
      ═══════════════════════════════════════════════════════════════ -->
 <script type="module">
 import * as THREE from 'three';
@@ -554,26 +832,17 @@ import {Sky} from 'three/addons/objects/Sky.js';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
-/* ─────────────── CONFIG ─────────────── */
-const $ = id => document.getElementById(id);
+/* ─────────── CONFIG ─────────── */
 const PI = Math.PI;
 const rnd = (a,b) => a + Math.random()*(b-a);
 const V = (x,y,z) => new THREE.Vector3(x,y,z);
 const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
 const lerp = (a,b,t) => a + (b-a)*t;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isMobile = matchMedia('(max-width: 1000px)').matches;
+const isMobile = matchMedia('(max-width: 760px)').matches;
 const lowPower = isMobile || (navigator.hardwareConcurrency||4) < 4;
 
-const progress = async (p,s) => {
-  $('load-bar').style.width = p + '%';
-  $('load-status').textContent = s;
-  await new Promise(r => setTimeout(r, 28));
-};
-
-await progress(5,'Initialising renderer');
-
-/* ─────────────── RENDERER ─────────────── */
+/* ─────────── RENDERER ─────────── */
 const renderer = new THREE.WebGLRenderer({
   antialias: !lowPower,
   alpha: true,
@@ -587,7 +856,7 @@ renderer.toneMappingExposure = 1.05;
 renderer.shadowMap.enabled = !lowPower;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setClearColor(0x000000, 0);
-$('canvas-host').appendChild(renderer.domElement);
+document.getElementById('canvas-host').appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0xbcd5e8, 0.0008);
@@ -595,7 +864,7 @@ scene.fog = new THREE.FogExp2(0xbcd5e8, 0.0008);
 const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.5, 6000);
 camera.position.set(0, 30, 220);
 
-/* ─────────────── HELPERS ─────────────── */
+/* ─────────── HELPERS ─────────── */
 const mats = [];
 const M = (o, T = THREE.MeshStandardMaterial) => {
   const m = new T(o);
@@ -642,7 +911,7 @@ const Y0 = 3;
 const DY = Y0 + 6.5;
 const gh = r => r < 95 ? Y0 : r < 145 ? Y0*(145-r)/50 : 0;
 
-/* ─────────────── SKY & CLOUDS ─────────────── */
+/* ─────────── SKY & CLOUDS ─────────── */
 const sky = new Sky();
 sky.scale.setScalar(4500);
 scene.add(sky);
@@ -667,7 +936,7 @@ clouds.rotation.x = PI/2;
 clouds.position.y = 1400;
 scene.add(clouds);
 
-/* ─────────────── LIGHTS ─────────────── */
+/* ─────────── LIGHTS ─────────── */
 const sun = new THREE.DirectionalLight(0xfff5e6, 3.2);
 sun.castShadow = !lowPower;
 if (!lowPower) {
@@ -680,9 +949,7 @@ const hemi = new THREE.HemisphereLight(0x87ceeb, 0x3a6b35, 0.55);
 const amb = new THREE.AmbientLight(0xa0b8d0, 0.35);
 scene.add(hemi, amb);
 
-/* ─────────────── TERRAIN ─────────────── */
-await progress(14,'Building terrain');
-
+/* ─────────── TERRAIN ─────────── */
 const gt = mkTex(256,256,g => {
   for (let i = 0; i < 4; i++) {
     g.fillStyle = i%2 ? '#4d8a3c' : '#5a9847';
@@ -732,9 +999,7 @@ for (let i = 0; i < 72; i++) {
   sp(dash, i, 90*Math.cos(a), Y0+0.1, 90*Math.sin(a), 1, 1, 1, null, -(a+PI/2));
 }
 
-/* ─────────────── VEGETATION ─────────────── */
-await progress(26,'Planting vegetation');
-
+/* ─────────── VEGETATION ─────────── */
 const avoid = [[-105,28,40],[105,25,40],[150,-70,45]];
 const pick = () => {
   for (;;) {
@@ -818,9 +1083,7 @@ for (let i = 0; i < 70; i++) {
   sp(skl, i, r*Math.cos(a), h/2, r*Math.sin(a), w, h, w, 0xc8d0d6, a);
 }
 
-/* ─────────────── PODIUM ─────────────── */
-await progress(38,'Podium & concourse');
-
+/* ─────────── PODIUM ─────────── */
 const winTex = (lit,rep) => mkTex(512,64,(g,w,h) => {
   g.fillStyle = lit ? '#000' : '#9a9a92';
   g.fillRect(0,0,w,h);
@@ -863,9 +1126,7 @@ for (const x of [-15,-9,-3,3,9,15])
 for (let s = 0; s < 3; s++)
   add(new THREE.BoxGeometry(30-s*2,0.25,4), conc, 0, Y0+0.12+s*0.25, 69-s*1.5);
 
-/* ─────────────── DOME ─────────────── */
-await progress(52,'Constructing dome');
-
+/* ─────────── DOME ─────────── */
 const R = 28.5, NT = 9, y0 = 7, Ht = 32, tH = Ht/NT;
 const dome = new THREE.Group();
 dome.position.y = DY;
@@ -976,9 +1237,7 @@ const domeLight = new THREE.PointLight(0x2bd04f, 0, 130, 2);
 domeLight.position.y = 24;
 dome.add(domeLight);
 
-/* ─────────────── HOTEL ─────────────── */
-await progress(68,'Hotel & IT Park');
-
+/* ─────────── HOTEL ─────────── */
 const hotel = new THREE.Group();
 const HP = [-105, 28];
 hotel.position.set(HP[0], gh(Math.hypot(...HP)), HP[1]);
@@ -1038,7 +1297,7 @@ const cg = M({color:0x7e9db0, metalness:0.85, roughness:0.1});
   }
 });
 
-/* ─────────────── LAMPS ─────────────── */
+/* ─────────── LAMPS ─────────── */
 const lamps = [];
 const lampBulbM = M({color:0xffcc88, emissive:0xffcc88, emissiveIntensity:2});
 for (let i = 0; i < 14; i++) {
@@ -1051,10 +1310,40 @@ for (let i = 0; i < 14; i++) {
   lamps.push(l);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   LIGHT STAGES — interpolated by scroll
-   ═══════════════════════════════════════════════════════════════ */
-const dir = (az,el) => {
+/* ─────────── BIRDS ─────────── */
+const birdMat = M({color:0x1a1a22, roughness:0.85, metalness:0.05});
+const birds = [];
+const BIRD_COUNT = lowPower ? 6 : 12;
+for (let i = 0; i < BIRD_COUNT; i++) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.SphereGeometry(0.28,5,4), birdMat);
+  body.scale.set(0.8, 0.7, 1.8);
+  g.add(body);
+  const wl = new THREE.Mesh(new THREE.BoxGeometry(1.6,0.04,0.5), birdMat);
+  wl.position.set(-0.85, 0.05, 0);
+  g.add(wl);
+  const wr = new THREE.Mesh(new THREE.BoxGeometry(1.6,0.04,0.5), birdMat);
+  wr.position.set(0.85, 0.05, 0);
+  g.add(wr);
+
+  const radius = 70 + Math.random()*130;
+  const height = 65 + Math.random()*55;
+  const speed = (0.04 + Math.random()*0.06) * (Math.random() > 0.5 ? 1 : -1);
+  g.userData = {
+    wl, wr,
+    angle: Math.random() * PI * 2,
+    radius,
+    height,
+    speed,
+    bob: Math.random() * PI * 2,
+    wingPhase: Math.random() * PI * 2
+  };
+  scene.add(g);
+  birds.push(g);
+}
+
+/* ─────────── LIGHT STAGES ─────────── */
+const dirFn = (az,el) => {
   az *= PI/180;
   el *= PI/180;
   return [Math.sin(az)*Math.cos(el), Math.sin(el), Math.cos(az)*Math.cos(el)];
@@ -1064,10 +1353,10 @@ const LIGHT_STOPS = [
   { at:0.00, sun:[100,180,80], sc:0xfff5e6, si:3.2, hs:0x87ceeb, hg:0x3a6b35, hi:0.55,
     ac:0xa0b8d0, ai:0.35, fog:0xbcd5e8, fd:0.0008, ex:1.05, env:1,
     sky:[8,2.5,0.005], lit:0, cl:[0xffffff,0.55] },
-  { at:0.32, sun:dir(150,12), sc:0xff8c42, si:2.4, hs:0xff9060, hg:0x4a3020, hi:0.4,
+  { at:0.32, sun:dirFn(150,12), sc:0xff8c42, si:2.4, hs:0xff9060, hg:0x4a3020, hi:0.4,
     ac:0xc09070, ai:0.2, fog:0xffa575, fd:0.0018, ex:1.0, env:0.6,
     sky:[10,3,0.005], lit:0, cl:[0xff9a70,0.6] },
-  { at:0.65, sun:dir(230,5), sc:0xff8a55, si:0.6, hs:0x3a5a9a, hg:0x101820, hi:0.5,
+  { at:0.65, sun:dirFn(230,5), sc:0xff8a55, si:0.6, hs:0x3a5a9a, hg:0x101820, hi:0.5,
     ac:0x2a3a60, ai:0.3, fog:0x3a4f78, fd:0.0014, ex:1.1, env:0.3,
     sky:[3,2.2,0.01], lit:1.3, cl:[0x6a7aa8,0.55] },
   { at:1.00, sun:[-80,140,-60], sc:0x4466aa, si:0.3, hs:0x1a2540, hg:0x0a0e1a, hi:0.12,
@@ -1081,7 +1370,6 @@ const col = hex => {
   return colCache[hex];
 };
 const tmpA = new THREE.Color();
-
 let currentLit = 0;
 
 function applyLightProgress(p) {
@@ -1140,7 +1428,7 @@ function applyLightProgress(p) {
   for (const g of [podM, baseM, winMat]) g.emissiveIntensity = lit * 1.3;
 }
 
-/* LED facade bands */
+/* ─────────── LED FACADE ─────────── */
 const BL = col(0x1e8cff), YE = col(0xffb81c), GR = col(0x2bd04f);
 const BAND = [GR,GR,GR,YE,YE,YE,BL,BL,BL];
 const CY = [GR,YE,BL];
@@ -1165,31 +1453,60 @@ function updateLED(now) {
   domeLight.color.copy(tierM[4].emissive);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   CAMERA KEYFRAMES — one per content panel
-   The KCC is offset to the RIGHT so it sits beside the left content rail.
-   ═══════════════════════════════════════════════════════════════ */
-const CAM_KEYS = [
-  { pos:[0,26,235],   tgt:[0,22,0],  offset:28 }, // 01 Hero — wide front
-  { pos:[85,32,175],  tgt:[0,25,0],  offset:24 }, // 02 About — angled side
-  { pos:[58,45,105],  tgt:[0,30,0],  offset:15 }, // 03 Ecosystem — closer
-  { pos:[30,42,72],   tgt:[0,30,0],  offset:10 }, // 04 Products — close
-  { pos:[75,26,88],   tgt:[0,26,0],  offset:17 }, // 05 Vision — low angle
-  { pos:[-120,40,90], tgt:[0,20,0],  offset:15 }, // 06 Founder — hotel side
-  { pos:[0,22,215],   tgt:[0,22,0],  offset:26 }  // 07 Contact — pull back
+function animateBirds(now) {
+  const t = now * 0.001;
+  birds.forEach(b => {
+    const d = b.userData;
+    d.angle += d.speed * 0.006;
+    const x = Math.cos(d.angle) * d.radius;
+    const z = Math.sin(d.angle) * d.radius;
+    const y = d.height + Math.sin(t * 0.6 + d.bob) * 3;
+    b.position.set(x, y, z);
+    const tangentX = -Math.sin(d.angle) * Math.sign(d.speed);
+    const tangentZ = Math.cos(d.angle) * Math.sign(d.speed);
+    b.rotation.y = Math.atan2(tangentX, tangentZ);
+    b.rotation.z = -Math.sign(d.speed) * 0.15;
+    const flap = Math.sin(t * 4 + d.wingPhase) * 0.55;
+    d.wl.rotation.z = -0.2 + flap;
+    d.wr.rotation.z = 0.2 - flap;
+  });
+}
+
+/* ─────────── CAMERA KEYFRAMES ─────────── */
+const CAM_KEYS_DESKTOP = [
+  { pos:[0,26,235],   tgt:[0,22,0],  offX:28 },
+  { pos:[85,32,175],  tgt:[0,25,0],  offX:24 },
+  { pos:[58,45,105],  tgt:[0,30,0],  offX:15 },
+  { pos:[30,42,72],   tgt:[0,30,0],  offX:10 },
+  { pos:[75,26,88],   tgt:[0,26,0],  offX:17 },
+  { pos:[-120,40,90], tgt:[0,20,0],  offX:15 },
+  { pos:[-100,30,120],tgt:[0,22,0],  offX:12 },
+  { pos:[0,22,215],   tgt:[0,22,0],  offX:26 }
+];
+
+const CAM_KEYS_MOBILE = [
+  { pos:[0,18,255],   tgt:[0,8,0],   offX:0 },
+  { pos:[60,22,200],  tgt:[0,10,0],  offX:0 },
+  { pos:[45,30,140],  tgt:[0,10,0],  offX:0 },
+  { pos:[28,32,100],  tgt:[0,10,0],  offX:0 },
+  { pos:[55,20,120],  tgt:[0,10,0],  offX:0 },
+  { pos:[-90,28,120], tgt:[0,8,0],   offX:0 },
+  { pos:[-80,22,140], tgt:[0,10,0],  offX:0 },
+  { pos:[0,16,235],   tgt:[0,8,0],   offX:0 }
 ];
 
 const camPos = new THREE.Vector3();
 const camTgt = new THREE.Vector3();
 
 function applyCameraProgress(p) {
+  const keys = isMobile ? CAM_KEYS_MOBILE : CAM_KEYS_DESKTOP;
   p = clamp(p, 0, 1);
-  const n = CAM_KEYS.length;
+  const n = keys.length;
   const scaled = p * (n - 1);
   const i = Math.floor(scaled);
   const t = scaled - i;
-  const a = CAM_KEYS[Math.min(i, n-1)];
-  const b = CAM_KEYS[Math.min(i+1, n-1)];
+  const a = keys[Math.min(i, n-1)];
+  const b = keys[Math.min(i+1, n-1)];
   const e = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
 
   camPos.set(
@@ -1201,16 +1518,13 @@ function applyCameraProgress(p) {
   const bx = lerp(a.tgt[0], b.tgt[0], e);
   const by = lerp(a.tgt[1], b.tgt[1], e);
   const bz = lerp(a.tgt[2], b.tgt[2], e);
-  const off = lerp(a.offset, b.offset, e);
-  const sideFactor = window.innerWidth > 1000 ? 1 : 0;
+  const offX = lerp(a.offX, b.offX, e);
 
-  camTgt.set(bx - off * sideFactor, by, bz);
+  camTgt.set(bx - offX, by, bz);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   SCROLL DRIVER
-   ═══════════════════════════════════════════════════════════════ */
-const panels = [...document.querySelectorAll('.panel')];
+/* ─────────── SCROLL DRIVER ─────────── */
+const panels = [...document.querySelectorAll('.panel, .stats-panel')];
 const progressItems = [...document.querySelectorAll('#scroll-progress .item')];
 const nav = document.getElementById('nav');
 
@@ -1221,26 +1535,21 @@ function computeProgress() {
   const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
   targetProgress = clamp(scrollY / Math.max(maxScroll, 1), 0, 1);
 }
-
 function updatePanelVisibility() {
   panels.forEach(panel => {
     const r = panel.getBoundingClientRect();
-    const inView = r.bottom > 80 && r.top < window.innerHeight - 80;
+    const inView = r.bottom > 60 && r.top < window.innerHeight - 60;
     panel.classList.toggle('visible', inView);
   });
 }
-
 function updateActivePanel() {
   let activeIdx = 0;
   let minDist = Infinity;
   panels.forEach((panel, i) => {
     const r = panel.getBoundingClientRect();
     const center = r.top + r.height/2;
-    const dist = Math.abs(center - window.innerHeight * 0.5);
-    if (dist < minDist) {
-      minDist = dist;
-      activeIdx = i;
-    }
+    const dist = Math.abs(center - window.innerHeight * 0.55);
+    if (dist < minDist) { minDist = dist; activeIdx = i; }
   });
   progressItems.forEach((el, i) => el.classList.toggle('active', i === activeIdx));
 }
@@ -1252,9 +1561,70 @@ addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', scrollY > 60);
 }, { passive: true });
 
-/* ═══════════════════════════════════════════════════════════════
-   ANIMATION LOOP
-   ═══════════════════════════════════════════════════════════════ */
+/* ─────────── CONTACT FORM ─────────── */
+const form = document.getElementById('imenaContactForm');
+const statusEl = document.getElementById('cf-status');
+const submitBtn = document.getElementById('cf-submit');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  statusEl.className = 'form-status';
+  statusEl.textContent = '';
+  statusEl.style.display = 'none';
+
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const service = form.service.value;
+  const message = form.message.value.trim();
+
+  if (!name || !email || !service || !message) {
+    statusEl.className = 'form-status error';
+    statusEl.textContent = 'Please fill in all fields.';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    statusEl.className = 'form-status error';
+    statusEl.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending…';
+
+  let delivered = false;
+  try {
+    const res = await fetch('https://formsubmit.co/ajax/imenahub.rw@gmail.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name, email,
+        _subject: `New project inquiry — ${service}`,
+        service, message,
+        _template: 'table'
+      })
+    });
+    if (res.ok) delivered = true;
+  } catch (err) { delivered = false; }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Send Message';
+
+  if (delivered) {
+    statusEl.className = 'form-status success';
+    statusEl.textContent = 'Thank you — your message has been sent. We\'ll reply shortly.';
+    form.reset();
+  } else {
+    const subject = encodeURIComponent(`New project inquiry — ${service}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\nService: ${service}\n\nProject description:\n${message}`
+    );
+    window.location.href = `mailto:imenahub.rw@gmail.com?subject=${subject}&body=${body}`;
+    statusEl.className = 'form-status success';
+    statusEl.textContent = 'Your email client is opening. We\'ll get back to you shortly.';
+  }
+});
+
+/* ─────────── ANIMATION LOOP ─────────── */
 let paused = false;
 document.addEventListener('visibilitychange', () => { paused = document.hidden; });
 
@@ -1264,26 +1634,21 @@ function tick() {
 
   const now = performance.now();
 
-  // Smooth scroll follow
   const followRate = reduceMotion ? 1 : 0.075;
   smoothProgress += (targetProgress - smoothProgress) * followRate;
   if (Math.abs(targetProgress - smoothProgress) < 0.0005) smoothProgress = targetProgress;
 
-  // Apply camera + lighting
   applyCameraProgress(smoothProgress);
   applyLightProgress(smoothProgress);
 
-  // Camera
   camera.position.copy(camPos);
   camera.lookAt(camTgt);
 
-  // LED animation
   updateLED(now);
+  if (!reduceMotion) animateBirds(now);
 
-  // Cloud drift
   cloudT.offset.x += 0.00003;
 
-  // Resize check
   const w = innerWidth, h = innerHeight;
   if (renderer.domElement.width !== w || renderer.domElement.height !== h) {
     renderer.setSize(w, h);
@@ -1300,18 +1665,11 @@ addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
 });
 
-/* ═══════════════════════════════════════════════════════════════
-   BOOT
-   ═══════════════════════════════════════════════════════════════ */
+document.getElementById('year').textContent = new Date().getFullYear();
+
 computeProgress();
 updatePanelVisibility();
 updateActivePanel();
-
-await progress(100,'Ready');
-
-setTimeout(() => {
-  document.getElementById('loading').classList.add('hidden');
-}, 450);
 
 tick();
 </script>
